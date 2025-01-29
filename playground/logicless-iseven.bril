@@ -1,4 +1,4 @@
-#ARGS: -2, 1
+#ARGS: -2 1
 @main(a: int, b: int) {
   a_odd: bool = call @is_odd a;
   b_odd: bool = call @is_odd b;

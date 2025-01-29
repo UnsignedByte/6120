@@ -6,12 +6,9 @@ import json
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='BRIL Program Instruction Counter')
     parser.add_argument('--file', required=True, help='Path to the BRIL program')
-    parser.add_argument('--args', nargs='*', help='Arguments to the BRIL program')
     parser.add_argument('--output', help='Path to the output file')
 
     args = parser.parse_args()
-
-    print("Reading file: {}".format(args.file))
 
     with open(args.file, 'r') as f:
         # if the file ends with .bril (instead of .json)
@@ -61,7 +58,10 @@ if __name__ == '__main__':
                 })
 
             # Add the original instruction
-            new_insns.append(instr)
+            if instr['op'] != 'print':
+                # Remove the print instructions
+                # To avoid confusing prints
+                new_insns.append(instr)
         # Also print at the very end of the function in case there is no return
         new_insns.append({
             'op': 'print',
@@ -75,9 +75,8 @@ if __name__ == '__main__':
     if args.output:
         with open(args.output, 'w') as f:
             json.dump(program, f, indent=2)
-    
-    # Now run brili on the modified program
-    program = json.dumps(program)
-    subprocess.run(['brili', '-p', *args.args], input=program.encode('utf-8'))
+    else:
+        # Print the json to stdout
+        print(json.dumps(program, indent=2))
 
 
