@@ -8,4 +8,10 @@ output.expect = "-"
 command = """
 ./lessons/2/insn-counter.py --file {filename} | brili {args}
 """
-output.insn_counted = "-"
+output.insn-counted = "-"
+
+[envs.trivial-dce]
+command = """
+bril2json < {filename} | ./lessons/3/trivial-dce.py | brili {args}
+"""
+output.trivial-dce = "-"
