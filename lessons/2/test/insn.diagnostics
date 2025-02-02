@@ -1,0 +1,2 @@
+main
+None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'three', 'op': 'const', 'type': 'int', 'value': 3}, {'args': ['one', 'two', 'three'], 'op': 'print'}]

@@ -1,0 +1,6 @@
+@main {
+  a: int = const 1;
+  b: int = const 2;
+.block2:
+  b: int = add a b;
+}

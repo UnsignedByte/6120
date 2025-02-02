@@ -1,0 +1,8 @@
+@main(a: int, b: int) {
+  sum: int = add a b;
+  print sum;
+  sum: int = add sum sum;
+  sum2: int = add a b;
+  sum3: int = add sum sum2;
+  print sum3;
+}

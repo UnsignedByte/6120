@@ -1,0 +1,2 @@
+main
+None: [{'dest': 'v', 'op': 'const', 'type': 'bool', 'value': True}, {'args': ['v'], 'op': 'print'}, {'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['one', 'two'], 'dest': 'half', 'op': 'div', 'type': 'int'}, {'args': ['half'], 'op': 'print'}]

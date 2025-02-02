@@ -12,6 +12,25 @@ output.insn-counted = "-"
 
 [envs.trivial-dce]
 command = """
-bril2json < {filename} | ./lessons/3/trivial-dce.py | brili {args}
+bril2json < {filename} | ./lessons/3/trivial-dce.py | bril2txt
 """
 output.trivial-dce = "-"
+
+[envs.lvn]
+command = """
+bril2json < {filename} | ./lessons/3/lvn.py | bril2txt
+"""
+output.lvn = "-"
+
+[envs.lvn-dce]
+command = """
+bril2json < {filename} | ./lessons/3/lvn.py | ./lessons/3/trivial-dce.py | bril2txt
+"""
+output.lvn-dce = "-"
+
+
+[envs.diagnostics]
+command = """
+bril2json < {filename} | ./playground/diagnostics.py
+"""
+output.diagnostics = "-"

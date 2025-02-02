@@ -1,0 +1,19 @@
+# ARGS: true
+@main(i: bool) {
+  br i .true .false;
+  br i .false .true;
+  br i .true .false;
+  br i .false .true;
+  br i .true .false;
+  br i .false .true;
+  br i .true .false;
+  br i .false .true;
+  br i .true .false;
+  br i .false .true;
+.true:
+  print i;
+  ret;
+.false:
+  print i;
+  ret;
+}

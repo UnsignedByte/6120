@@ -1,0 +1,7 @@
+# ARGS: 2 3
+@main (a: int, b: int){
+  sum1: int = add a b;
+  sum2: int = add a b;
+  mul1: int = mul sum1 sum2;
+  print mul1;
+}
