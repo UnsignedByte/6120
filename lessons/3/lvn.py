@@ -88,10 +88,37 @@ class LocalValueNumbering(FunctionPass):
             elif op in {'add', 'sub', 'mul', 'div'}:
                 args = instr['args']
                 assert len(args) == 2
-                # Canonicalize the arguments
-                args.sort()
-                # Construct the value number
-                value = (op, *args)
+                # If both argument values are constants, we can evaluate the operation
+                values = [table.id2value[arg] for arg in args]
+                if all(isinstance(v, int) for v in values):
+                    if op == 'add':
+                        value = values[0] + values[1]
+                    elif op == 'sub':
+                        value = values[0] - values[1]
+                    elif op == 'mul':
+                        value = values[0] * values[1]
+                    elif op == 'div':
+                        value = values[0] // values[1]
+                else:
+                    # Canonicalize the arguments
+                    args.sort()
+                    # Construct the value number
+                    value = (op, *args)
+            elif op in {'and', 'or', 'not'}:
+                args = instr['args']
+                assert len(args) <= 2
+                
+                values = [table.id2value[arg] for arg in args]
+                if all(isinstance(v, bool) for v in values):
+                    if op == 'and':
+                        value = values[0] and values[1]
+                    elif op == 'or':
+                        value = values[0] or values[1]
+                    elif op == 'not':
+                        value = not values[0]
+                else:
+                    args.sort()
+                    value = (op, *args)
 
             if 'dest' in instr:
                 name = instr['dest']
@@ -125,6 +152,8 @@ class LocalValueNumbering(FunctionPass):
 
                     # Recreate the instruction from the value
                     if isinstance(value, int):
+                        if 'args' in instr:
+                            del instr['args']
                         new_block.append({
                             **instr,
                             'op': 'const',
