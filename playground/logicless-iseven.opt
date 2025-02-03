@@ -1,7 +1,8 @@
 @main(a: int, b: int) {
   a_odd: bool = call @is_odd a;
+  b_odd: bool = call @is_odd b;
   print a_odd;
-  print a_odd;
+  print b_odd;
 }
 @abs(n: int): int {
   zero: int = const 0;
@@ -14,7 +15,13 @@
 }
 @is_even(n: int): bool {
   n0: int = call @abs n;
-  ret n0;
+  one: int = const 1;
+  two: int = const 2;
+  np1: int = add n0 one;
+  half: int = div n0 two;
+  np1_half: int = div np1 two;
+  ret_val: bool = eq half np1_half;
+  ret ret_val;
 }
 @is_odd(n: int): bool {
   is_even: bool = call @is_even n;

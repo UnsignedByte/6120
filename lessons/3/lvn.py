@@ -38,6 +38,13 @@ class LVNTable:
     def get_representative(self, value_id: int) -> str:
         return self.id2name[value_id]
 
+    def __repr__(self):
+        rep = ""
+        for k, v in self.id2name.items():
+            rep += f'{k}\t| {v}\t|\t{self.id2value[k]}\n'
+        
+        return rep
+
 class LocalValueNumbering(FunctionPass):
     def before(self):
         # Collect all the names in the function
@@ -101,7 +108,8 @@ class LocalValueNumbering(FunctionPass):
                         value = values[0] // values[1]
                 else:
                     # Canonicalize the arguments
-                    args.sort()
+                    if op != 'div':
+                        args.sort()
                     # Construct the value number
                     value = (op, *args)
             elif op in {'and', 'or', 'not'}:
@@ -119,9 +127,13 @@ class LocalValueNumbering(FunctionPass):
                 else:
                     args.sort()
                     value = (op, *args)
+            
+            # print(table)
 
             if 'dest' in instr:
                 name = instr['dest']
+                if value is None:
+                    value = name
                 if value in table.value2id:
                     # This is an old value
                     vid = table.add(name, value)
@@ -151,11 +163,11 @@ class LocalValueNumbering(FunctionPass):
                     table.name2id[old_name] = vid
 
                     # Recreate the instruction from the value
-                    if value is None:
+                    if isinstance(value, str):
                         if 'args' in instr:
                             instr['args'] = [table.id2name[arg] for arg in instr['args']]
                         new_block.append(instr)
-                    elif isinstance(value, int):
+                    elif isinstance(value, int) or isinstance(value, bool):
                         if 'args' in instr:
                             del instr['args']
                         new_block.append({
