@@ -1,0 +1,4 @@
+main
+None: [{'dest': 'a', 'funcs': ['dummy'], 'op': 'call', 'type': 'int'}, {'args': ['a'], 'op': 'print'}, {'dest': 'b', 'funcs': ['dummy'], 'op': 'call', 'type': 'int'}, {'dest': 'a', 'funcs': ['dummy'], 'op': 'call', 'type': 'int'}, {'args': ['a', 'b'], 'dest': 'sum', 'op': 'add', 'type': 'int'}, {'args': ['sum'], 'op': 'print'}]
+dummy
+None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['one'], 'op': 'ret'}]

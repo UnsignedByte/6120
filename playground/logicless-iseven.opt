@@ -17,7 +17,7 @@
   n0: int = call @abs n;
   one: int = const 1;
   two: int = const 2;
-  np1: int = add n0 one;
+  np1: int = add one n0;
   half: int = div n0 two;
   np1_half: int = div np1 two;
   ret_val: bool = eq half np1_half;

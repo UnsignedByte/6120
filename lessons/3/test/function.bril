@@ -1,0 +1,13 @@
+@main {
+  a: int = call @dummy;
+  print a;
+  b: int = call @dummy;
+  a: int = call @dummy;
+  sum: int = add a b;
+  print sum;
+}
+
+@dummy (): int {
+  one: int = const 1;
+  ret one;
+}

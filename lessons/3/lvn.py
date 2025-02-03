@@ -130,10 +130,8 @@ class LocalValueNumbering(FunctionPass):
             
             # print(table)
 
-            if 'dest' in instr:
+            if 'dest' in instr and value is not None:
                 name = instr['dest']
-                if value is None:
-                    value = name
                 if value in table.value2id:
                     # This is an old value
                     vid = table.add(name, value)
@@ -163,11 +161,7 @@ class LocalValueNumbering(FunctionPass):
                     table.name2id[old_name] = vid
 
                     # Recreate the instruction from the value
-                    if isinstance(value, str):
-                        if 'args' in instr:
-                            instr['args'] = [table.id2name[arg] for arg in instr['args']]
-                        new_block.append(instr)
-                    elif isinstance(value, int) or isinstance(value, bool):
+                    if isinstance(value, int) or isinstance(value, bool):
                         if 'args' in instr:
                             del instr['args']
                         new_block.append({
