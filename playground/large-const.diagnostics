@@ -1,0 +1,2 @@
+main
+None: [{'dest': 'v', 'op': 'const', 'type': 'int', 'value': 9007199254740991}, {'args': ['v', 'v'], 'dest': 'prod', 'op': 'mul', 'type': 'int'}, {'args': ['prod'], 'op': 'print'}]
