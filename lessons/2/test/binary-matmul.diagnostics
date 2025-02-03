@@ -6,7 +6,7 @@ inner_loop: [{'args': ['k', 'one'], 'dest': 'k', 'op': 'add', 'type': 'int'}, {'
 multiply: [{'args': ['a', 'dim2', 'i', 'k'], 'dest': 'a_bit', 'funcs': ['mat_bitsel'], 'op': 'call', 'type': 'int'}, {'args': ['b', 'dim3', 'k', 'j'], 'dest': 'b_bit', 'funcs': ['mat_bitsel'], 'op': 'call', 'type': 'int'}, {'args': ['a_bit', 'b_bit'], 'dest': 'a_bit_b_bit', 'op': 'mul', 'type': 'int'}, {'args': ['dot_product', 'a_bit_b_bit'], 'dest': 'dot_product', 'op': 'add', 'type': 'int'}, {'labels': ['inner_loop'], 'op': 'jmp'}]
 end_col: [{'args': ['dot_product'], 'dest': 'dot_product_odd', 'funcs': ['is_odd'], 'op': 'call', 'type': 'bool'}, {'args': ['dot_product_odd'], 'labels': ['add_dp', 'col_loop'], 'op': 'br'}]
 add_dp: [{'args': ['i', 'j', 'dim3'], 'dest': 'index', 'funcs': ['mat_packed_index'], 'op': 'call', 'type': 'int'}, {'args': ['index'], 'dest': 'dp_bit', 'funcs': ['pow2'], 'op': 'call', 'type': 'int'}, {'args': ['output', 'dp_bit'], 'dest': 'output', 'op': 'add', 'type': 'int'}, {'labels': ['col_loop'], 'op': 'jmp'}]
-return: [{'args': ['output'], 'op': 'print'}, {'args': ['output'], 'op': 'ret'}]
+return: [{'args': ['output'], 'op': 'print'}]
 mat_bitsel
 None: [{'args': ['i', 'j', 'cols'], 'dest': 'index', 'funcs': ['mat_packed_index'], 'op': 'call', 'type': 'int'}, {'args': ['m', 'index'], 'dest': 'ret_val', 'funcs': ['bitsel'], 'op': 'call', 'type': 'bool'}, {'args': ['ret_val'], 'labels': ['ret_one', 'ret_zero'], 'op': 'br'}]
 ret_one: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['one'], 'op': 'ret'}]

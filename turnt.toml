@@ -1,8 +1,9 @@
 [envs.test]
 command = """
-bril2json < {filename} | brili {args}
+bril2json < {filename} | brili -p {args}
 """
 output.expect = "-"
+output.prof = "2"
 
 [envs.insn-counter]
 command = """

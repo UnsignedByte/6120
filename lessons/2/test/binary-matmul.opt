@@ -1,4 +1,4 @@
-@main(a: int, b: int, dim1: int, dim2: int, dim3: int): int {
+@main(a: int, b: int, dim1: int, dim2: int, dim3: int) {
   one: int = const 1;
   i: int = const -1;
   output: int = const 0;
@@ -33,7 +33,6 @@
   jmp .col_loop;
 .return:
   print output;
-  ret output;
 }
 @mat_bitsel(m: int, cols: int, i: int, j: int): int {
   index: int = call @mat_packed_index i j cols;
