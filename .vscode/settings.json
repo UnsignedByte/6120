@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.opt": "bril",
+    "*.lvn": "bril",
+    "*.lvn-dce": "bril",
+    "*.trivial-dce": "bril",
+  }
+}
