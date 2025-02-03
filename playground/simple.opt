@@ -1,0 +1,6 @@
+@main {
+  v: bool = const true;
+  print v;
+  half: int = const 0;
+  print half;
+}

@@ -1,0 +1,4 @@
+@main {
+  prod: int = const 81129638414606663681390495662081;
+  print prod;
+}

@@ -1,0 +1,5 @@
+@main(v: int) {
+  one: int = const 1;
+  sum: int = add one v;
+  print sum;
+}

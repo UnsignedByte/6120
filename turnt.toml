@@ -24,10 +24,15 @@ output.lvn = "-"
 
 [envs.lvn-dce]
 command = """
-bril2json < {filename} | ./lessons/3/lvn.py | ./lessons/3/trivial-dce.py | bril2txt
+utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
 """
 output.lvn-dce = "-"
 
+[envs.opt]
+command = """
+utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
+"""
+output.opt = "-"
 
 [envs.diagnostics]
 command = """

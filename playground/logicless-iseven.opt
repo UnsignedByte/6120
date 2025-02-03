@@ -1,0 +1,23 @@
+@main(a: int, b: int) {
+  a_odd: bool = call @is_odd a;
+  print a_odd;
+  print a_odd;
+}
+@abs(n: int): int {
+  zero: int = const 0;
+  is_neg: bool = lt n zero;
+  br is_neg .negative .positive;
+.negative:
+  n: int = sub zero n;
+.positive:
+  ret n;
+}
+@is_even(n: int): bool {
+  n0: int = call @abs n;
+  ret n0;
+}
+@is_odd(n: int): bool {
+  is_even: bool = call @is_even n;
+  ret_val: bool = not is_even;
+  ret ret_val;
+}

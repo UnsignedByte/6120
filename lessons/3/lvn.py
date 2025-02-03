@@ -151,7 +151,11 @@ class LocalValueNumbering(FunctionPass):
                     table.name2id[old_name] = vid
 
                     # Recreate the instruction from the value
-                    if isinstance(value, int):
+                    if value is None:
+                        if 'args' in instr:
+                            instr['args'] = [table.id2name[arg] for arg in instr['args']]
+                        new_block.append(instr)
+                    elif isinstance(value, int):
                         if 'args' in instr:
                             del instr['args']
                         new_block.append({
@@ -172,7 +176,8 @@ class LocalValueNumbering(FunctionPass):
                     
             else:
                 # Just reconstruct the instruction
-                instr['args'] = [table.id2name[arg] for arg in instr['args']]
+                if 'args' in instr:
+                    instr['args'] = [table.id2name[arg] for arg in instr['args']]
                 new_block.append(instr)
 
 
