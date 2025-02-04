@@ -1,4 +1,7 @@
 @main {
   one: int = const 1;
-  print one;
+  two: int = id one;
+  three: int = id two;
+  four: int = id three;
+  print four;
 }

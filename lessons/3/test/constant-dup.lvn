@@ -1,7 +1,8 @@
 @main {
   one: int = const 1;
-  two: int = id one;
-  three: int = id one;
-  four: int = id one;
-  print one;
+  two: int = const 1;
+  three: int = const 1;
+  four: int = const 1;
+.block2:
+  print four;
 }

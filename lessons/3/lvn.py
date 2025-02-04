@@ -204,7 +204,20 @@ class LocalValueNumbering(FunctionPass):
                     rep = table.get_representative(vid)
 
                     # Create an id instruction
-                    new_block.append({**instr, "op": "id", "dest": name, "args": [rep]})
+                    if isinstance(value, tuple) and value[0] == "const":
+                        new_block.append(
+                            {
+                                **instr,
+                                "op": "const",
+                                "dest": name,
+                                "type": value[1],
+                                "value": value[2],
+                            }
+                        )
+                    else:
+                        new_block.append(
+                            {**instr, "op": "id", "dest": name, "args": [rep]}
+                        )
                 else:
                     # This is a new value
 

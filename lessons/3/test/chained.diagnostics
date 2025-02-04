@@ -1,2 +1,2 @@
 main
-None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['one'], 'dest': 'two', 'op': 'id', 'type': 'int'}, {'args': ['two'], 'dest': 'three', 'op': 'id', 'type': 'int'}, {'args': ['three'], 'dest': 'four', 'op': 'id', 'type': 'int'}, {'args': ['one'], 'op': 'print'}]
+None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['one'], 'dest': 'two', 'op': 'id', 'type': 'int'}, {'args': ['two'], 'dest': 'three', 'op': 'id', 'type': 'int'}, {'args': ['three'], 'dest': 'four', 'op': 'id', 'type': 'int'}, {'args': ['four'], 'op': 'print'}]

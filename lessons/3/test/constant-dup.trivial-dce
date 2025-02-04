@@ -3,5 +3,6 @@
   two: int = id one;
   three: int = id two;
   four: int = id three;
+.block2:
   print four;
 }
