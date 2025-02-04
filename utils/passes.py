@@ -31,7 +31,7 @@ class FunctionPass(ABC):
     name = None
     for instr in self.func['instrs']:
       if 'label' in instr: # Header of a new block
-        if len(current_block) > 0:
+        if len(current_block) > 0 or name is not None:
           blocks.append(BasicBlock(name, current_block))
 
         name = instr['label']
@@ -42,12 +42,12 @@ class FunctionPass(ABC):
       # If the instruction is a control flow instruction
       # I.E. a br, jmp, or ret instruction
       if instr.get('op', '') in {'br', 'jmp', 'ret'}:
-        if len(current_block) > 0:
+        if len(current_block) > 0 or name is not None:
           blocks.append(BasicBlock(name, current_block))
         name = None
         current_block = []
       
-    if len(current_block) > 0:
+    if len(current_block) > 0 or name is not None:
       blocks.append(BasicBlock(name, current_block))
     return blocks
   

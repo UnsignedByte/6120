@@ -29,7 +29,7 @@
 .add_dp:
   index: int = call @mat_packed_index i j dim3;
   dp_bit: int = call @pow2 index;
-  output: int = add output dp_bit;
+  output: int = add dp_bit output;
   jmp .col_loop;
 .return:
   print output;
@@ -93,7 +93,7 @@
   n0: int = call @abs n;
   one: int = const 1;
   two: int = const 2;
-  np1: int = add one n0;
+  np1: int = add n0 one;
   half: int = div n0 two;
   np1_half: int = div np1 two;
   ret_val: bool = eq half np1_half;

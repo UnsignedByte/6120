@@ -1,0 +1,7 @@
+@main(x: int) {
+  v0 = id x;
+  y: int = id v0;
+  x: int = const 2;
+  z: int = id v0;
+  print x v0 v0;
+}

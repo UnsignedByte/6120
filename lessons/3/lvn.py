@@ -7,6 +7,8 @@ from utils.passes import FunctionPass, BasicBlock
 
 class LVNTable:
     def __init__(self):
+        self.unique_instr_id = 0
+
         # Maps IDs to names in the table
         self.id2name = {}
         # Maps names to IDs in the table
@@ -45,6 +47,41 @@ class LVNTable:
         
         return rep
 
+def last_write_map(block: BasicBlock) -> dict[str, int]:
+    # Find the index of the last write of every variable 
+
+    m = {}
+
+    for i, instr in enumerate(block.instrs):
+        if 'dest' in instr:
+            m[instr['dest']] = i
+    
+    return m
+
+def const_fold(table: LVNTable, instr):
+    commutative_ops = {'add', 'mul', 'and', 'or'}
+    op_map = {
+        'add': lambda x, y: x + y,
+        'sub': lambda x, y: x - y,
+        'mul': lambda x, y: x * y,
+        'div': lambda x, y: x // y,
+        'and': lambda x, y: x and y,
+        'or': lambda x, y: x or y,
+        'not': lambda x: not x
+    }
+
+    op = instr['op']
+    if op in commutative_ops:
+        instr['args'].sort()
+    args = instr['args']
+
+    values = [table.id2value[arg] for arg in args]
+    if op in op_map and all(v[0] == 'const' for v in values):
+        values = [v[2] for v in values]
+        return ("const", instr['type'], op_map[op](*values))
+    else:
+        return (op, *args)
+
 class LocalValueNumbering(FunctionPass):
     def before(self):
         # Collect all the names in the function
@@ -61,11 +98,14 @@ class LocalValueNumbering(FunctionPass):
     def construct_unique_name(self):
         while f'v{self.unique_nid}' in self.names:
             self.unique_nid += 1
+        self.names.add(f'v{self.unique_nid}')
         return f'v{self.unique_nid}'
 
     def basic_block(self, block):
         # print(block)
         table = LVNTable()
+
+        lw_map = last_write_map(block)
 
         new_block = []
         for i in range(len(block.instrs)):
@@ -90,47 +130,37 @@ class LocalValueNumbering(FunctionPass):
                 assert len(args) == 1
                 # Find the value in the table
                 value = table.id2value[args[0]]
+                # If this is a string, then we should check if its representative will be written later.
+                # This is to deal with the case
+                #   x = 0
+                # NEW_BLOCK:
+                #   y = x
+                #   x = 1
+                #   z = y
+                rep = table.id2name[args[0]]
+                if isinstance(value, str) and lw_map.get(value, 0) > i and rep == value:
+                    new_name = self.construct_unique_name()
+                    new_block.append(
+                        {
+                            "op": "id",
+                            'dest': new_name,
+                            'args': [rep]
+                        }
+                    )
+                    table.id2name[args[0]] = new_name
+
             elif op == 'const':
-                value = instr['value']
-            elif op in {'add', 'sub', 'mul', 'div'}:
-                args = instr['args']
-                assert len(args) == 2
-                # If both argument values are constants, we can evaluate the operation
-                values = [table.id2value[arg] for arg in args]
-                if all(isinstance(v, int) for v in values):
-                    if op == 'add':
-                        value = values[0] + values[1]
-                    elif op == 'sub':
-                        value = values[0] - values[1]
-                    elif op == 'mul':
-                        value = values[0] * values[1]
-                    elif op == 'div':
-                        value = values[0] // values[1]
-                else:
-                    # Canonicalize the arguments
-                    if op != 'div':
-                        args.sort()
-                    # Construct the value number
-                    value = (op, *args)
-            elif op in {'and', 'or', 'not'}:
-                args = instr['args']
-                assert len(args) <= 2
-                
-                values = [table.id2value[arg] for arg in args]
-                if all(isinstance(v, bool) for v in values):
-                    if op == 'and':
-                        value = values[0] and values[1]
-                    elif op == 'or':
-                        value = values[0] or values[1]
-                    elif op == 'not':
-                        value = not values[0]
-                else:
-                    args.sort()
-                    value = (op, *args)
-            
+                value = ("const", instr['type'], instr['value'])
+            elif op in {'add', 'sub', 'mul', 'div','and', 'or', 'not'}:
+                value = const_fold(table, instr)
+            else:
+                # This is an unknown instruction, treat it as something that
+                # may have side effects
+                value = ("unknown", table.unique_instr_id)
+                table.unique_instr_id += 1
             # print(table)
 
-            if 'dest' in instr and value is not None:
+            if 'dest' in instr:
                 name = instr['dest']
                 if value in table.value2id:
                     # This is an old value
@@ -149,10 +179,9 @@ class LocalValueNumbering(FunctionPass):
 
                     # Check if the name will be rewritten later.
                     # If so, assign it a new name
-                    for j in range(i + 1, len(block.instrs)):
-                        if block.instrs[j].get('dest', '') == instr['dest']:
-                            instr['dest'] = self.construct_unique_name()
-                            break
+                    if lw_map.get(instr['dest'], 0) > i:
+                        instr['dest'] = self.construct_unique_name()
+                        
                     old_name = name
                     name = instr['dest']
                     vid = table.add(name, value)
@@ -161,22 +190,29 @@ class LocalValueNumbering(FunctionPass):
                     table.name2id[old_name] = vid
 
                     # Recreate the instruction from the value
-                    if isinstance(value, int) or isinstance(value, bool):
-                        if 'args' in instr:
-                            del instr['args']
-                        new_block.append({
-                            **instr,
-                            'op': 'const',
-                            'dest': name,
-                            'value': value
-                        })
-                    elif isinstance(value, tuple):
-                        new_block.append({
-                            **instr,
-                            'op': value[0],
-                            'dest': name,
-                            'args': [table.id2name[arg] for arg in value[1:]]
-                        })
+                    if isinstance(value, tuple):
+                        if value[0] == 'const':
+                            new_block.append({
+                                **instr,
+                                'op': 'const',
+                                'dest': name,
+                                'type': value[1],
+                                'value': value[2]
+                            })
+                        elif value[0] == 'unknown':
+                            if 'args' in instr:
+                                instr['args'] = [table.id2name[arg] for arg in instr['args']]
+                            new_block.append({
+                                **instr,
+                                'dest': name
+                            })
+                        else:
+                            new_block.append({
+                                **instr,
+                                'op': value[0],
+                                'dest': name,
+                                'args': [table.id2name[arg] for arg in value[1:]]
+                            })
                     else:
                         raise ValueError(f'Unknown value type: {value}')
                     
