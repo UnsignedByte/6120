@@ -6,6 +6,7 @@ pipeline = [
     "bril2json",
     "brili -p {args}",
 ]
+timeout = 100
 
 [runs.opt]
 pipeline = [
@@ -14,3 +15,4 @@ pipeline = [
     "lessons/3/trivial-dce.py",
     "brili -p {args}",
 ]
+timeout = 100
