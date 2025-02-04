@@ -2,8 +2,10 @@
 import json
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from utils.passes import FunctionPass, BasicBlock
+
 
 class LVNTable:
     def __init__(self):
@@ -29,58 +31,74 @@ class LVNTable:
             self.name2id[name] = vid
             self.value2id[value] = vid
         return vid
-    
+
     def canonicalize(self, instr):
-        if 'args' in instr:
-            instr['args'] = [
-                self.get_representative(self.name_map[arg])
-                for arg in instr['args']
+        if "args" in instr:
+            instr["args"] = [
+                self.get_representative(self.name_map[arg]) for arg in instr["args"]
             ]
-    
+
     def get_representative(self, value_id: int) -> str:
         return self.id2name[value_id]
 
     def __repr__(self):
         rep = ""
         for k, v in self.id2name.items():
-            rep += f'{k}\t| {v}\t|\t{self.id2value[k]}\n'
-        
+            rep += f"{k}\t| {v}\t|\t{self.id2value[k]}\n"
+
         return rep
 
+
 def last_write_map(block: BasicBlock) -> dict[str, int]:
-    # Find the index of the last write of every variable 
+    # Find the index of the last write of every variable
 
     m = {}
 
     for i, instr in enumerate(block.instrs):
-        if 'dest' in instr:
-            m[instr['dest']] = i
-    
+        if "dest" in instr:
+            m[instr["dest"]] = i
+
     return m
 
+
 def const_fold(table: LVNTable, instr):
-    commutative_ops = {'add', 'mul', 'and', 'or'}
+    commutative_ops = {"add", "mul", "eq", "and", "or", "fadd", "fmul", "feq"}
     op_map = {
-        'add': lambda x, y: x + y,
-        'sub': lambda x, y: x - y,
-        'mul': lambda x, y: x * y,
-        'div': lambda x, y: x // y,
-        'and': lambda x, y: x and y,
-        'or': lambda x, y: x or y,
-        'not': lambda x: not x
+        "add": lambda x, y: ("int", x + y),
+        "sub": lambda x, y: ("int", x - y),
+        "mul": lambda x, y: ("int", x * y),
+        "div": lambda x, y: ("int", x // y),
+        "eq": lambda x, y: ("bool", x == y),
+        "lt": lambda x, y: ("bool", x < y),
+        "gt": lambda x, y: ("bool", x > y),
+        "le": lambda x, y: ("bool", x <= y),
+        "ge": lambda x, y: ("bool", x >= y),
+        "and": lambda x, y: ("bool", x and y),
+        "or": lambda x, y: ("bool", x or y),
+        "not": lambda x: ("bool", not x),
+        "fadd": lambda x, y: ("float", x + y),
+        "fsub": lambda x, y: ("float", x - y),
+        "fmul": lambda x, y: ("float", x * y),
+        "fdiv": lambda x, y: ("float", x / y),
+        "feq": lambda x, y: ("bool", x == y),
+        "flt": lambda x, y: ("bool", x < y),
+        "fgt": lambda x, y: ("bool", x > y),
+        "fle": lambda x, y: ("bool", x <= y),
+        "fge": lambda x, y: ("bool", x >= y),
     }
 
-    op = instr['op']
+    op = instr["op"]
     if op in commutative_ops:
-        instr['args'].sort()
-    args = instr['args']
+        instr["args"].sort()
+    args = instr["args"]
 
     values = [table.id2value[arg] for arg in args]
-    if op in op_map and all(v[0] == 'const' for v in values):
+    if op in op_map and all(v[0] == "const" for v in values):
         values = [v[2] for v in values]
-        return ("const", instr['type'], op_map[op](*values))
+        return ("const", *op_map[op](*values))
     else:
         return (op, *args)
+
 
 class LocalValueNumbering(FunctionPass):
     def before(self):
@@ -88,18 +106,18 @@ class LocalValueNumbering(FunctionPass):
         self.names = set()
         self.unique_nid = 0
         if "args" in self.func:
-            self.names.update([arg['name'] for arg in self.func['args']])
-        for instr in self.func['instrs']:
-            if 'dest' in instr:
-                self.names.add(instr['dest'])
-            if 'args' in instr:
-                self.names.update(instr['args'])
-        
+            self.names.update([arg["name"] for arg in self.func["args"]])
+        for instr in self.func["instrs"]:
+            if "dest" in instr:
+                self.names.add(instr["dest"])
+            if "args" in instr:
+                self.names.update(instr["args"])
+
     def construct_unique_name(self):
-        while f'v{self.unique_nid}' in self.names:
+        while f"v{self.unique_nid}" in self.names:
             self.unique_nid += 1
-        self.names.add(f'v{self.unique_nid}')
-        return f'v{self.unique_nid}'
+        self.names.add(f"v{self.unique_nid}")
+        return f"v{self.unique_nid}"
 
     def basic_block(self, block):
         # print(block)
@@ -107,26 +125,50 @@ class LocalValueNumbering(FunctionPass):
 
         lw_map = last_write_map(block)
 
+        known_ops = {
+            "add",
+            "sub",
+            "mul",
+            "div",
+            "and",
+            "or",
+            "not",
+            "eq",
+            "lt",
+            "gt",
+            "le",
+            "ge",
+            "fadd",
+            "fsub",
+            "fmul",
+            "fdiv",
+            "feq",
+            "flt",
+            "fgt",
+            "fle",
+            "fge",
+        }
+
         new_block = []
         for i in range(len(block.instrs)):
             instr = block.instrs[i]
 
             # Rewrite the arguments of the instruction
-            if 'args' in instr:
+            if "args" in instr:
                 new_args = []
-                for arg in instr['args']:
+                for arg in instr["args"]:
                     if arg in table.name2id:
                         new_args.append(table.name2id[arg])
                     else:
                         # This is a new value that has not been written in this basic block
                         new_args.append(table.add(arg, arg))
-                instr['args'] = new_args
+                instr["args"] = new_args
 
-            op = instr['op']
+            op = instr["op"]
             # Convert the instruction to a value
             value = None
-            if op == 'id':
-                args = instr['args']
+            if op == "id":
+                args = instr["args"]
                 assert len(args) == 1
                 # Find the value in the table
                 value = table.id2value[args[0]]
@@ -140,18 +182,12 @@ class LocalValueNumbering(FunctionPass):
                 rep = table.id2name[args[0]]
                 if isinstance(value, str) and lw_map.get(value, 0) > i and rep == value:
                     new_name = self.construct_unique_name()
-                    new_block.append(
-                        {
-                            "op": "id",
-                            'dest': new_name,
-                            'args': [rep]
-                        }
-                    )
+                    new_block.append({"op": "id", "dest": new_name, "args": [rep]})
                     table.id2name[args[0]] = new_name
 
-            elif op == 'const':
-                value = ("const", instr['type'], instr['value'])
-            elif op in {'add', 'sub', 'mul', 'div','and', 'or', 'not'}:
+            elif op == "const":
+                value = ("const", instr["type"], instr["value"])
+            elif op in known_ops:
                 value = const_fold(table, instr)
             else:
                 # This is an unknown instruction, treat it as something that
@@ -160,30 +196,25 @@ class LocalValueNumbering(FunctionPass):
                 table.unique_instr_id += 1
             # print(table)
 
-            if 'dest' in instr:
-                name = instr['dest']
+            if "dest" in instr:
+                name = instr["dest"]
                 if value in table.value2id:
                     # This is an old value
                     vid = table.add(name, value)
                     rep = table.get_representative(vid)
 
                     # Create an id instruction
-                    new_block.append({
-                        **instr,
-                        'op': 'id',
-                        'dest': name,
-                        'args': [rep]
-                    })
+                    new_block.append({**instr, "op": "id", "dest": name, "args": [rep]})
                 else:
                     # This is a new value
 
                     # Check if the name will be rewritten later.
                     # If so, assign it a new name
-                    if lw_map.get(instr['dest'], 0) > i:
-                        instr['dest'] = self.construct_unique_name()
-                        
+                    if lw_map.get(instr["dest"], 0) > i:
+                        instr["dest"] = self.construct_unique_name()
+
                     old_name = name
-                    name = instr['dest']
+                    name = instr["dest"]
                     vid = table.add(name, value)
 
                     # Map the old name to the new id
@@ -191,56 +222,54 @@ class LocalValueNumbering(FunctionPass):
 
                     # Recreate the instruction from the value
                     if isinstance(value, tuple):
-                        if value[0] == 'const':
-                            new_block.append({
-                                **instr,
-                                'op': 'const',
-                                'dest': name,
-                                'type': value[1],
-                                'value': value[2]
-                            })
-                        elif value[0] == 'unknown':
-                            if 'args' in instr:
-                                instr['args'] = [table.id2name[arg] for arg in instr['args']]
-                            new_block.append({
-                                **instr,
-                                'dest': name
-                            })
+                        if value[0] == "const":
+                            new_block.append(
+                                {
+                                    **instr,
+                                    "op": "const",
+                                    "dest": name,
+                                    "type": value[1],
+                                    "value": value[2],
+                                }
+                            )
+                        elif value[0] == "unknown":
+                            if "args" in instr:
+                                instr["args"] = [
+                                    table.id2name[arg] for arg in instr["args"]
+                                ]
+                            new_block.append({**instr, "dest": name})
                         else:
-                            new_block.append({
-                                **instr,
-                                'op': value[0],
-                                'dest': name,
-                                'args': [table.id2name[arg] for arg in value[1:]]
-                            })
+                            new_block.append(
+                                {
+                                    **instr,
+                                    "op": value[0],
+                                    "dest": name,
+                                    "args": [table.id2name[arg] for arg in value[1:]],
+                                }
+                            )
                     else:
-                        raise ValueError(f'Unknown value type: {value}')
-                    
+                        raise ValueError(f"Unknown value type: {value}")
+
             else:
                 # Just reconstruct the instruction
-                if 'args' in instr:
-                    instr['args'] = [table.id2name[arg] for arg in instr['args']]
+                if "args" in instr:
+                    instr["args"] = [table.id2name[arg] for arg in instr["args"]]
                 new_block.append(instr)
-
 
         return BasicBlock(block.name, new_block)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Prints the basic blocks of a function
     program = json.load(sys.stdin)
 
     new_funcs = []
 
-    for func in program['functions']:
+    for func in program["functions"]:
         pass_ = LocalValueNumbering(func)
         pass_.run()
         new_funcs.append(func)
-    
-    program['functions'] = new_funcs
+
+    program["functions"] = new_funcs
 
     json.dump(program, sys.stdout, indent=2)
-
-
-
-
