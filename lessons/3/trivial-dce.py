@@ -15,9 +15,6 @@ class LocalDCE(FunctionPass):
 
         # Go in reverse because we want to discard writes that occur without other writes after them
         for instr in block.instrs[::-1]:
-            if "args" in instr:
-                for arg in instr["args"]:
-                    written_not_read.discard(arg)
 
             dead = False
             if "dest" in instr:
@@ -25,6 +22,10 @@ class LocalDCE(FunctionPass):
                 if instr["dest"] in written_not_read:
                     dead = True
                 written_not_read.add(instr["dest"])
+
+            if "args" in instr:
+                for arg in instr["args"]:
+                    written_not_read.discard(arg)
 
             if not dead:
                 new_block.append(instr)
