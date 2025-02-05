@@ -1,0 +1,4 @@
+@main {
+  x: int = add x x;
+  print x;
+}
