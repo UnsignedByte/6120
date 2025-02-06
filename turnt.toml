@@ -1,13 +1,13 @@
 [envs.test]
 command = """
-bril2json < {filename} | brili -p {args}
+bril2json < {filename} | brilirs -p {args}
 """
 output.expect = "-"
 output.prof = "2"
 
 [envs.insn-counter]
 command = """
-./lessons/2/insn-counter.py --file {filename} | brili {args}
+./lessons/2/insn-counter.py --file {filename} | brilirs {args}
 """
 output.insn-counted = "-"
 

@@ -1,4 +1,4 @@
 @main {
-  prod: int = const 81129638414606663681390495662081;
+  prod: int = const -18014398509481983;
   print prod;
 }

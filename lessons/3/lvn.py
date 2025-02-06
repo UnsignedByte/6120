@@ -2,6 +2,7 @@
 import json
 import os
 import sys
+import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from utils.passes import FunctionPass, BasicBlock
@@ -94,8 +95,19 @@ def const_fold(table: LVNTable, instr):
 
     values = [table.id2value[arg] for arg in args]
     if op in op_map and all(v[0] == "const" for v in values):
-        values = [v[2] for v in values]
-        return ("const", *op_map[op](*values))
+        values = [np.int64(v[2]) if v[1] == "int" else v[2] for v in values]
+        try:
+            with np.errstate(
+                over="ignore", under="ignore", invalid="raise", divide="raise"
+            ):
+                value = ("const", *op_map[op](*values))
+            if value[1] == "int":
+                value = ("const", "int", int(value[2]))
+            return value
+        except FloatingPointError:
+            return (op, *args)
+        except ZeroDivisionError:
+            return (op, *args)
     else:
         return (op, *args)
 
@@ -182,7 +194,9 @@ class LocalValueNumbering(FunctionPass):
                 rep = table.id2name[args[0]]
                 if isinstance(value, str) and lw_map.get(value, 0) > i and rep == value:
                     new_name = self.construct_unique_name()
-                    new_block.append({"op": "id", "dest": new_name, "args": [rep]})
+                    new_block.append(
+                        {**instr, "op": "id", "dest": new_name, "args": [rep]}
+                    )
                     table.id2name[args[0]] = new_name
 
             elif op == "const":
