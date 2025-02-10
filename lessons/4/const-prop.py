@@ -15,17 +15,16 @@ class ConstProp(DataFlowPass):
         return self.init()
 
     def meet(self, inp):
-        ret = {}
-        # Keep only the values that are the same in all the inputs
-        keys = set().union(*[x.keys() for x in inp])
-        for key in keys:
-            values = set(x[key] for x in inp if key in x)
-            if len(values) == 1:
-                ret[key] = values.pop()
-            else:
-                ret[key] = None
-
-        return ret
+        # Convert each input dictionary into a set of tuples
+        inp = [set(d.items()) for d in inp]
+        # Take the intersection of all the input sets
+        if len(inp) == 0:
+            intersection = set()
+        elif len(inp) == 1:
+            intersection = inp[0]
+        else:
+            intersection = inp[0].intersection(*inp[1:])
+        return dict(intersection)
 
     def transfer(self, bidx: int):
         block = self.blocks[bidx]
@@ -58,27 +57,28 @@ class ConstProp(DataFlowPass):
 
         out_values = {**in_values}
         for i, instr in enumerate(block.instrs):
-            args = [out_values.get(arg, None) for arg in instr.get("args", [])]
+            args = instr.get("args", [])
             if "dest" in instr:
                 if instr.get("op", "") == "const":
                     # If the instruction is a constant, then it is constant propagatable
                     out_values[instr["dest"]] = (instr["type"], instr["value"])
-                elif instr.get("op", "") == "id" and args[0] is not None:
-                    out_values[instr["dest"]] = args[0]
+                elif instr.get("op", "") == "id" and args[0] in out_values:
+                    out_values[instr["dest"]] = out_values[args[0]]
                 elif instr.get("op", "") in op_map and all(
-                    arg is not None for arg in args
+                    arg in out_values for arg in args
                 ):
-                    args = [v[1] for v in args]
+                    args = [out_values[arg][1] for arg in args]
                     # If all the arguments are constant propagatable, then this instruction is constant propagatable
                     out_values[instr["dest"]] = op_map[instr["op"]](*args)
                 else:
                     # Otherwise, remove the variable from the out set
-                    out_values[instr["dest"]] = None
+                    if instr["dest"] in out_values:
+                        del out_values[instr["dest"]]
         return out_values
 
     def before(self):
         def vals_str(vals):
-            vals = [f"{k}: {v[0]} = {v[1]}" for k, v in vals.items() if v is not None]
+            vals = [f"{k}: {v[0]} = {v[1]}" for k, v in vals.items()]
             return ", ".join(sorted(vals))
 
         # Print output information

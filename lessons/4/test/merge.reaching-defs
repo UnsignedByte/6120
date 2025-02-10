@@ -1,0 +1,12 @@
+.unknown:
+	in: cond=?
+	out: b=2, c=3, cond=?
+.left:
+	in: b=2, c=3, cond=?
+	out: a=1, b=2, c=3, cond=?
+.right:
+	in: b=2, c=3, cond=?
+	out: a=1, b=2, c=1, cond=?
+.end:
+	in: a=1, b=2, c={1, 3}, cond=?
+	out: a=1, b=2, c={1, 3}, cond=?

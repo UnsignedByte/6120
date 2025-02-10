@@ -1,0 +1,9 @@
+@main(cond: bool) {
+  br cond .left .right;
+.left:
+  jmp .end;
+.right:
+  jmp .end;
+.end:
+  return;
+}
