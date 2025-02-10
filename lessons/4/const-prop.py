@@ -63,6 +63,8 @@ class ConstProp(DataFlowPass):
                 if instr.get("op", "") == "const":
                     # If the instruction is a constant, then it is constant propagatable
                     out_values[instr["dest"]] = (instr["type"], instr["value"])
+                elif instr.get("op", "") == "id" and args[0] is not None:
+                    out_values[instr["dest"]] = args[0]
                 elif instr.get("op", "") in op_map and all(
                     arg is not None for arg in args
                 ):
