@@ -1,12 +1,12 @@
 .unknown:
 	in: cond=?
-	out: cond=?, a=47, b=42
+	out: a=47, b=42, cond=?
 .left:
-	in: cond=?, a=47, b=42
-	out: c=5, a=47, b=1, cond=?
+	in: a=47, b=42, cond=?
+	out: a=47, b=1, c=5, cond=?
 .right:
-	in: cond=?, a=47, b=42
-	out: cond=?, c=10, b=42, a=2
+	in: a=47, b=42, cond=?
+	out: a=2, b=42, c=10, cond=?
 .end:
-	in: c={10, 5}, a={47, 2}, b={1, 42}, cond=?
-	out: c={10, 5}, a={47, 2}, b={1, 42}, cond=?, d=sub a c
+	in: a={2, 47}, b={1, 42}, c={10, 5}, cond=?
+	out: a={2, 47}, b={1, 42}, c={10, 5}, cond=?, d=sub a c

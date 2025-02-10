@@ -59,7 +59,12 @@ class ReachingDefs(DataFlowPass):
                 if len(values) == 1:
                     output.append(f"{var}={values.pop()}")
                 else:
+                    # Sort the values for consistency
+                    values = sorted(list(values))
                     output.append(f"{var}={{{', '.join(values)}}}")
+
+            # Sort the output for consistency
+            output.sort()
             return ", ".join(output)
 
         # Print output information
