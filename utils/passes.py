@@ -64,7 +64,7 @@ def generate_cfg(blocks):
             if last_instr.get("op", "") in {"jmp", "br"}:
                 # There should be two successors
                 succs[i] = [name_map[s] for s in last_instr["labels"]]
-            elif last_instr.get("op", "") == "ret":
+            elif last_instr.get("op", "") == "ret" or i == len(blocks) - 1:
                 succs[i] = []
             else:
                 succs[i] = [i + 1]

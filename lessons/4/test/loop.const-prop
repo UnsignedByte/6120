@@ -1,0 +1,12 @@
+.unknown:
+	in: 
+	out: i, one
+.head:
+	in: one
+	out: one
+.body:
+	in: one
+	out: one
+.end:
+	in: one
+	out: one

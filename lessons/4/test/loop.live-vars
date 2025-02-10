@@ -1,0 +1,12 @@
+.unknown:
+	out: iters
+	in: i, iters, one
+.head:
+	out: i, iters, one
+	in: i, iters, one
+.body:
+	out: i, iters, one
+	in: i, iters, one
+.end:
+	out: i, iters
+	in: 

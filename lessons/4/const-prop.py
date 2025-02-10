@@ -22,6 +22,8 @@ class ConstProp(DataFlowPass):
             values = set(x[key] for x in inp if key in x)
             if len(values) == 1:
                 ret[key] = values.pop()
+            else:
+                ret[key] = None
 
         return ret
 
@@ -59,19 +61,20 @@ class ConstProp(DataFlowPass):
         for i, instr in enumerate(block.instrs):
             if "dest" in instr:
                 if instr.get("op", "") in const_ops and all(
-                    arg in out_values for arg in instr.get("args", [])
+                    out_values.get(arg, None) is not None
+                    for arg in instr.get("args", [])
                 ):
                     # If all the arguments are constant propagatable, then this instruction is constant propagatable
                     out_values[instr["dest"]] = bidx
                 else:
                     # Otherwise, remove the variable from the out set
-                    if instr["dest"] in out_values:
-                        del out_values[instr["dest"]]
+                    out_values[instr["dest"]] = None
         return out_values
 
     def before(self):
         def vals_str(vals):
-            return ", ".join(sorted(list(vals)))
+            vals = [k for k, v in vals.items() if v is not None]
+            return ", ".join(sorted(vals))
 
         # Print output information
         for i, block in enumerate(self.blocks):
