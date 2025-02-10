@@ -4,7 +4,7 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from utils.passes import DataFlowPass, FunctionPass, BasicBlock
+from utils.passes import DataFlowPass
 
 
 class ConstProp(DataFlowPass):
@@ -32,40 +32,43 @@ class ConstProp(DataFlowPass):
         in_values = self.in_values[bidx]
 
         # Operations that can be constant propagated
-        const_ops = {
-            "add",
-            "sub",
-            "mul",
-            "div",
-            "eq",
-            "lt",
-            "gt",
-            "le",
-            "ge",
-            "not",
-            "and",
-            "or",
-            "fadd",
-            "fsub",
-            "fmul",
-            "fdiv",
-            "feq",
-            "flt",
-            "fgt",
-            "fle",
-            "fge",
-            "const",
+        op_map = {
+            "add": lambda x, y: ("int", x + y),
+            "sub": lambda x, y: ("int", x - y),
+            "mul": lambda x, y: ("int", x * y),
+            "div": lambda x, y: ("int", x // y),
+            "eq": lambda x, y: ("bool", x == y),
+            "lt": lambda x, y: ("bool", x < y),
+            "gt": lambda x, y: ("bool", x > y),
+            "le": lambda x, y: ("bool", x <= y),
+            "ge": lambda x, y: ("bool", x >= y),
+            "and": lambda x, y: ("bool", x and y),
+            "or": lambda x, y: ("bool", x or y),
+            "not": lambda x: ("bool", not x),
+            "fadd": lambda x, y: ("float", x + y),
+            "fsub": lambda x, y: ("float", x - y),
+            "fmul": lambda x, y: ("float", x * y),
+            "fdiv": lambda x, y: ("float", x / y),
+            "feq": lambda x, y: ("bool", x == y),
+            "flt": lambda x, y: ("bool", x < y),
+            "fgt": lambda x, y: ("bool", x > y),
+            "fle": lambda x, y: ("bool", x <= y),
+            "fge": lambda x, y: ("bool", x >= y),
         }
 
         out_values = {**in_values}
         for i, instr in enumerate(block.instrs):
+            args = [out_values.get(arg, None) for arg in instr.get("args", [])]
             if "dest" in instr:
-                if instr.get("op", "") in const_ops and all(
-                    out_values.get(arg, None) is not None
-                    for arg in instr.get("args", [])
+                if instr.get("op", "") == "const":
+                    # If the instruction is a constant, then it is constant propagatable
+                    out_values[instr["dest"]] = (instr["type"], instr["value"])
+                elif instr.get("op", "") in op_map and all(
+                    arg is not None for arg in args
                 ):
+                    args = [v[1] for v in args]
                     # If all the arguments are constant propagatable, then this instruction is constant propagatable
-                    out_values[instr["dest"]] = bidx
+                    out_values[instr["dest"]] = op_map[instr["op"]](*args)
                 else:
                     # Otherwise, remove the variable from the out set
                     out_values[instr["dest"]] = None
@@ -73,7 +76,7 @@ class ConstProp(DataFlowPass):
 
     def before(self):
         def vals_str(vals):
-            vals = [k for k, v in vals.items() if v is not None]
+            vals = [f"{k}: {v[0]} = {v[1]}" for k, v in vals.items() if v is not None]
             return ", ".join(sorted(vals))
 
         # Print output information

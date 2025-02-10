@@ -1,0 +1,6 @@
+.unknown:
+	in: 
+	out: a=1, b=2
+.block2:
+	in: a=1, b=2
+	out: a=1, b=add a b

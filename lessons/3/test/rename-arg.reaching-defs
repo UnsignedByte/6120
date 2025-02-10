@@ -1,0 +1,3 @@
+.unknown:
+	in: x=?
+	out: x=2, y=id x, z=id y

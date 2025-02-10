@@ -1,0 +1,3 @@
+.unknown:
+	in: a=?, b=?
+	out: a=?, b=?, mul1=mul sum1 sum2, sum1=add a b, sum2=add b a

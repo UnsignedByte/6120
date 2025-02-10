@@ -1,0 +1,6 @@
+.unknown:
+	in: 
+	out: one: int = 1
+.block2:
+	in: one: int = 1
+	out: one: int = 1

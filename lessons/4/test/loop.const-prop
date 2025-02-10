@@ -1,12 +1,12 @@
 .unknown:
 	in: 
-	out: i, one
+	out: i: int = 0, one: int = 1
 .head:
-	in: one
-	out: one
+	in: one: int = 1
+	out: one: int = 1
 .body:
-	in: one
-	out: one
+	in: one: int = 1
+	out: one: int = 1
 .end:
-	in: one
-	out: one
+	in: one: int = 1
+	out: one: int = 1

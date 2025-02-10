@@ -1,12 +1,12 @@
 .unknown:
 	in: 
-	out: a, b
+	out: a: int = 5, b: int = 6
 .l1:
-	in: a, b
-	out: a, b
+	in: a: int = 5, b: int = 6
+	out: a: int = 5, b: int = 7
 .l2:
-	in: a, b
-	out: a, b
+	in: a: int = 5, b: int = 6
+	out: a: int = 5, b: int = 6
 .end:
-	in: a
-	out: a
+	in: a: int = 5
+	out: a: int = 5

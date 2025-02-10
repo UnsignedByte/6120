@@ -1,0 +1,3 @@
+.unknown:
+	in: 
+	out: one: int = 1
