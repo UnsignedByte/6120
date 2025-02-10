@@ -1,0 +1,5 @@
+main
+None: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 5}, {'dest': 'b', 'op': 'const', 'type': 'int', 'value': 6}, {'args': ['cond'], 'labels': ['l1', 'l2'], 'op': 'br'}]
+l1: [{'dest': 'b', 'op': 'const', 'type': 'int', 'value': 7}, {'labels': ['end'], 'op': 'jmp'}]
+l2: [{'labels': ['end'], 'op': 'jmp'}]
+end: [{'args': ['a', 'b'], 'op': 'print'}, {'op': 'ret'}]

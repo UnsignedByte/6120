@@ -4,15 +4,18 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from utils.passes import DataFlowPass, FunctionPass, BasicBlock
+from utils.passes import DataFlowPass
 
 
-class ReachingDefs(DataFlowPass):
+class LiveVars(DataFlowPass):
+    def __init__(self, func):
+        super().__init__(func, True)
+
     def init(self):
         return set()
 
     def args(self):
-        return set((a["name"], -1, -1) for a in self.func.get("args", []))
+        return self.init()
 
     def meet(self, inp):
         return set().union(*inp)
@@ -22,53 +25,28 @@ class ReachingDefs(DataFlowPass):
         in_values = self.in_values[bidx]
 
         out_values = set(in_values)
-        for i, instr in enumerate(block.instrs):
+        for i, instr in reversed(list(enumerate(block.instrs))):
+            # Remove the defined variable from the out set
             if "dest" in instr:
-                # Remove all definitions of this variable
-                for val in in_values:
-                    if val[0] == instr["dest"]:
-                        out_values.discard(val)
+                out_values.discard(instr["dest"])
 
-                # Add this definition
-                out_values.add((instr["dest"], bidx, i))
+            # Add the used variables to the out set
+            for arg in instr.get("args", []):
+                out_values.add(arg)
 
         return out_values
 
     def before(self):
         def vals_str(vals):
-            bindings = {}
-
-            for var, bidx, i in vals:
-                # Figure out what value this is
-                if bidx == -1:
-                    value = "?"
-                else:
-                    inst = self.blocks[bidx].instrs[i]
-                    if inst.get("op", "") == "const":
-                        value = str(inst["value"])
-                    else:
-                        value = f"{inst['op']} {' '.join(inst.get('args', []))}"
-
-                if not var in bindings:
-                    bindings[var] = set()
-
-                bindings[var].add(value)
-
-            output = []
-            for var, values in bindings.items():
-                if len(values) == 1:
-                    output.append(f"{var}={values.pop()}")
-                else:
-                    output.append(f"{var}={{{', '.join(values)}}}")
-            return ", ".join(output)
+            return ", ".join(sorted(list(vals)))
 
         # Print output information
         for i, block in enumerate(self.blocks):
             name = block.name if block.name else "unknown"
             print(f".{name}:")
             # Print the input and output values for this block
-            print(f"\tin: {vals_str(self.in_values[i])}")
             print(f"\tout: {vals_str(self.out_values[i])}")
+            print(f"\tin: {vals_str(self.in_values[i])}")
 
 
 if __name__ == "__main__":
@@ -78,5 +56,5 @@ if __name__ == "__main__":
     program = json.load(sys.stdin)
 
     for func in program["functions"]:
-        pass_ = ReachingDefs(func)
+        pass_ = LiveVars(func)
         pass_.run()

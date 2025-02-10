@@ -1,0 +1,12 @@
+.unknown:
+	in: cond=?
+	out: a=5, b=6, cond=?
+.l1:
+	in: a=5, b=6, cond=?
+	out: a=5, b=7, cond=?
+.l2:
+	in: a=5, b=6, cond=?
+	out: a=5, b=6, cond=?
+.end:
+	in: a=5, b={6, 7}, cond=?
+	out: a=5, b={6, 7}, cond=?

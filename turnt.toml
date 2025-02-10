@@ -23,6 +23,17 @@ bril2json < {filename} | ./lessons/4/reaching-defs.py
 """
 output.reaching-defs = "-"
 
+[envs.live-vars]
+command = """
+bril2json < {filename} | ./lessons/4/live-vars.py
+"""
+output.live-vars = "-"
+[envs.const-prop]
+command = """
+bril2json < {filename} | ./lessons/4/const-prop.py
+"""
+output.const-prop = "-"
+
 [envs.lvn]
 command = """
 bril2json < {filename} | ./lessons/3/lvn.py | bril2txt

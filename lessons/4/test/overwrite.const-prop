@@ -1,0 +1,15 @@
+.unknown:
+	in: 
+	out: a
+.l1:
+	in: a
+	out: a
+.l2:
+	in: a
+	out: a
+.l3:
+	in: a
+	out: a
+.end:
+	in: a
+	out: a

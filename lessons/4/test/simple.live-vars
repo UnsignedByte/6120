@@ -1,0 +1,12 @@
+.unknown:
+	out: cond
+	in: a
+.left:
+	out: a
+	in: a, c
+.right:
+	out: 
+	in: a, c
+.end:
+	out: a, c
+	in: 

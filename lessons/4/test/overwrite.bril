@@ -9,5 +9,6 @@
   a: int = const 3;
   print a;
 .end:
+  print a;
   ret;
 }
