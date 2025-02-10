@@ -56,7 +56,7 @@ class ConstProp(DataFlowPass):
         }
 
         out_values = {**in_values}
-        for i, instr in enumerate(block.instrs):
+        for instr in block.instrs:
             args = instr.get("args", [])
             if "dest" in instr:
                 if instr.get("op", "") == "const":
