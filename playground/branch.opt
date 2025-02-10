@@ -1,0 +1,12 @@
+@main {
+  v: bool = const true;
+  br v .true .false;
+.true:
+  print v;
+  jmp .end;
+.false:
+  print v;
+  jmp .end;
+.end:
+  print v;
+}

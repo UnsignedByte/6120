@@ -1,0 +1,12 @@
+.unknown:
+	in: cond=?
+	out: cond=?, a=47, b=42
+.left:
+	in: cond=?, a=47, b=42
+	out: c=5, a=47, b=1, cond=?
+.right:
+	in: cond=?, a=47, b=42
+	out: cond=?, c=10, b=42, a=2
+.end:
+	in: c={10, 5}, a={47, 2}, b={1, 42}, cond=?
+	out: c={10, 5}, a={47, 2}, b={1, 42}, cond=?, d=sub a c

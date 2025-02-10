@@ -17,6 +17,12 @@ bril2json < {filename} | ./lessons/3/trivial-dce.py | bril2txt
 """
 output.trivial-dce = "-"
 
+[envs.reaching-defs]
+command = """
+bril2json < {filename} | ./lessons/4/reaching-defs.py
+"""
+output.reaching-defs = "-"
+
 [envs.lvn]
 command = """
 bril2json < {filename} | ./lessons/3/lvn.py | bril2txt
