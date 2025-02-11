@@ -1,6 +1,6 @@
 .unknown:
 	in: 
-	out: 
+	out: a = ?, b = ?, sum = ?
 .unknown:
 	in: 
 	out: one: int = 1

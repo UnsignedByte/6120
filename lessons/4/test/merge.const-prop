@@ -8,5 +8,5 @@
 	in: b: int = 2, c: int = 3
 	out: a: int = 1, b: int = 2, c: int = 1
 .end:
-	in: a: int = 1, b: int = 2
-	out: a: int = 1, b: int = 2
+	in: a: int = 1, b: int = 2, c = ?
+	out: a: int = 1, b: int = 2, c = ?

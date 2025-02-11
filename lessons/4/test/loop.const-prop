@@ -2,11 +2,11 @@
 	in: 
 	out: i: int = 0, one: int = 1
 .head:
-	in: 
-	out: 
+	in: cond = ?, i = ?, one: int = 1
+	out: cond = ?, i = ?, one: int = 1
 .body:
-	in: 
-	out: 
+	in: cond = ?, i = ?, one: int = 1
+	out: cond = ?, i = ?, one: int = 1
 .end:
-	in: 
-	out: 
+	in: cond = ?, i = ?, one: int = 1
+	out: cond = ?, i = ?, one: int = 1

@@ -8,5 +8,5 @@
 	in: a: int = 47, b: int = 42
 	out: a: int = 2, b: int = 42, c: int = 10
 .end:
-	in: 
-	out: 
+	in: a = ?, b = ?, c = ?
+	out: a = ?, b = ?, c = ?, d = ?
