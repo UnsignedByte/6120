@@ -1,0 +1,6 @@
+.unknown:
+	in: 
+	out: (add a b)
+.unknown:
+	in: 
+	out: (const 1)

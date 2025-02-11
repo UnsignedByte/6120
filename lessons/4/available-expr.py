@@ -9,75 +9,72 @@ from utils.passes import DataFlowPass
 
 class AvailableExpr(DataFlowPass):
     def init(self):
-        return {}
+        return None
 
     def args(self):
-        return self.init()
+        return set()
 
     def meet(self, inp):
-        # Convert each input dictionary into a set of tuples
-        inp = [set(d.items()) for d in inp]
-        # Take the intersection of all the input sets
-        if len(inp) == 0:
-            intersection = set()
-        elif len(inp) == 1:
-            intersection = inp[0]
-        else:
-            intersection = inp[0].intersection(*inp[1:])
-        return dict(intersection)
+        # Filter out nones
+        inp = [x for x in inp if x is not None]
+        if not inp:
+            return None
+
+        return inp[0].intersection(*inp[1:])
 
     def transfer(self, bidx: int):
         block = self.blocks[bidx]
         in_values = self.in_values[bidx]
 
-        # Operations that can be constant propagated
-        op_map = {
-            "add": lambda x, y: ("int", x + y),
-            "sub": lambda x, y: ("int", x - y),
-            "mul": lambda x, y: ("int", x * y),
-            "div": lambda x, y: ("int", x // y),
-            "eq": lambda x, y: ("bool", x == y),
-            "lt": lambda x, y: ("bool", x < y),
-            "gt": lambda x, y: ("bool", x > y),
-            "le": lambda x, y: ("bool", x <= y),
-            "ge": lambda x, y: ("bool", x >= y),
-            "and": lambda x, y: ("bool", x and y),
-            "or": lambda x, y: ("bool", x or y),
-            "not": lambda x: ("bool", not x),
-            "fadd": lambda x, y: ("float", x + y),
-            "fsub": lambda x, y: ("float", x - y),
-            "fmul": lambda x, y: ("float", x * y),
-            "fdiv": lambda x, y: ("float", x / y),
-            "feq": lambda x, y: ("bool", x == y),
-            "flt": lambda x, y: ("bool", x < y),
-            "fgt": lambda x, y: ("bool", x > y),
-            "fle": lambda x, y: ("bool", x <= y),
-            "fge": lambda x, y: ("bool", x >= y),
+        # Operations that do not have side effects
+        const_ops = {
+            "add",
+            "sub",
+            "mul",
+            "div",
+            "eq",
+            "lt",
+            "gt",
+            "le",
+            "ge",
+            "and",
+            "or",
+            "not",
+            "fadd",
+            "fsub",
+            "fmul",
+            "fdiv",
+            "feq",
+            "flt",
+            "fgt",
+            "fle",
+            "fge",
+            "id",
         }
 
-        out_values = {**in_values}
+        out_values = set(in_values)
         for instr in block.instrs:
-            args = instr.get("args", [])
+            if instr.get("op", None) == "const":
+                out_values.add(("const", instr["value"]))
+            elif instr.get("op", None) in const_ops:
+                out_values.add((instr["op"], *instr.get("args", [])))
+
             if "dest" in instr:
-                if instr.get("op", "") == "const":
-                    # If the instruction is a constant, then it is constant propagatable
-                    out_values[instr["dest"]] = (instr["type"], instr["value"])
-                elif instr.get("op", "") == "id" and args[0] in out_values:
-                    out_values[instr["dest"]] = out_values[args[0]]
-                elif instr.get("op", "") in op_map and all(
-                    arg in out_values for arg in args
-                ):
-                    args = [out_values[arg][1] for arg in args]
-                    # If all the arguments are constant propagatable, then this instruction is constant propagatable
-                    out_values[instr["dest"]] = op_map[instr["op"]](*args)
-                else:
-                    # Otherwise, we know that this value is non-constant
-                    out_values[instr["dest"]] = None
+                # Remove all expressions that read from this variable
+                discard = set()
+                for val in out_values:
+                    if val[0] != "const":
+                        used_args = set(val[1:])
+                        if instr["dest"] in used_args:
+                            discard.add(val)
+
+                out_values -= discard
+
         return out_values
 
     def before(self):
         def vals_str(vals):
-            vals = [f"{k} = {' '.join(v)}" for k, v in vals.items()]
+            vals = [f"({' '.join(map(str, v))})" for v in vals]
             return ", ".join(sorted(vals))
 
         # Print output information

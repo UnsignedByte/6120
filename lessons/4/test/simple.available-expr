@@ -1,0 +1,12 @@
+.unknown:
+	in: 
+	out: (const 42), (const 47)
+.left:
+	in: (const 42), (const 47)
+	out: (const 1), (const 42), (const 47), (const 5)
+.right:
+	in: (const 42), (const 47)
+	out: (const 10), (const 2), (const 42), (const 47)
+.end:
+	in: (const 42), (const 47)
+	out: (const 42), (const 47), (sub a c)

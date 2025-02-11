@@ -1,0 +1,11 @@
+# Test where a value is defined only in one branch
+# ARGS: true
+@main (cond: bool){
+  br cond .left .right;
+.left:
+  a: int = const 1;
+  jmp .end;
+.right:
+  jmp .end;
+.end:
+}

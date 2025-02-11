@@ -25,9 +25,12 @@ class ReachingDefs(DataFlowPass):
         for i, instr in enumerate(block.instrs):
             if "dest" in instr:
                 # Remove all definitions of this variable
-                for val in in_values:
+                discard = set()
+                for val in out_values:
                     if val[0] == instr["dest"]:
-                        out_values.discard(val)
+                        discard.add(val)
+
+                out_values -= discard
 
                 # Add this definition
                 out_values.add((instr["dest"], bidx, i))

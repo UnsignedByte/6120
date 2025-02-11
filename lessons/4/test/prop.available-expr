@@ -1,0 +1,12 @@
+.unknown:
+	in: 
+	out: (const 5), (const 6)
+.l1:
+	in: (const 5), (const 6)
+	out: (const 5), (const 6), (const 7)
+.l2:
+	in: (const 5), (const 6)
+	out: (const 5), (const 6)
+.end:
+	in: (const 5), (const 6)
+	out: (const 5), (const 6)

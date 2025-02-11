@@ -28,11 +28,18 @@ command = """
 bril2json < {filename} | ./lessons/4/live-vars.py
 """
 output.live-vars = "-"
+
 [envs.const-prop]
 command = """
 bril2json < {filename} | ./lessons/4/const-prop.py
 """
 output.const-prop = "-"
+
+[envs.available-expr]
+command = """
+bril2json < {filename} | ./lessons/4/available-expr.py
+"""
+output.available-expr = "-"
 
 [envs.lvn]
 command = """

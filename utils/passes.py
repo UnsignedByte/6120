@@ -57,7 +57,10 @@ def generate_cfg(blocks):
 
     for i, block in blocks:
         if len(block.instrs) == 0:
-            succs[i] = [i + 1]
+            if i == len(blocks) - 1:
+                succs[i] = []
+            else:
+                succs[i] = [i + 1]
         else:
             last_instr = block.instrs[-1]
             # If this is a br, jmp, or ret instruction

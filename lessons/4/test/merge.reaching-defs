@@ -3,10 +3,10 @@
 	out: b=2, c=3, cond=?
 .left:
 	in: b=2, c=3, cond=?
-	out: a=1, b=2, c=3, cond=?
+	out: a=1, b=2, c=3, cond=?, x=add b c
 .right:
 	in: b=2, c=3, cond=?
-	out: a=1, b=2, c=1, cond=?
+	out: a=1, b=2, c=1, cond=?, x=sub b c
 .end:
-	in: a=1, b=2, c={1, 3}, cond=?
-	out: a=1, b=2, c={1, 3}, cond=?
+	in: a=1, b=2, c={1, 3}, cond=?, x={add b c, sub b c}
+	out: a=1, b=2, c={1, 3}, cond=?, x={add b c, sub b c}
