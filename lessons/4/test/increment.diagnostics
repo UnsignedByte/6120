@@ -1,0 +1,4 @@
+main
+None: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}]
+l1: [{'args': ['a', 'a'], 'dest': 'a', 'op': 'add', 'type': 'int'}]
+l2: [{'args': ['a'], 'op': 'print'}]
