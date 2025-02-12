@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: cond=?
 	out: cond=?
@@ -10,3 +11,5 @@
 .end:
 	in: a=1, cond=?
 	out: a=1, cond=?
+}
+

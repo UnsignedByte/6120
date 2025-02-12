@@ -1,3 +1,6 @@
+main {
 .unknown:
 	in: 
 	out: (add a b), (add sum sum2)
+}
+

@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: cond=?
 	out: a=47, b=42, cond=?
@@ -10,3 +11,5 @@
 .end:
 	in: a={2, 47}, b={1, 42}, c={10, 5}, cond=?
 	out: a={2, 47}, b={1, 42}, c={10, 5}, cond=?, d=sub a c
+}
+

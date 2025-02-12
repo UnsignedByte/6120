@@ -1,3 +1,6 @@
+main {
 .unknown:
 	in: 
-	out: four = ?, one: int = 1, three = ?, two = ?
+	out: four: int = 1, one: int = 1, three: int = 1, two: int = 1
+}
+

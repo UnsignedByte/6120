@@ -1,0 +1,12 @@
+main {
+.unknown:
+	in: 
+	out: a = [-inf, inf], b = [-inf, inf], sum = [-inf, inf]
+}
+
+dummy {
+.unknown:
+	in: 
+	out: one = [1, 1]
+}
+

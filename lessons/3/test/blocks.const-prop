@@ -1,6 +1,9 @@
+main {
 .unknown:
 	in: 
 	out: a: int = 1, b: int = 2
 .block2:
 	in: a: int = 1, b: int = 2
 	out: a: int = 1, b: int = 3
+}
+

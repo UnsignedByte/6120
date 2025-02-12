@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: a = [-inf, inf], b = [-inf, inf]
+	out: a = [-inf, inf], b = [-inf, inf], mul1 = [-inf, inf], sum1 = [-inf, inf], sum2 = [-inf, inf]
+}
+

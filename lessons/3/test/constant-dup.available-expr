@@ -1,6 +1,9 @@
+main {
 .unknown:
 	in: 
 	out: (const 1), (id one), (id three), (id two)
 .block2:
 	in: (const 1), (id one), (id three), (id two)
 	out: (const 1), (id one), (id three), (id two)
+}
+

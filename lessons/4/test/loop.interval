@@ -1,0 +1,15 @@
+main {
+.unknown:
+	in: iters = [-inf, inf]
+	out: i = [0, 0], iters = [-inf, inf], one = [1, 1]
+.head:
+	in: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+	out: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+.body:
+	in: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+	out: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+.end:
+	in: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+	out: cond = [False, True], i = [0, inf], iters = [-inf, inf], one = [1, 1]
+}
+

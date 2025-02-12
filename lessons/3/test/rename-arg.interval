@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: x = [-inf, inf]
+	out: x = [2, 2], y = [-inf, inf], z = [-inf, inf]
+}
+

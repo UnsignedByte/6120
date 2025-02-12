@@ -1,6 +1,12 @@
+main {
 .unknown:
 	in: 
 	out: (add a b)
+}
+
+dummy {
 .unknown:
 	in: 
 	out: (const 1)
+}
+

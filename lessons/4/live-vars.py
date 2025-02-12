@@ -36,17 +36,8 @@ class LiveVars(DataFlowPass):
 
         return out_values
 
-    def before(self):
-        def vals_str(vals):
-            return ", ".join(sorted(list(vals)))
-
-        # Print output information
-        for i, block in enumerate(self.blocks):
-            name = block.name if block.name else "unknown"
-            print(f".{name}:")
-            # Print the input and output values for this block
-            print(f"\tout: {vals_str(self.out_values[i])}")
-            print(f"\tin: {vals_str(self.in_values[i])}")
+    def to_str(self, val: any):
+        return ", ".join(sorted(list(val)))
 
 
 if __name__ == "__main__":
@@ -58,3 +49,4 @@ if __name__ == "__main__":
     for func in program["functions"]:
         pass_ = LiveVars(func)
         pass_.run()
+        print(pass_)

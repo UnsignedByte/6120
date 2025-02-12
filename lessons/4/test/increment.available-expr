@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: 
 	out: (const 1)
@@ -7,3 +8,5 @@
 .l2:
 	in: (const 1)
 	out: (const 1)
+}
+

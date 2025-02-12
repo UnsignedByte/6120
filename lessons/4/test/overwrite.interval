@@ -1,0 +1,18 @@
+main {
+.unknown:
+	in: 
+	out: a = [0, 0]
+.l1:
+	in: a = [0, 0]
+	out: a = [1, 1]
+.l2:
+	in: a = [1, 1]
+	out: a = [2, 2]
+.l3:
+	in: a = [2, 2]
+	out: a = [3, 3]
+.end:
+	in: a = [3, 3]
+	out: a = [3, 3]
+}
+

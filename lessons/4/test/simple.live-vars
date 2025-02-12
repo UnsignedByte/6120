@@ -1,12 +1,15 @@
+main {
 .unknown:
-	out: cond
 	in: a
+	out: cond
 .left:
+	in: a, c
 	out: a
-	in: a, c
 .right:
-	out: 
 	in: a, c
+	out: 
 .end:
-	out: a, c
 	in: 
+	out: a, c
+}
+

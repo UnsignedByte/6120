@@ -1,6 +1,12 @@
+main {
 .unknown:
-	out: 
 	in: 
+	out: 
+}
+
+dummy {
 .unknown:
-	out: 
 	in: 
+	out: 
+}
+

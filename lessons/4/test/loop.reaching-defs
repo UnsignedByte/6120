@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: iters=?
 	out: i=0, iters=?, one=1
@@ -10,3 +11,5 @@
 .end:
 	in: cond=lt i iters, i={0, add i one}, iters=?, one=1
 	out: cond=lt i iters, i={0, add i one}, iters=?, one=1
+}
+

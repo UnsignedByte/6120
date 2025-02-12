@@ -72,18 +72,9 @@ class AvailableExpr(DataFlowPass):
 
         return out_values
 
-    def before(self):
-        def vals_str(vals):
-            vals = [f"({' '.join(map(str, v))})" for v in vals]
-            return ", ".join(sorted(vals))
-
-        # Print output information
-        for i, block in enumerate(self.blocks):
-            name = block.name if block.name else "unknown"
-            print(f".{name}:")
-            # Print the input and output values for this block
-            print(f"\tin: {vals_str(self.in_values[i])}")
-            print(f"\tout: {vals_str(self.out_values[i])}")
+    def to_str(self, val):
+        val = [f"({' '.join(map(str, v))})" for v in val]
+        return ", ".join(sorted(val))
 
 
 if __name__ == "__main__":
@@ -95,3 +86,4 @@ if __name__ == "__main__":
     for func in program["functions"]:
         pass_ = AvailableExpr(func)
         pass_.run()
+        print(pass_)

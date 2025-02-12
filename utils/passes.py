@@ -103,16 +103,13 @@ class FunctionPass(ABC):
     def run(self):
         self.before()
 
-        # First, generate the basic blocks for the function
-        blocks = generate_basic_blocks(self.func)
-
         # Loop through each basic block and run the basic_block method
-        new_blocks = map(self.basic_block, blocks)
+        new_blocks = list(map(self.basic_block, self.blocks))
+
+        self.blocks = new_blocks
 
         # Reassemble the function
         new_instrs = map(lambda block: block.flatten(), new_blocks)
-
-        self.blocks = new_blocks
         self.func["instrs"] = [instr for block in new_instrs for instr in block]
 
         self.after()
@@ -128,6 +125,11 @@ class DataFlowPass(FunctionPass):
         self.in_values = [self.init() for _ in self.blocks]
         self.out_values = [self.init() for _ in self.blocks]
         self.reverse = reverse
+
+    @abstractmethod
+    def to_str(self, val: any):
+        # Method to convert a value to a string
+        pass
 
     @abstractmethod
     def init(self):
@@ -193,3 +195,16 @@ class DataFlowPass(FunctionPass):
 
         # Now that we have the final values, we can apply them to the function
         super().run()
+
+    def __repr__(self):
+        output = ""
+        # Print output information
+        output += f"{self.func['name']} {{\n"
+        for i, block in enumerate(self.blocks):
+            name = block.name if block.name else "unknown"
+            output += f".{name}:\n"
+            # output the input and output values for this block
+            output += f"\tin: {self.to_str(self.in_values[i])}\n"
+            output += f"\tout: {self.to_str(self.out_values[i])}\n"
+        output += "}\n"
+        return output

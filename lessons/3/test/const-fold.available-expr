@@ -1,3 +1,6 @@
+main {
 .unknown:
 	in: 
 	out: (add one two), (const 1), (const 2)
+}
+

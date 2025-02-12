@@ -28,6 +28,11 @@ command = """
 bril2json < {filename} | ./lessons/4/live-vars.py
 """
 output.live-vars = "-"
+[envs.interval]
+command = """
+bril2json < {filename} | ./lessons/4/interval.py
+"""
+output.interval = "-"
 
 [envs.const-prop]
 command = """

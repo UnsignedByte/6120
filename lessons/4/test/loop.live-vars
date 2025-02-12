@@ -1,12 +1,15 @@
+main {
 .unknown:
+	in: i, iters, one
 	out: iters
-	in: i, iters, one
 .head:
-	out: i, iters, one
 	in: i, iters, one
+	out: i, iters, one
 .body:
-	out: i, iters, one
 	in: i, iters, one
+	out: i, iters, one
 .end:
-	out: i, iters
 	in: 
+	out: i, iters
+}
+

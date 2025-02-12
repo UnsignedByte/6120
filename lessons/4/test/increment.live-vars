@@ -1,9 +1,12 @@
+main {
 .unknown:
+	in: a
 	out: 
-	in: a
 .l1:
-	out: a
 	in: a
-.l2:
 	out: a
+.l2:
 	in: 
+	out: a
+}
+

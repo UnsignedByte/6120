@@ -37,46 +37,37 @@ class ReachingDefs(DataFlowPass):
 
         return out_values
 
-    def before(self):
-        def vals_str(vals):
-            bindings = {}
+    def to_str(self, val: any):
+        bindings = {}
 
-            for var, bidx, i in vals:
-                # Figure out what value this is
-                if bidx == -1:
-                    value = "?"
+        for var, bidx, i in val:
+            # Figure out what value this is
+            if bidx == -1:
+                value = "?"
+            else:
+                inst = self.blocks[bidx].instrs[i]
+                if inst.get("op", "") == "const":
+                    value = str(inst["value"])
                 else:
-                    inst = self.blocks[bidx].instrs[i]
-                    if inst.get("op", "") == "const":
-                        value = str(inst["value"])
-                    else:
-                        value = f"{inst['op']} {' '.join(inst.get('args', []))}"
+                    value = f"{inst['op']} {' '.join(inst.get('args', []))}"
 
-                if not var in bindings:
-                    bindings[var] = set()
+            if not var in bindings:
+                bindings[var] = set()
 
-                bindings[var].add(value)
+            bindings[var].add(value)
 
-            output = []
-            for var, values in bindings.items():
-                if len(values) == 1:
-                    output.append(f"{var}={values.pop()}")
-                else:
-                    # Sort the values for consistency
-                    values = sorted(list(values))
-                    output.append(f"{var}={{{', '.join(values)}}}")
+        output = []
+        for var, values in bindings.items():
+            if len(values) == 1:
+                output.append(f"{var}={values.pop()}")
+            else:
+                # Sort the values for consistency
+                values = sorted(list(values))
+                output.append(f"{var}={{{', '.join(values)}}}")
 
-            # Sort the output for consistency
-            output.sort()
-            return ", ".join(output)
-
-        # Print output information
-        for i, block in enumerate(self.blocks):
-            name = block.name if block.name else "unknown"
-            print(f".{name}:")
-            # Print the input and output values for this block
-            print(f"\tin: {vals_str(self.in_values[i])}")
-            print(f"\tout: {vals_str(self.out_values[i])}")
+        # Sort the output for consistency
+        output.sort()
+        return ", ".join(output)
 
 
 if __name__ == "__main__":
@@ -88,3 +79,4 @@ if __name__ == "__main__":
     for func in program["functions"]:
         pass_ = ReachingDefs(func)
         pass_.run()
+        print(pass_)

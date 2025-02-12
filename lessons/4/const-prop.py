@@ -64,8 +64,8 @@ class ConstProp(DataFlowPass):
                 if instr.get("op", "") == "const":
                     # If the instruction is a constant, then it is constant propagatable
                     out_values[instr["dest"]] = (instr["type"], instr["value"])
-                elif instr.get("op", "") == "id" and args[0] in out_values:
-                    out_values[instr["dest"]] = out_values[args[0]]
+                elif instr.get("op", "") == "id":
+                    out_values[instr["dest"]] = args[0]
                 elif instr.get("op", "") in op_map and all(
                     arg is not None for arg in args
                 ):
@@ -77,23 +77,14 @@ class ConstProp(DataFlowPass):
                     out_values[instr["dest"]] = None
         return out_values
 
-    def before(self):
-        def vals_str(vals):
-            ret = []
-            for k, v in vals.items():
-                if v is not None:
-                    ret.append(f"{k}: {v[0]} = {v[1]}")
-                else:
-                    ret.append(f"{k} = ?")
-            return ", ".join(sorted(ret))
-
-        # Print output information
-        for i, block in enumerate(self.blocks):
-            name = block.name if block.name else "unknown"
-            print(f".{name}:")
-            # Print the input and output values for this block
-            print(f"\tin: {vals_str(self.in_values[i])}")
-            print(f"\tout: {vals_str(self.out_values[i])}")
+    def to_str(self, val):
+        ret = []
+        for k, v in val.items():
+            if v is not None:
+                ret.append(f"{k}: {v[0]} = {v[1]}")
+            else:
+                ret.append(f"{k} = ?")
+        return ", ".join(sorted(ret))
 
 
 if __name__ == "__main__":
@@ -105,3 +96,4 @@ if __name__ == "__main__":
     for func in program["functions"]:
         pass_ = ConstProp(func)
         pass_.run()
+        print(pass_)

@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: 
+	out: x = [2, 2]
+}
+

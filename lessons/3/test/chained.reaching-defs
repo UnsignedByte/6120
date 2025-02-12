@@ -1,3 +1,6 @@
+main {
 .unknown:
 	in: 
 	out: four=id three, one=1, three=id two, two=id one
+}
+

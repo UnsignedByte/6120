@@ -1,0 +1,15 @@
+main {
+.unknown:
+	in: i, n, one, result, two
+	out: n
+.loop:
+	in: i, n, one, result, two
+	out: i, n, one, result, two
+.multiply:
+	in: i, n, one, result, two
+	out: i, n, one, result, two
+.return:
+	in: 
+	out: result
+}
+

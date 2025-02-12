@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: 
 	out: (const 0), (const 1)
@@ -10,3 +11,5 @@
 .end:
 	in: (const 0), (const 1), (lt i iters)
 	out: (const 0), (const 1), (lt i iters)
+}
+

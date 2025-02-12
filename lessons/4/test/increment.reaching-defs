@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: 
 	out: a=1
@@ -7,3 +8,5 @@
 .l2:
 	in: a=add a a
 	out: a=add a a
+}
+

@@ -1,6 +1,12 @@
+main {
 .unknown:
 	in: 
 	out: a=call , b=call , sum=add a b
+}
+
+dummy {
 .unknown:
 	in: 
 	out: one=1
+}
+

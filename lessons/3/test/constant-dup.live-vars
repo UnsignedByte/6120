@@ -1,6 +1,9 @@
+main {
 .unknown:
-	out: 
 	in: four
+	out: 
 .block2:
-	out: four
 	in: 
+	out: four
+}
+

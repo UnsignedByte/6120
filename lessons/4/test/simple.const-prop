@@ -1,3 +1,4 @@
+main {
 .unknown:
 	in: 
 	out: a: int = 47, b: int = 42
@@ -10,3 +11,5 @@
 .end:
 	in: a = ?, b = ?, c = ?
 	out: a = ?, b = ?, c = ?, d = ?
+}
+

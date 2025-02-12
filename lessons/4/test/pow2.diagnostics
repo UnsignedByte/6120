@@ -1,0 +1,5 @@
+main
+None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'result', 'op': 'const', 'type': 'int', 'value': 1}]
+loop: [{'args': ['i', 'n'], 'dest': 'i_lt_n', 'op': 'lt', 'type': 'bool'}, {'args': ['i_lt_n'], 'labels': ['multiply', 'return'], 'op': 'br'}]
+multiply: [{'args': ['result', 'two'], 'dest': 'result', 'op': 'mul', 'type': 'int'}, {'args': ['i', 'one'], 'dest': 'i', 'op': 'add', 'type': 'int'}, {'labels': ['loop'], 'op': 'jmp'}]
+return: [{'args': ['result'], 'op': 'print'}]

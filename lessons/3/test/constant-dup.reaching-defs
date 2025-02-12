@@ -1,6 +1,9 @@
+main {
 .unknown:
 	in: 
 	out: four=id three, one=1, three=id two, two=id one
 .block2:
 	in: four=id three, one=1, three=id two, two=id one
 	out: four=id three, one=1, three=id two, two=id one
+}
+
