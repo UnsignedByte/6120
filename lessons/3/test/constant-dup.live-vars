@@ -1,9 +1,9 @@
 main {
 .unknown:
-	in: four
 	out: 
+	in: four
 .block2:
-	in: 
 	out: four
+	in: 
 }
 

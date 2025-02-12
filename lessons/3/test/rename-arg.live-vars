@@ -1,6 +1,6 @@
 main {
 .unknown:
-	in: 
 	out: x
+	in: 
 }
 

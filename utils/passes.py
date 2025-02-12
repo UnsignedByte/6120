@@ -204,7 +204,11 @@ class DataFlowPass(FunctionPass):
             name = block.name if block.name else "unknown"
             output += f".{name}:\n"
             # output the input and output values for this block
-            output += f"\tin: {self.to_str(self.in_values[i])}\n"
-            output += f"\tout: {self.to_str(self.out_values[i])}\n"
+            if self.reverse:
+                output += f"\tout: {self.to_str(self.out_values[i])}\n"
+                output += f"\tin: {self.to_str(self.in_values[i])}\n"
+            else:
+                output += f"\tin: {self.to_str(self.in_values[i])}\n"
+                output += f"\tout: {self.to_str(self.out_values[i])}\n"
         output += "}\n"
         return output

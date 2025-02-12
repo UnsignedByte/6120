@@ -1,18 +1,18 @@
 main {
 .unknown:
-	in: 
 	out: 
+	in: 
 .l1:
-	in: 
 	out: 
+	in: 
 .l2:
-	in: 
 	out: 
+	in: 
 .l3:
-	in: a
 	out: 
+	in: a
 .end:
-	in: 
 	out: a
+	in: 
 }
 
