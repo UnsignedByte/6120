@@ -1,0 +1,86 @@
+use std::collections::HashMap;
+
+use bril_rs::{Argument, Code, EffectOps, Function, Instruction, Type};
+
+use crate::basic_block::BasicBlock;
+
+/// Function representation using basic blocks.
+pub struct BBFunction {
+    pub name: String,
+    pub args: Vec<Argument>,
+    pub blocks: Vec<BasicBlock>,
+    pub return_type: Option<Type>,
+    name_map: HashMap<String, usize>,
+}
+
+impl BBFunction {
+    pub fn new(func: Function) -> Self {
+        let mut blocks = Vec::new();
+        let mut curr_block = None;
+
+        for instr in func.instrs {
+            match instr {
+                Code::Label { label, .. } => {
+                    if let Some(block) = curr_block {
+                        blocks.push(block);
+                    }
+                    curr_block = Some(BasicBlock {
+                        label: Some(label),
+                        instrs: Vec::new(),
+                    });
+                }
+                Code::Instruction(Instruction::Effect {
+                    op: EffectOps::Jump | EffectOps::Branch | EffectOps::Return,
+                    ..
+                }) => {
+                    if let Some(block) = curr_block {
+                        blocks.push(block);
+                    }
+                    curr_block = None;
+                }
+                Code::Instruction(i) => match curr_block {
+                    Some(ref mut block) => {
+                        block.instrs.push(i);
+                    }
+                    None => {
+                        curr_block = Some(BasicBlock {
+                            label: None,
+                            instrs: vec![i],
+                        });
+                    }
+                },
+            }
+        }
+
+        if let Some(block) = curr_block {
+            blocks.push(block);
+        }
+
+        let name_map = blocks
+            .iter()
+            .enumerate()
+            .filter_map(|(i, block)| block.label.as_ref().map(|label| (label.clone(), i)))
+            .collect();
+
+        BBFunction {
+            name: func.name,
+            args: func.args,
+            blocks,
+            return_type: func.return_type,
+            name_map,
+        }
+    }
+
+    pub fn len(&self) -> usize {
+        self.blocks.len()
+    }
+
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.blocks.is_empty()
+    }
+
+    pub fn get_block_idx(&self, label: &str) -> Option<usize> {
+        self.name_map.get(label).copied()
+    }
+}

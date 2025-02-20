@@ -1,0 +1,17 @@
+[workspace]
+members = ["utils"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+
+[workspace.dependencies]
+bril-rs = { path = "bril/bril-rs", features = [
+  "memory",
+  "float",
+  "ssa",
+  "speculate",
+  "position",
+  "import",
+  "char",
+] }
