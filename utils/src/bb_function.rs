@@ -15,6 +15,25 @@ pub struct BBFunction {
 
 impl BBFunction {
     pub fn new(func: Function) -> Self {
+        func.into()
+    }
+
+    pub fn len(&self) -> usize {
+        self.blocks.len()
+    }
+
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.blocks.is_empty()
+    }
+
+    pub fn get_block_idx(&self, label: &str) -> Option<usize> {
+        self.name_map.get(label).copied()
+    }
+}
+
+impl From<Function> for BBFunction {
+    fn from(func: Function) -> Self {
         let mut blocks = Vec::new();
         let mut curr_block = None;
 
@@ -29,26 +48,27 @@ impl BBFunction {
                         instrs: Vec::new(),
                     });
                 }
-                Code::Instruction(Instruction::Effect {
-                    op: EffectOps::Jump | EffectOps::Branch | EffectOps::Return,
-                    ..
-                }) => {
-                    if let Some(block) = curr_block {
-                        blocks.push(block);
-                    }
-                    curr_block = None;
-                }
-                Code::Instruction(i) => match curr_block {
-                    Some(ref mut block) => {
-                        block.instrs.push(i);
-                    }
-                    None => {
-                        curr_block = Some(BasicBlock {
+                Code::Instruction(i) => {
+                    curr_block = match curr_block {
+                        Some(mut block) => {
+                            block.instrs.push(i.clone());
+                            if let Instruction::Effect {
+                                op: EffectOps::Jump | EffectOps::Branch | EffectOps::Return,
+                                ..
+                            } = i
+                            {
+                                blocks.push(block);
+                                None
+                            } else {
+                                Some(block)
+                            }
+                        }
+                        None => Some(BasicBlock {
                             label: None,
                             instrs: vec![i],
-                        });
+                        }),
                     }
-                },
+                }
             }
         }
 
@@ -70,17 +90,26 @@ impl BBFunction {
             name_map,
         }
     }
+}
 
-    pub fn len(&self) -> usize {
-        self.blocks.len()
-    }
-
-    #[must_use]
-    pub fn is_empty(&self) -> bool {
-        self.blocks.is_empty()
-    }
-
-    pub fn get_block_idx(&self, label: &str) -> Option<usize> {
-        self.name_map.get(label).copied()
+impl From<BBFunction> for Function {
+    fn from(bb_func: BBFunction) -> Self {
+        Function {
+            args: bb_func.args,
+            instrs: bb_func
+                .blocks
+                .into_iter()
+                .flat_map(|block| {
+                    block
+                        .label
+                        .map(|label| Code::Label { label, pos: None })
+                        .into_iter()
+                        .chain(block.instrs.into_iter().map(Code::Instruction))
+                })
+                .collect(),
+            name: bb_func.name,
+            pos: None,
+            return_type: bb_func.return_type,
+        }
     }
 }

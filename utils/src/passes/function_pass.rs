@@ -1,15 +1,23 @@
 use crate::{BBFunction, BasicBlock};
 
 pub trait FunctionPass {
-    fn basic_block(&mut self, bb: &mut BasicBlock);
-    fn before(&mut self, func: &mut BBFunction);
-    fn after(&mut self, func: &mut BBFunction);
+    fn basic_block(&mut self, bb: BasicBlock) -> BasicBlock {
+        bb
+    }
+    fn before(&mut self, func: BBFunction) -> BBFunction {
+        func
+    }
+    fn after(&mut self, func: BBFunction) -> BBFunction {
+        func
+    }
 
-    fn run(&mut self, func: &mut BBFunction) {
-        self.before(func);
-        for bb in &mut func.blocks {
-            self.basic_block(bb);
-        }
-        self.after(func);
+    fn func(&mut self, func: BBFunction) -> BBFunction {
+        let mut func = self.before(func);
+        func.blocks = func
+            .blocks
+            .into_iter()
+            .map(|bb| self.basic_block(bb))
+            .collect();
+        self.after(func)
     }
 }

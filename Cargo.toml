@@ -1,5 +1,5 @@
 [workspace]
-members = ["utils"]
+members = ["utils", "lessons/3"]
 resolver = "2"
 
 [workspace.package]
@@ -15,3 +15,5 @@ bril-rs = { path = "bril/bril-rs", features = [
   "import",
   "char",
 ] }
+utils = { version = "0.0.1", path = "utils" }
+serde = "1.0.217"

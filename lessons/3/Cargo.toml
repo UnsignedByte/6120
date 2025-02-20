@@ -1,0 +1,8 @@
+[package]
+name = "lesson-3"
+version = "0.0.1"
+edition.workspace = true
+
+[dependencies]
+bril-rs.workspace = true
+utils.workspace = true

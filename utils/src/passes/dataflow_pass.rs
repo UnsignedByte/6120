@@ -3,13 +3,13 @@ use std::{collections::LinkedList, fmt::Display};
 use crate::{BBFunction, BasicBlock, CFG};
 
 /// Results of a dataflow analysis
-pub struct Dataflow<'func, Val> {
-    cfg: &'func CFG<'func>,
+pub struct Dataflow<Val> {
+    cfg: CFG,
     pub in_vals: Vec<Val>,
     pub out_vals: Vec<Val>,
 }
 
-impl<Val: Display> Display for Dataflow<'_, Val> {
+impl<Val: Display> Display for Dataflow<Val> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "@{} {{{{", self.cfg.func.name)?;
         for (i, (in_val, out_val)) in self.in_vals.iter().zip(&self.out_vals).enumerate() {
@@ -36,7 +36,7 @@ where
     /// Merge function
     fn merge(&self, in_vals: &[Val]) -> Val;
 
-    fn run<'func>(&mut self, cfg: &'func mut CFG) -> Dataflow<'func, Val> {
+    fn func(&mut self, cfg: CFG) -> Dataflow<Val> {
         let n = cfg.len();
 
         let mut in_vals = vec![Val::default(); n];
@@ -45,7 +45,7 @@ where
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
             if cfg.is_entry(i) {
-                in_vals[i] = self.init(cfg.func);
+                in_vals[i] = self.init(&cfg.func);
             } else {
                 let inputs = cfg.preds[i]
                     .iter()

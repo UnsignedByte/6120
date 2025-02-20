@@ -1,15 +1,15 @@
 use crate::BBFunction;
 use bril_rs::{EffectOps, Instruction};
 
-pub struct CFG<'func> {
-    pub func: &'func BBFunction,
+pub struct CFG {
+    pub func: BBFunction,
     pub preds: Vec<Vec<usize>>,
     pub succs: Vec<Vec<usize>>,
     reversed: bool,
 }
 
-impl<'func> CFG<'func> {
-    pub fn new(func: &'func BBFunction) -> Self {
+impl CFG {
+    pub fn new(func: BBFunction) -> Self {
         let blocks = &func.blocks;
         let n = blocks.len();
 
