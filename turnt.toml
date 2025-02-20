@@ -13,7 +13,7 @@ output.insn-counted = "-"
 
 [envs.trivial-dce]
 command = """
-bril2json < {filename} | target/debug/tdce | bril2txt
+bril2json < {filename} | ./lessons/3/trivial-dce.py | bril2txt
 """
 output.trivial-dce = "-"
 
