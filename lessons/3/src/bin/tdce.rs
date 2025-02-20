@@ -106,8 +106,10 @@ impl FunctionPass for TDCEPass {
 
                 live
             })
-            .rev()
             .collect();
+
+        // Reverse the instructions back to their original order
+        bb.instrs.reverse();
 
         bb
     }
