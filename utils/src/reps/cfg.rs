@@ -1,5 +1,5 @@
 use crate::{BBFunction, BasicBlock, GraphLike};
-use bril_rs::{EffectOps, Instruction};
+use bril_rs::{EffectOps, Function, Instruction};
 use graphviz_rust::{
     dot_generator::{attr, edge, id, node, node_id},
     dot_structures::{Attribute, Edge, EdgeTy, Id, Node, NodeId, Stmt, Vertex},
@@ -147,9 +147,19 @@ impl CFG {
     }
 }
 
-impl GraphLike for CFG {
-    type N = BasicBlock;
+impl From<BBFunction> for CFG {
+    fn from(func: BBFunction) -> Self {
+        Self::new(func)
+    }
+}
 
+impl From<Function> for CFG {
+    fn from(func: Function) -> Self {
+        BBFunction::new(func).into()
+    }
+}
+
+impl GraphLike<&BasicBlock> for CFG {
     fn node_attrs(&self, node: &BasicBlock) -> Vec<Attribute> {
         let mut attrs = vec![
             attr!("label", &format!(r#""{}""#, node.label_or_default())),

@@ -93,12 +93,8 @@ impl CallGraph {
     }
 }
 
-impl GraphLike for CallGraph {
-    type N = Function;
-
-    fn node(&self, gid: &[usize], node: &Function, id: usize) -> Stmt {
-        let cfg = CFG::new(node.clone().into());
-
+impl GraphLike<CFG> for CallGraph {
+    fn node(&self, gid: &[usize], cfg: CFG, id: usize) -> Stmt {
         let new_gid = gid.iter().chain([id].iter()).copied().collect::<Vec<_>>();
 
         cfg.graph(&new_gid).into()
@@ -113,7 +109,7 @@ impl GraphLike for CallGraph {
                 .functions
                 .iter()
                 .enumerate()
-                .map(|(i, bb)| self.node(gid, bb, i)),
+                .map(|(i, bb)| self.node(gid, bb.clone().into(), i)),
         );
 
         // Add edges

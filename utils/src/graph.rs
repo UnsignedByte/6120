@@ -4,9 +4,7 @@ use graphviz_rust::{
     printer::{DotPrinter, PrinterContext},
 };
 
-pub trait GraphLike {
-    type N;
-
+pub trait GraphLike<N> {
     fn node_id(&self, gid: &[usize], id: usize) -> NodeId {
         NodeId(
             Id::Plain(format!(
@@ -21,11 +19,11 @@ pub trait GraphLike {
         )
     }
 
-    fn node_attrs(&self, _node: &Self::N) -> Vec<Attribute> {
+    fn node_attrs(&self, _node: N) -> Vec<Attribute> {
         vec![]
     }
 
-    fn node(&self, gid: &[usize], node: &Self::N, id: usize) -> Stmt {
+    fn node(&self, gid: &[usize], node: N, id: usize) -> Stmt {
         Node {
             id: self.node_id(gid, id),
             attributes: self.node_attrs(node),
@@ -55,10 +53,9 @@ pub trait GraphLike {
     }
 }
 
-pub fn draw(graph: &[Box<impl GraphLike>], directional: bool, strict: bool) -> String {
-    let mut stmts = vec![attr!("compound", "true").into()];
-
-    stmts.extend(graph.iter().enumerate().map(|(i, g)| g.graph(&[i]).into()));
+pub fn draw<N>(graph: impl GraphLike<N>, directional: bool, strict: bool) -> String {
+    let sg = graph.graph(&[]);
+    let stmts = vec![attr!("compound", "true").into(), sg.into()];
 
     let g = match directional {
         true => Graph::DiGraph {

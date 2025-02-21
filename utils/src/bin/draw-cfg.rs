@@ -7,8 +7,7 @@ impl AnalysisPass for CFGDrawer {
     fn program(&mut self, prog: &bril_rs::Program) {
         let call_graph = CallGraph::new(prog.clone());
 
-        let cfgs: Vec<_> = vec![Box::new(call_graph)];
-        let dot = draw(&cfgs, true, true);
+        let dot = draw(call_graph, true, true);
 
         println!("{}", dot);
     }
