@@ -1,22 +1,13 @@
-use bril_rs::Function;
-use utils::{draw, run_analysis, AnalysisPass, CFG};
+use utils::{draw, run_analysis, setup_logger_from_env, AnalysisPass, CallGraph};
 
 #[derive(Default)]
-struct CFGDrawer {
-    cfgs: Vec<CFG>,
-}
+struct CFGDrawer;
 
 impl AnalysisPass for CFGDrawer {
-    fn function(&mut self, func: &Function) {
-        let cfg = CFG::new(func.clone().into());
+    fn program(&mut self, prog: &bril_rs::Program) {
+        let call_graph = CallGraph::new(prog.clone());
 
-        self.cfgs.push(cfg);
-    }
-
-    fn finish(&mut self) {
-        let cfgs = std::mem::take(&mut self.cfgs);
-
-        let cfgs: Vec<_> = cfgs.into_iter().map(Box::new).collect();
+        let cfgs: Vec<_> = vec![Box::new(call_graph)];
         let dot = draw(&cfgs, true, true);
 
         println!("{}", dot);
@@ -24,5 +15,6 @@ impl AnalysisPass for CFGDrawer {
 }
 
 fn main() {
-    run_analysis(CFGDrawer::default());
+    setup_logger_from_env();
+    run_analysis(CFGDrawer);
 }

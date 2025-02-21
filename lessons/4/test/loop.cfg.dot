@@ -1,14 +1,21 @@
 strict digraph G {
+  compound=true
   subgraph cluster_0 {
-    label="main"
-    color=blue
-    subgraph_0_node_0[label="entry",shape=oval]
-    subgraph_0_node_1[label="head",shape=oval]
-    subgraph_0_node_2[label="body",shape=oval]
-    subgraph_0_node_3[label="end",shape=oval]
-    subgraph_0_node_0 -> subgraph_0_node_1
-    subgraph_0_node_1 -> subgraph_0_node_2 [color=green]
-    subgraph_0_node_1 -> subgraph_0_node_3 [color=red]
-    subgraph_0_node_2 -> subgraph_0_node_1
+    subgraph cluster_0_0 {
+      label="main"
+      color=darkgray
+      style=rounded
+      fillcolor=lightgray
+      cluster_0_0_0[label="entry",shape=oval,color=blue,rank=source]
+      cluster_0_0_1[label="head",shape=oval]
+      cluster_0_0_2[label="body",shape=oval]
+      cluster_0_0_3[label="end",shape=oval]
+      cluster_0_0_exit[label=exit,color=purple,rank=sink]
+      cluster_0_0_0 -> cluster_0_0_1
+      cluster_0_0_1 -> cluster_0_0_2 [color=green]
+      cluster_0_0_1 -> cluster_0_0_3 [color=red]
+      cluster_0_0_2 -> cluster_0_0_1
+      cluster_0_0_3 -> cluster_0_0_exit [color=black]
+    }
   }
 }

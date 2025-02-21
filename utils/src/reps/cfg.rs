@@ -1,8 +1,8 @@
 use crate::{BBFunction, BasicBlock, GraphLike};
 use bril_rs::{EffectOps, Instruction};
 use graphviz_rust::{
-    dot_generator::{attr, edge, id},
-    dot_structures::{Attribute, Edge, EdgeTy, Id, Stmt, Vertex},
+    dot_generator::{attr, edge, id, node, node_id},
+    dot_structures::{Attribute, Edge, EdgeTy, Id, Node, NodeId, Stmt, Vertex},
 };
 
 enum FlowEdge {
@@ -151,16 +151,25 @@ impl GraphLike for CFG {
     type N = BasicBlock;
 
     fn node_attrs(&self, node: &BasicBlock) -> Vec<Attribute> {
-        vec![
+        let mut attrs = vec![
             attr!("label", &format!(r#""{}""#, node.label_or_default())),
             attr!("shape", "oval"),
-        ]
+        ];
+
+        if node.is_entry {
+            attrs.push(attr!("color", "blue"));
+            attrs.push(attr!("rank", "source"));
+        }
+
+        attrs
     }
 
     fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
         let mut stmts = vec![
             attr!("label", &format!(r#""{}""#, self.func.name)).into(),
-            attr!("color", "blue").into(),
+            attr!("color", "darkgray").into(),
+            attr!("style", "rounded").into(),
+            attr!("fillcolor", "lightgray").into(),
         ];
 
         // Add nodes
@@ -169,8 +178,12 @@ impl GraphLike for CFG {
                 .blocks
                 .iter()
                 .enumerate()
-                .map(|(i, bb)| self.node(gid, bb, i).into()),
+                .map(|(i, bb)| self.node(gid, bb, i)),
         );
+
+        // Create the exit node
+        let exit_node = &format!("{}_exit", self.graph_id(gid));
+        stmts.push(node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into());
 
         // Add edges
         stmts.extend(
@@ -178,7 +191,11 @@ impl GraphLike for CFG {
                 .iter()
                 .enumerate()
                 .flat_map(|(i, succs)| match succs {
-                    FlowEdge::Exit => vec![],
+                    FlowEdge::Exit => vec![edge!(
+                        self.node_id(gid, i) => node_id!(exit_node);
+                        attr!("color", "black")
+                    )
+                    .into()],
                     FlowEdge::Branch(t, f) => vec![
                     edge!(self.node_id(gid, i) => self.node_id(gid, *t); attr!("color", "green"))
                         .into(),

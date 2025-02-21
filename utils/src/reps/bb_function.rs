@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
+use crate::reps::basic_block::BasicBlock;
 use bril_rs::{Argument, Code, EffectOps, Function, Instruction, Type};
-
-use crate::basic_block::BasicBlock;
+use std::collections::HashMap;
 
 /// Function representation using basic blocks.
 pub struct BBFunction {
