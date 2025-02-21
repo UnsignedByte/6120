@@ -6,3 +6,4 @@ edition.workspace = true
 [dependencies]
 bril-rs.workspace = true
 utils.workspace = true
+log.workspace = true

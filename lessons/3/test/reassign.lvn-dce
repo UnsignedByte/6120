@@ -1,5 +1,5 @@
 @main {
-  v1: int = const 1;
+  _x-1: int = const 1;
   x: int = const 4;
-  print x v1;
+  print x _x-1;
 }

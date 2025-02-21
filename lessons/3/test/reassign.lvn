@@ -1,9 +1,9 @@
 @main {
-  v0: int = const 0;
-  v1: int = const 1;
+  _x-0: int = const 0;
+  _x-1: int = const 1;
   y: int = const 1;
-  v2: int = const 2;
-  v3: int = const 3;
+  _x-2: int = const 2;
+  _x-3: int = const 3;
   x: int = const 4;
-  print x v1;
+  print x _x-1;
 }

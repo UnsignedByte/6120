@@ -1,10 +1,11 @@
 use crate::BBFunction;
 use bril_rs::{EffectOps, Instruction};
 
+/// Control Flow Graph representation.
 pub struct CFG {
     pub func: BBFunction,
-    pub preds: Vec<Vec<usize>>,
-    pub succs: Vec<Vec<usize>>,
+    preds: Vec<Vec<usize>>,
+    succs: Vec<Vec<usize>>,
     reversed: bool,
 }
 
@@ -91,5 +92,13 @@ impl CFG {
     /// Check whether a block idx is an entry block (no predecessors)
     pub fn is_entry(&self, idx: usize) -> bool {
         self.preds[idx].is_empty()
+    }
+
+    pub fn preds(&self, idx: usize) -> &[usize] {
+        &self.preds[idx]
+    }
+
+    pub fn succs(&self, idx: usize) -> &[usize] {
+        &self.succs[idx]
     }
 }

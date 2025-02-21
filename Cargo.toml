@@ -17,3 +17,7 @@ bril-rs = { path = "bril/bril-rs", features = [
 ] }
 utils = { version = "0.0.1", path = "utils" }
 serde = "1.0.217"
+derivative = "2.2.0"
+log = "0.4"
+argh = "0.1.13"
+simple_logger = "5.0.0"

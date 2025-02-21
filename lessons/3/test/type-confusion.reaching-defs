@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: 
+	out: a=id tmp2, b=id tmp, tmp2=1, tmp=1
+}
+

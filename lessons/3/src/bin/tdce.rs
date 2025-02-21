@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use bril_rs::{Code, Function, Instruction, Program};
-use utils::{BasicBlock, FunctionPass, Pass};
+use utils::{run_passes, BasicBlock, FunctionPass, Pass};
 
 pub struct TDCEPass;
 
@@ -116,9 +116,5 @@ impl FunctionPass for TDCEPass {
 }
 
 fn main() {
-    let input = std::io::stdin();
-
-    let mut tdce = TDCEPass;
-
-    tdce.run(input.lock());
+    run_passes(&mut [Box::new(TDCEPass)]);
 }

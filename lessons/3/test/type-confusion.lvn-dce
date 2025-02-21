@@ -1,0 +1,5 @@
+@main {
+  tmp: float = const 1.0;
+  tmp2: int = const 1;
+  print tmp2 tmp;
+}

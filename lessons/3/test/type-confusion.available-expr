@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: 
+	out: (const 1), (id tmp), (id tmp2)
+}
+

@@ -1,18 +1,19 @@
 extract = 'total_dyn_inst: (\d+)'
-benchmarks = ['bril/benchmarks/*/*.bril', 'lessons/*/test/*.bril', 'playground/*.bril']
+benchmarks = [
+    'bril/benchmarks/*/*.bril',
+    'lessons/*/test/*.bril',
+    'playground/*.bril',
+]
 
 [runs.baseline]
-pipeline = [
-    "bril2json",
-    "brilirs -p {args}",
-]
+pipeline = ["bril2json", "brilirs -p {args}"]
 timeout = 100
 
 [runs.opt]
 pipeline = [
     "bril2json",
-    "lessons/3/lvn.py",
-    "lessons/3/trivial-dce.py",
+    "target/release/lvn",
+    "target/release/tdce",
     "brilirs -p {args}",
 ]
 timeout = 100

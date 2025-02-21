@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: 
+	out: a: int = 1, b: float = 1, tmp2: int = 1, tmp: float = 1
+}
+

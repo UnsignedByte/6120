@@ -47,7 +47,8 @@ where
             if cfg.is_entry(i) {
                 in_vals[i] = self.init(&cfg.func);
             } else {
-                let inputs = cfg.preds[i]
+                let inputs = cfg
+                    .preds(i)
                     .iter()
                     .map(|&j| out_vals[j].clone())
                     .collect::<Vec<_>>();
@@ -60,7 +61,7 @@ where
 
             if new_vals != out_vals[i] {
                 out_vals[i] = new_vals;
-                for &j in &cfg.succs[i] {
+                for &j in cfg.succs(i) {
                     worklist.push_back(j);
                 }
             }

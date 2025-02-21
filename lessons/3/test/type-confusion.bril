@@ -1,0 +1,10 @@
+@main {
+    tmp: float = const 1;
+    tmp2: int = const 1;
+
+    a: int = id tmp2;
+    b: float = id tmp;
+
+
+    print a b;
+}

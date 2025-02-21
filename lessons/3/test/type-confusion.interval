@@ -1,0 +1,6 @@
+main {
+.unknown:
+	in: 
+	out: a = [1, 1], b = [1, 1], tmp = [1, 1], tmp2 = [1, 1]
+}
+

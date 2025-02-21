@@ -1,5 +1,21 @@
 use bril_rs::{load_abstract_program_from_read, output_program, Function, Program};
 
+pub fn run_passes(passes: &mut [Box<dyn Pass>]) {
+    let input = std::io::stdin();
+
+    // Read stdin and parse it into a Program using serde
+    let mut prog: Program = load_abstract_program_from_read(input.lock())
+        .try_into()
+        .unwrap();
+
+    // Run each pass on the program
+    for pass in passes {
+        prog = pass.run(prog);
+    }
+
+    output_program(&prog);
+}
+
 pub trait Pass {
     /// Function to be called on each function in the program
     fn function(&mut self, func: Function) -> Function {
@@ -16,10 +32,7 @@ pub trait Pass {
         prog
     }
 
-    fn run(&mut self, input: impl std::io::Read) {
-        // Read stdin and parse it into a Program using serde
-        let prog: Program = load_abstract_program_from_read(input).try_into().unwrap();
-
+    fn run(&mut self, prog: Program) -> Program {
         let mut prog = self.before(prog);
 
         prog.functions = prog
@@ -28,7 +41,6 @@ pub trait Pass {
             .map(|func| self.function(func))
             .collect();
 
-        let prog = self.after(prog);
-        output_program(&prog);
+        self.after(prog)
     }
 }

@@ -1,9 +1,9 @@
 @main {
-  v0: int = call @dummy;
-  print v0;
+  _a-0: int = call @dummy;
+  print _a-0;
   b: int = call @dummy;
   a: int = call @dummy;
-  sum: int = add b a;
+  sum: int = add a b;
   print sum;
 }
 @dummy: int {

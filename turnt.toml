@@ -17,6 +17,24 @@ bril2json < {filename} | target/debug/tdce | bril2txt
 """
 output.trivial-dce = "-"
 
+[envs.lvn]
+command = """
+bril2json < {filename} | target/debug/lvn | bril2txt
+"""
+output.lvn = "-"
+
+[envs.lvn-dce]
+command = """
+utils/pipeline.sh target/debug/lvn target/debug/tdce < {filename} | bril2txt
+"""
+output.lvn-dce = "-"
+
+[envs.opt]
+command = """
+utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
+"""
+output.opt = "-"
+
 [envs.reaching-defs]
 command = """
 bril2json < {filename} | ./lessons/4/reaching-defs.py
@@ -45,24 +63,6 @@ command = """
 bril2json < {filename} | ./lessons/4/available-expr.py
 """
 output.available-expr = "-"
-
-[envs.lvn]
-command = """
-bril2json < {filename} | ./lessons/3/lvn.py | bril2txt
-"""
-output.lvn = "-"
-
-[envs.lvn-dce]
-command = """
-utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
-"""
-output.lvn-dce = "-"
-
-[envs.opt]
-command = """
-utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
-"""
-output.opt = "-"
 
 [envs.diagnostics]
 command = """

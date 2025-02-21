@@ -5,3 +5,7 @@ edition.workspace = true
 
 [dependencies]
 bril-rs.workspace = true
+derivative.workspace = true
+log.workspace = true
+argh.workspace = true
+simple_logger.workspace = true
