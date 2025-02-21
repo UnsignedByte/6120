@@ -105,7 +105,7 @@ impl GraphLike for CallGraph {
     }
 
     fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
-        let mut stmts = vec![];
+        let mut stmts = vec![attr!("peripheries", "0").into()];
 
         // Add nodes
         stmts.extend(

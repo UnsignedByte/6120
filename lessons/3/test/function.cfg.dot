@@ -1,6 +1,7 @@
 strict digraph G {
   compound=true
   subgraph cluster_0 {
+    peripheries=0
     subgraph cluster_0_0 {
       label="main"
       color=darkgray
