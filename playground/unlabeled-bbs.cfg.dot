@@ -5,7 +5,7 @@ strict digraph G {
       label="main"
       color=darkgray
       style=rounded
-      fillcolor=lightgray
+      bgcolor=lightgray
       cluster_0_0_0[label="entry",shape=oval,color=blue,rank=source]
       cluster_0_0_1[label="?",shape=oval]
       cluster_0_0_2[label="?",shape=oval]

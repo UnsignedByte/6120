@@ -169,7 +169,7 @@ impl GraphLike for CFG {
             attr!("label", &format!(r#""{}""#, self.func.name)).into(),
             attr!("color", "darkgray").into(),
             attr!("style", "rounded").into(),
-            attr!("fillcolor", "lightgray").into(),
+            attr!("bgcolor", "lightgray").into(),
         ];
 
         // Add nodes

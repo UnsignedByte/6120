@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use bril_rs::{Instruction, Literal, Type, ValueOps};
+use bril_rs::{Instruction, Literal, ValueOps};
 
 pub trait Foldable<K, V> {
     fn fold(&self, f: impl Fn(&K) -> Option<V>) -> Option<(K, Option<V>)>;

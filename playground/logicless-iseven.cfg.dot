@@ -5,7 +5,7 @@ strict digraph G {
       label="main"
       color=darkgray
       style=rounded
-      fillcolor=lightgray
+      bgcolor=lightgray
       cluster_0_0_0[label="entry",shape=oval,color=blue,rank=source]
       cluster_0_0_exit[label=exit,color=purple,rank=sink]
       cluster_0_0_0 -> cluster_0_0_exit [color=black]
@@ -14,7 +14,7 @@ strict digraph G {
       label="abs"
       color=darkgray
       style=rounded
-      fillcolor=lightgray
+      bgcolor=lightgray
       cluster_0_1_0[label="entry",shape=oval,color=blue,rank=source]
       cluster_0_1_1[label="negative",shape=oval]
       cluster_0_1_2[label="positive",shape=oval]
@@ -28,7 +28,7 @@ strict digraph G {
       label="is_even"
       color=darkgray
       style=rounded
-      fillcolor=lightgray
+      bgcolor=lightgray
       cluster_0_2_0[label="entry",shape=oval,color=blue,rank=source]
       cluster_0_2_exit[label=exit,color=purple,rank=sink]
       cluster_0_2_0 -> cluster_0_2_exit [color=black]
@@ -37,7 +37,7 @@ strict digraph G {
       label="is_odd"
       color=darkgray
       style=rounded
-      fillcolor=lightgray
+      bgcolor=lightgray
       cluster_0_3_0[label="entry",shape=oval,color=blue,rank=source]
       cluster_0_3_exit[label=exit,color=purple,rank=sink]
       cluster_0_3_0 -> cluster_0_3_exit [color=black]
