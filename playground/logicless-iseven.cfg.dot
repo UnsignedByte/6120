@@ -1,0 +1,27 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+  }
+  subgraph cluster_1 {
+    label="abs"
+    color=blue
+    subgraph_1_node_0[label="entry",shape=oval]
+    subgraph_1_node_1[label="negative",shape=oval]
+    subgraph_1_node_2[label="positive",shape=oval]
+    subgraph_1_node_0 -> subgraph_1_node_1 [color=green]
+    subgraph_1_node_0 -> subgraph_1_node_2 [color=red]
+    subgraph_1_node_1 -> subgraph_1_node_2
+  }
+  subgraph cluster_2 {
+    label="is_even"
+    color=blue
+    subgraph_2_node_0[label="entry",shape=oval]
+  }
+  subgraph cluster_3 {
+    label="is_odd"
+    color=blue
+    subgraph_3_node_0[label="entry",shape=oval]
+  }
+}

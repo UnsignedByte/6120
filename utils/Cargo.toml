@@ -9,3 +9,4 @@ derivative.workspace = true
 log.workspace = true
 argh.workspace = true
 simple_logger.workspace = true
+graphviz-rust.workspace = true

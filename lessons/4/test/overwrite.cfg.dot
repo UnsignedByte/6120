@@ -1,0 +1,15 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+    subgraph_0_node_1[label="l1",shape=oval]
+    subgraph_0_node_2[label="l2",shape=oval]
+    subgraph_0_node_3[label="l3",shape=oval]
+    subgraph_0_node_4[label="end",shape=oval]
+    subgraph_0_node_0 -> subgraph_0_node_1
+    subgraph_0_node_1 -> subgraph_0_node_2
+    subgraph_0_node_2 -> subgraph_0_node_3
+    subgraph_0_node_3 -> subgraph_0_node_4
+  }
+}

@@ -61,7 +61,7 @@ where
 
             if new_vals != out_vals[i] {
                 out_vals[i] = new_vals;
-                for &j in cfg.succs(i) {
+                for j in cfg.succs(i) {
                     worklist.push_back(j);
                 }
             }

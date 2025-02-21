@@ -1,5 +1,0 @@
-@main {
-  v: int = const 9007199254740991;
-  prod: int = mul v v;
-  print prod;
-}

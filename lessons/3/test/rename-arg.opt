@@ -1,5 +1,5 @@
 @main(x: int) {
-  v0: int = id x;
+  y: int = id x;
   x: int = const 2;
-  print x v0 v0;
+  print x y y;
 }

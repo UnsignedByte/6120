@@ -1,0 +1,83 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+    subgraph_0_node_1[label="row_loop",shape=oval]
+    subgraph_0_node_2[label="col_loop",shape=oval]
+    subgraph_0_node_3[label="inner_loop",shape=oval]
+    subgraph_0_node_4[label="multiply",shape=oval]
+    subgraph_0_node_5[label="end_col",shape=oval]
+    subgraph_0_node_6[label="add_dp",shape=oval]
+    subgraph_0_node_7[label="return",shape=oval]
+    subgraph_0_node_0 -> subgraph_0_node_1
+    subgraph_0_node_1 -> subgraph_0_node_2 [color=green]
+    subgraph_0_node_1 -> subgraph_0_node_7 [color=red]
+    subgraph_0_node_2 -> subgraph_0_node_3 [color=green]
+    subgraph_0_node_2 -> subgraph_0_node_1 [color=red]
+    subgraph_0_node_3 -> subgraph_0_node_4 [color=green]
+    subgraph_0_node_3 -> subgraph_0_node_5 [color=red]
+    subgraph_0_node_4 -> subgraph_0_node_3
+    subgraph_0_node_5 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_5 -> subgraph_0_node_2 [color=red]
+    subgraph_0_node_6 -> subgraph_0_node_2
+  }
+  subgraph cluster_1 {
+    label="mat_bitsel"
+    color=blue
+    subgraph_1_node_0[label="entry",shape=oval]
+    subgraph_1_node_1[label="ret_one",shape=oval]
+    subgraph_1_node_2[label="ret_zero",shape=oval]
+    subgraph_1_node_0 -> subgraph_1_node_1 [color=green]
+    subgraph_1_node_0 -> subgraph_1_node_2 [color=red]
+  }
+  subgraph cluster_2 {
+    label="mat_packed_index"
+    color=blue
+    subgraph_2_node_0[label="entry",shape=oval]
+  }
+  subgraph cluster_3 {
+    label="pow2"
+    color=blue
+    subgraph_3_node_0[label="entry",shape=oval]
+    subgraph_3_node_1[label="loop",shape=oval]
+    subgraph_3_node_2[label="multiply",shape=oval]
+    subgraph_3_node_3[label="return",shape=oval]
+    subgraph_3_node_0 -> subgraph_3_node_1
+    subgraph_3_node_1 -> subgraph_3_node_2 [color=green]
+    subgraph_3_node_1 -> subgraph_3_node_3 [color=red]
+    subgraph_3_node_2 -> subgraph_3_node_1
+  }
+  subgraph cluster_4 {
+    label="bitsel"
+    color=blue
+    subgraph_4_node_0[label="entry",shape=oval]
+    subgraph_4_node_1[label="loop",shape=oval]
+    subgraph_4_node_2[label="divide",shape=oval]
+    subgraph_4_node_3[label="return",shape=oval]
+    subgraph_4_node_0 -> subgraph_4_node_1
+    subgraph_4_node_1 -> subgraph_4_node_3 [color=green]
+    subgraph_4_node_1 -> subgraph_4_node_2 [color=red]
+    subgraph_4_node_2 -> subgraph_4_node_1
+  }
+  subgraph cluster_5 {
+    label="abs"
+    color=blue
+    subgraph_5_node_0[label="entry",shape=oval]
+    subgraph_5_node_1[label="negative",shape=oval]
+    subgraph_5_node_2[label="positive",shape=oval]
+    subgraph_5_node_0 -> subgraph_5_node_1 [color=green]
+    subgraph_5_node_0 -> subgraph_5_node_2 [color=red]
+    subgraph_5_node_1 -> subgraph_5_node_2
+  }
+  subgraph cluster_6 {
+    label="is_even"
+    color=blue
+    subgraph_6_node_0[label="entry",shape=oval]
+  }
+  subgraph cluster_7 {
+    label="is_odd"
+    color=blue
+    subgraph_7_node_0[label="entry",shape=oval]
+  }
+}

@@ -44,6 +44,7 @@ impl From<Function> for BBFunction {
                         blocks.push(block);
                     }
                     curr_block = Some(BasicBlock {
+                        is_entry: false,
                         label: Some(label),
                         instrs: Vec::new(),
                     });
@@ -64,6 +65,7 @@ impl From<Function> for BBFunction {
                             }
                         }
                         None => Some(BasicBlock {
+                            is_entry: false,
                             label: None,
                             instrs: vec![i],
                         }),
@@ -74,6 +76,10 @@ impl From<Function> for BBFunction {
 
         if let Some(block) = curr_block {
             blocks.push(block);
+        }
+
+        if !blocks.is_empty() {
+            blocks[0].is_entry = true;
         }
 
         let name_map = blocks

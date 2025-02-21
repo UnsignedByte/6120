@@ -31,7 +31,7 @@ output.lvn-dce = "-"
 
 [envs.opt]
 command = """
-utils/pipeline.sh lessons/3/lvn.py lessons/3/trivial-dce.py < {filename} | bril2txt
+utils/pipeline.sh target/debug/lvn target/debug/tdce < {filename} | bril2txt
 """
 output.opt = "-"
 
@@ -69,3 +69,9 @@ command = """
 bril2json < {filename} | ./playground/diagnostics.py
 """
 output.diagnostics = "-"
+
+[envs.cfg-dot]
+command = """
+bril2json < {filename} | target/debug/draw-cfg
+"""
+output."cfg.dot" = "-"

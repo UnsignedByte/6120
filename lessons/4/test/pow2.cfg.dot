@@ -1,0 +1,14 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+    subgraph_0_node_1[label="loop",shape=oval]
+    subgraph_0_node_2[label="multiply",shape=oval]
+    subgraph_0_node_3[label="return",shape=oval]
+    subgraph_0_node_0 -> subgraph_0_node_1
+    subgraph_0_node_1 -> subgraph_0_node_2 [color=green]
+    subgraph_0_node_1 -> subgraph_0_node_3 [color=red]
+    subgraph_0_node_2 -> subgraph_0_node_1
+  }
+}

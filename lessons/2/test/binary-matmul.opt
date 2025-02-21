@@ -21,7 +21,7 @@
   a_bit: int = call @mat_bitsel a dim2 i k;
   b_bit: int = call @mat_bitsel b dim3 k j;
   a_bit_b_bit: int = mul a_bit b_bit;
-  dot_product: int = add a_bit_b_bit dot_product;
+  dot_product: int = add dot_product a_bit_b_bit;
   jmp .inner_loop;
 .end_col:
   dot_product_odd: bool = call @is_odd dot_product;
@@ -29,7 +29,7 @@
 .add_dp:
   index: int = call @mat_packed_index i j dim3;
   dp_bit: int = call @pow2 index;
-  output: int = add dp_bit output;
+  output: int = add output dp_bit;
   jmp .col_loop;
 .return:
   print output;
@@ -46,8 +46,8 @@
   ret zero;
 }
 @mat_packed_index(i: int, j: int, cols: int): int {
-  v0: int = mul i cols;
-  index: int = add v0 j;
+  _index-0: int = mul i cols;
+  index: int = add _index-0 j;
   ret index;
 }
 @pow2(n: int): int {

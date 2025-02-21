@@ -1,0 +1,23 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+    subgraph_0_node_1[label="?",shape=oval]
+    subgraph_0_node_2[label="?",shape=oval]
+    subgraph_0_node_3[label="?",shape=oval]
+    subgraph_0_node_4[label="?",shape=oval]
+    subgraph_0_node_5[label="true",shape=oval]
+    subgraph_0_node_6[label="false",shape=oval]
+    subgraph_0_node_0 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_0 -> subgraph_0_node_5 [color=red]
+    subgraph_0_node_1 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_1 -> subgraph_0_node_5 [color=red]
+    subgraph_0_node_2 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_2 -> subgraph_0_node_5 [color=red]
+    subgraph_0_node_3 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_3 -> subgraph_0_node_5 [color=red]
+    subgraph_0_node_4 -> subgraph_0_node_6 [color=green]
+    subgraph_0_node_4 -> subgraph_0_node_5 [color=red]
+  }
+}

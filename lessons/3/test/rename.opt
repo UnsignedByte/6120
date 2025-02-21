@@ -1,7 +1,7 @@
 @main(a: int, b: int) {
-  v0: int = add a b;
-  print v0;
-  sum: int = add v0 v0;
-  sum3: int = add v0 sum;
+  _sum-0: int = add a b;
+  print _sum-0;
+  sum: int = add _sum-0 _sum-0;
+  sum3: int = add sum _sum-0;
   print sum3;
 }

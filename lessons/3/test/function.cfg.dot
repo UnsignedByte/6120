@@ -1,0 +1,12 @@
+strict digraph G {
+  subgraph cluster_0 {
+    label="main"
+    color=blue
+    subgraph_0_node_0[label="entry",shape=oval]
+  }
+  subgraph cluster_1 {
+    label="dummy"
+    color=blue
+    subgraph_1_node_0[label="entry",shape=oval]
+  }
+}

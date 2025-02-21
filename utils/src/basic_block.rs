@@ -1,6 +1,7 @@
 use bril_rs::Instruction;
 
 pub struct BasicBlock {
+    pub is_entry: bool,
     pub label: Option<String>,
     pub instrs: Vec<Instruction>,
 }
@@ -12,6 +13,17 @@ impl BasicBlock {
 
     pub fn iter(&self) -> std::slice::Iter<Instruction> {
         self.instrs.iter()
+    }
+
+    pub fn label_or_default(&self) -> &str {
+        if let Some(label) = &self.label {
+            label
+        } else {
+            match self.is_entry {
+                true => "entry",
+                false => "?",
+            }
+        }
     }
 }
 
