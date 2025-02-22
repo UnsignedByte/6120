@@ -5,6 +5,7 @@ use graphviz_rust::{
     dot_structures::{Attribute, Edge, EdgeTy, Id, Node, NodeId, Stmt, Vertex},
 };
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum FlowEdge {
     Exit,
     Branch(usize, usize),
@@ -102,6 +103,10 @@ impl CFG {
         }
     }
 
+    pub fn name(&self) -> &str {
+        &self.func.name
+    }
+
     pub fn reverse(self) -> Self {
         Self {
             func: self.func,
@@ -142,6 +147,12 @@ impl CFG {
         }
     }
 
+    pub fn exits(&self) -> Vec<usize> {
+        (0..self.len())
+            .filter(|&i| self.succs[i] == FlowEdge::Exit)
+            .collect()
+    }
+
     pub fn get(&self, idx: usize) -> &BasicBlock {
         &self.func.blocks[idx]
     }
@@ -161,17 +172,7 @@ impl From<Function> for CFG {
 
 impl GraphLike<&BasicBlock> for CFG {
     fn node_attrs(&self, node: &BasicBlock) -> Vec<Attribute> {
-        let mut attrs = vec![
-            attr!("label", &format!(r#""{}""#, node.label_or_default())),
-            attr!("shape", "oval"),
-        ];
-
-        if node.is_entry {
-            attrs.push(attr!("color", "blue"));
-            attrs.push(attr!("rank", "source"));
-        }
-
-        attrs
+        node.node_attrs()
     }
 
     fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {

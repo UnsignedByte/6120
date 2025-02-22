@@ -1,4 +1,8 @@
 use bril_rs::Instruction;
+use graphviz_rust::{
+    dot_generator::{attr, id},
+    dot_structures::{Attribute, Id},
+};
 
 pub struct BasicBlock {
     pub is_entry: bool,
@@ -24,6 +28,20 @@ impl BasicBlock {
                 false => "?",
             }
         }
+    }
+
+    pub fn node_attrs(&self) -> Vec<Attribute> {
+        let mut attrs = vec![
+            attr!("label", &format!(r#""{}""#, self.label_or_default())),
+            attr!("shape", "oval"),
+        ];
+
+        if self.is_entry {
+            attrs.push(attr!("color", "blue"));
+            attrs.push(attr!("rank", "source"));
+        }
+
+        attrs
     }
 }
 

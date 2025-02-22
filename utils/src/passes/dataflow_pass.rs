@@ -1,12 +1,14 @@
+use crate::{BBFunction, CFG};
+use itertools::Itertools;
+use std::fmt::Debug;
 use std::{collections::LinkedList, fmt::Display};
-
-use crate::{BBFunction, BasicBlock, CFG};
 
 /// Results of a dataflow analysis
 pub struct Dataflow<Val> {
-    cfg: CFG,
+    pub cfg: CFG,
     pub in_vals: Vec<Val>,
     pub out_vals: Vec<Val>,
+    pub exit_val: Val,
 }
 
 impl<Val: Display> Display for Dataflow<Val> {
@@ -25,39 +27,48 @@ impl<Val: Display> Display for Dataflow<Val> {
 /// Trait for dataflow analysis passes
 pub trait DataflowPass<Val>
 where
-    Val: Eq + Clone + Default,
+    Val: Eq + Clone + Default + Debug,
 {
     /// Initial values for entry blocks
-    fn init(&self, func: &BBFunction) -> Val;
+    fn init(&self, func: &BBFunction, bidx: usize) -> Val;
+
+    /// Meet function
+    fn meet(&self, in_vals: &[Val]) -> Val;
 
     /// Transfer function
-    fn transfer(&self, block: &BasicBlock, in_val: &Val) -> Val;
+    fn transfer(&self, func: &BBFunction, bidx: usize, in_val: &Val) -> Val;
 
-    /// Merge function
-    fn merge(&self, in_vals: &[Val]) -> Val;
+    /// Transfer function for the exit block
+    fn finish(&self, _func: &BBFunction, exit_val: Val) -> Val {
+        exit_val
+    }
 
-    fn func(&mut self, cfg: CFG) -> Dataflow<Val> {
+    fn cfg(&mut self, cfg: CFG) -> Dataflow<Val> {
         let n = cfg.len();
 
         let mut in_vals = vec![Val::default(); n];
-        let mut out_vals = vec![Val::default(); n];
+        let mut out_vals = vec![];
+        for i in 0..n {
+            out_vals.push(self.init(&cfg.func, i));
+        }
 
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
-            if cfg.is_entry(i) {
-                in_vals[i] = self.init(&cfg.func);
-            } else {
-                let inputs = cfg
-                    .preds(i)
-                    .iter()
-                    .map(|&j| out_vals[j].clone())
-                    .collect::<Vec<_>>();
+            let inputs = cfg
+                .preds(i)
+                .iter()
+                .map(|&j| out_vals[j].clone())
+                .collect_vec();
 
-                in_vals[i] = self.merge(&inputs);
-            }
+            log::trace!("Collected inputs for block {}: {:?}", i, inputs);
 
-            let block = &cfg.func.blocks[i];
-            let new_vals = self.transfer(block, &in_vals[i]);
+            in_vals[i] = self.meet(&inputs);
+
+            log::trace!("Merged inputs for block {}: {:?}", i, in_vals[i]);
+
+            let new_vals = self.transfer(&cfg.func, i, &in_vals[i]);
+
+            log::trace!("New values for block {}: {:?}", i, new_vals);
 
             if new_vals != out_vals[i] {
                 out_vals[i] = new_vals;
@@ -67,10 +78,20 @@ where
             }
         }
 
+        // The exit value can be computed by meeting all the out values of exit block(s)
+        let exit_val = cfg
+            .exits()
+            .into_iter()
+            .map(|i| out_vals[i].clone())
+            .collect_vec();
+        let exit_val = self.meet(&exit_val);
+        let exit_val = self.finish(&cfg.func, exit_val);
+
         Dataflow {
             cfg,
             in_vals,
             out_vals,
+            exit_val,
         }
     }
 }

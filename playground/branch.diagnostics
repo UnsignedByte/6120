@@ -1,5 +1,0 @@
-main
-None: [{'dest': 'v', 'op': 'const', 'type': 'bool', 'value': True}, {'args': ['v'], 'labels': ['true', 'false'], 'op': 'br'}]
-true: [{'args': ['v'], 'op': 'print'}, {'labels': ['end'], 'op': 'jmp'}]
-false: [{'args': ['v'], 'op': 'print'}, {'labels': ['end'], 'op': 'jmp'}]
-end: [{'args': ['v'], 'op': 'print'}]

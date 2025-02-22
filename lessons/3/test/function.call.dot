@@ -1,0 +1,9 @@
+strict digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    cluster_0[label="main",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_1[label="dummy",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_0 -> cluster_1 [color=purple]
+  }
+}

@@ -1,6 +1,0 @@
-main
-None: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 0}]
-l1: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['a'], 'op': 'print'}]
-l2: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 2}]
-l3: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 3}, {'args': ['a'], 'op': 'print'}]
-end: [{'args': ['a'], 'op': 'print'}, {'op': 'ret'}]

@@ -1,0 +1,23 @@
+strict digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    cluster_0[label="main",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_1[label="mat_bitsel",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_2[label="mat_packed_index",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_3[label="pow2",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_4[label="bitsel",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_5[label="abs",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_6[label="is_even",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_7[label="is_odd",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_0 -> cluster_1 [color=purple]
+    cluster_0 -> cluster_7 [color=purple]
+    cluster_0 -> cluster_2 [color=purple]
+    cluster_0 -> cluster_3 [color=purple]
+    cluster_1 -> cluster_2 [color=purple]
+    cluster_1 -> cluster_4 [color=purple]
+    cluster_4 -> cluster_7 [color=purple]
+    cluster_6 -> cluster_5 [color=purple]
+    cluster_7 -> cluster_6 [color=purple]
+  }
+}

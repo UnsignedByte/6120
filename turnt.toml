@@ -70,8 +70,22 @@ bril2json < {filename} | ./playground/diagnostics.py
 """
 output.diagnostics = "-"
 
+
+[envs.call-dot]
+command = """
+bril2json < {filename} | target/debug/gen-callgraph
+"""
+output."call.dot" = "-"
+
 [envs.cfg-dot]
 command = """
-bril2json < {filename} | target/debug/draw-cfg
+bril2json < {filename} | target/debug/gen-callgraph -s cfg
 """
 output."cfg.dot" = "-"
+
+
+[envs.domtree-dot]
+command = """
+bril2json < {filename} | target/debug/gen-callgraph -s domtree
+"""
+output."domtree.dot" = "-"

@@ -25,6 +25,10 @@ impl BBFunction {
         self.blocks.is_empty()
     }
 
+    pub fn get(&self, idx: usize) -> &BasicBlock {
+        &self.blocks[idx]
+    }
+
     pub fn get_block_idx(&self, label: &str) -> Option<usize> {
         self.name_map.get(label).copied()
     }

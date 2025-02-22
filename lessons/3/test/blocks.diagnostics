@@ -1,3 +1,0 @@
-main
-None: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'b', 'op': 'const', 'type': 'int', 'value': 2}]
-block2: [{'args': ['a', 'b'], 'dest': 'b', 'op': 'add', 'type': 'int'}]

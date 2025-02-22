@@ -1,5 +1,0 @@
-main
-None: [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 0}]
-head: [{'args': ['i', 'iters'], 'dest': 'cond', 'op': 'lt', 'type': 'bool'}, {'args': ['cond'], 'labels': ['body', 'end'], 'op': 'br'}]
-body: [{'args': ['i'], 'op': 'print'}, {'args': ['i', 'one'], 'dest': 'i', 'op': 'add', 'type': 'int'}, {'labels': ['head'], 'op': 'jmp'}]
-end: [{'args': ['i', 'iters'], 'op': 'print'}]

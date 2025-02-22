@@ -1,5 +1,0 @@
-main
-None: [{'args': ['cond'], 'labels': ['left', 'right'], 'op': 'br'}]
-left: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}, {'labels': ['end'], 'op': 'jmp'}]
-right: [{'labels': ['end'], 'op': 'jmp'}]
-end: []

@@ -1,2 +1,0 @@
-main
-None: [{'args': ['a', 'b'], 'dest': 'sum1', 'op': 'add', 'type': 'int'}, {'args': ['a', 'b'], 'dest': 'sum2', 'op': 'add', 'type': 'int'}, {'args': ['sum1', 'sum2'], 'dest': 'mul1', 'op': 'mul', 'type': 'int'}, {'args': ['mul1'], 'op': 'print'}]

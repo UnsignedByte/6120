@@ -8,12 +8,12 @@ pub trait GraphLike<N> {
     fn node_id(&self, gid: &[usize], id: usize) -> NodeId {
         NodeId(
             Id::Plain(format!(
-                "cluster_{}_{}",
+                "cluster_{}",
                 gid.iter()
+                    .chain(std::iter::once(&id))
                     .map(ToString::to_string)
                     .collect::<Vec<_>>()
                     .join("_"),
-                id
             )),
             None,
         )

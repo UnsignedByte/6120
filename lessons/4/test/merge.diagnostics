@@ -1,5 +1,0 @@
-main
-None: [{'dest': 'b', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'c', 'op': 'const', 'type': 'int', 'value': 3}, {'args': ['cond'], 'labels': ['left', 'right'], 'op': 'br'}]
-left: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'b', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['b', 'c'], 'dest': 'x', 'op': 'add', 'type': 'int'}, {'labels': ['end'], 'op': 'jmp'}]
-right: [{'dest': 'a', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'c', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['b', 'c'], 'dest': 'x', 'op': 'sub', 'type': 'int'}, {'labels': ['end'], 'op': 'jmp'}]
-end: [{'args': ['x'], 'op': 'print'}]

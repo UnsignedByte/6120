@@ -1,0 +1,13 @@
+strict digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    cluster_0[label="main",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_1[label="abs",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_2[label="is_even",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_3[label="is_odd",shape=oval,color=darkgray,style=filled,fillcolor=lightgray]
+    cluster_0 -> cluster_3 [color=purple]
+    cluster_2 -> cluster_1 [color=purple]
+    cluster_3 -> cluster_2 [color=purple]
+  }
+}

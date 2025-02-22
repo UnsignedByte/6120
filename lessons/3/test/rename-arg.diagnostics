@@ -1,2 +1,0 @@
-main
-None: [{'args': ['x'], 'dest': 'y', 'op': 'id', 'type': 'int'}, {'dest': 'x', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['y'], 'dest': 'z', 'op': 'id', 'type': 'int'}, {'args': ['x', 'y', 'z'], 'op': 'print'}]
