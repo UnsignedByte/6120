@@ -2,7 +2,7 @@
 @main(n: int) {
     print n;
     zero: int = const 0;
-    is_zero: int = eq n zero;
+    is_zero: bool = eq n zero;
     br is_zero .done .recurse;
 .recurse:
     one: int = const 1;

@@ -1,0 +1,35 @@
+[envs.test]
+command = """
+bril2json < {filename} | brilirs -p {args}
+"""
+output.expect = "-"
+output.prof = "2"
+
+[envs.opt]
+command = """
+utils/pipeline.sh target/debug/lvn target/debug/tdce < {filename} | bril2txt
+"""
+output.opt = "-"
+
+
+[envs.call-dot]
+default = false
+command = """
+bril2json < {filename} | target/debug/gen-callgraph
+"""
+output."call.dot" = "-"
+
+[envs.cfg-dot]
+default = false
+command = """
+bril2json < {filename} | target/debug/gen-callgraph -s cfg
+"""
+output."cfg.dot" = "-"
+
+
+[envs.domtree-dot]
+default = false
+command = """
+bril2json < {filename} | target/debug/gen-callgraph -s domtree
+"""
+output."domtree.dot" = "-"

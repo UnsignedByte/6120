@@ -1,0 +1,20 @@
+
+[envs.trivial-dce]
+default = false
+command = """
+bril2json < {filename} | ../../target/debug/tdce | bril2txt
+"""
+output.trivial-dce = "-"
+
+[envs.lvn]
+default = false
+command = """
+bril2json < {filename} | ../../target/debug/lvn | bril2txt
+"""
+output.lvn = "-"
+
+[envs.lvn-dce]
+command = """
+../../utils/pipeline.sh ../../target/debug/lvn ../../target/debug/tdce < {filename} | bril2txt
+"""
+output.lvn-dce = "-"

@@ -1,0 +1,12 @@
+
+[envs.diagnostics]
+command = """
+bril2json < {filename} | ./diagnostics.py
+"""
+output.diagnostics = "-"
+
+[envs.insn-counter]
+command = """
+./insn-counter.py --file {filename} | brilirs {args}
+"""
+output.insn-counted = "-"

@@ -1,0 +1,30 @@
+
+
+[envs.reaching-defs]
+command = """
+bril2json < {filename} | ./reaching-defs.py
+"""
+output.reaching-defs = "-"
+
+[envs.live-vars]
+command = """
+bril2json < {filename} | ./live-vars.py
+"""
+output.live-vars = "-"
+[envs.interval]
+command = """
+bril2json < {filename} | ./interval.py
+"""
+output.interval = "-"
+
+[envs.const-prop]
+command = """
+bril2json < {filename} | ./const-prop.py
+"""
+output.const-prop = "-"
+
+[envs.available-expr]
+command = """
+bril2json < {filename} | ./available-expr.py
+"""
+output.available-expr = "-"
