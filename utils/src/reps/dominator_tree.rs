@@ -32,6 +32,8 @@ impl DominatorTree {
             ..
         } = DominatorPass.cfg(cfg);
 
+        let n = cfg.len();
+
         // Add the exit doms to the set
         doms.push(exit_doms);
 
@@ -63,12 +65,12 @@ impl DominatorTree {
             candidates.into_iter().next().copied()
         }).collect();
 
-        log::trace!("Immediate Dominaors: {:?}", immediate_doms);
+        log::trace!("Immediate Dominators: {:?}", immediate_doms);
 
         // A block's dominance frontier is a set of values it does not dominate
         // but it dominates a predecessor of the value.
         // First, find the set of nodes dominated by each block.
-        let mut strict_dom_bys = vec![HashSet::new(); cfg.len() + 1];
+        let mut strict_dom_bys = vec![HashSet::new(); n + 1];
         for (i, doms) in strict_doms.iter().enumerate() {
             for &dom in doms {
                 // dom dominates i
@@ -83,8 +85,8 @@ impl DominatorTree {
             .map(|(i, sdom_by)| {
                 // Get the set of all successors of dominated blocks
                 let candidates = sdom_by.iter()
-                    .flat_map(|&dom| cfg.succs(dom))
-                    .chain(cfg.succs(i)) // i also dominates itself
+                    .flat_map(|&dom| if dom < n { cfg.succs(dom)} else {vec![]})
+                    .chain(if i < n {cfg.succs(i)} else {vec![]}) // i also dominates itself
                     .collect::<HashSet<_>>();
 
                 // The dominance frontier is the set of all successors that are not strictly dominated by i
