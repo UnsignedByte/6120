@@ -6,14 +6,14 @@ use graphviz_rust::{
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum FlowEdge {
+pub(crate) enum FlowEdge {
     Exit,
     Branch(usize, usize),
     Jump(usize),
 }
 
 impl FlowEdge {
-    fn vec(&self) -> Vec<usize> {
+    pub fn vec(&self) -> Vec<usize> {
         match self {
             FlowEdge::Exit => vec![],
             FlowEdge::Branch(t, f) => vec![*t, *f],
@@ -24,8 +24,8 @@ impl FlowEdge {
 /// Control Flow Graph representation.
 pub struct CFG {
     pub func: BBFunction,
-    preds: Vec<Vec<usize>>,
-    succs: Vec<FlowEdge>,
+    pub(crate) preds: Vec<Vec<usize>>,
+    pub(crate) succs: Vec<FlowEdge>,
     reversed: bool,
 }
 

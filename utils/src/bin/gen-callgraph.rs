@@ -49,10 +49,12 @@ impl AnalysisPass for CallDrawer {
     fn program(&mut self, prog: &bril_rs::Program) {
         let call_graph = CallGraph::new(prog.clone());
 
+        let strict = false;
+
         let dot = match self.sg_ty {
-            SubgraphTypes::None => draw::<Function>(call_graph, true, true),
-            SubgraphTypes::CFG => draw::<CFG>(call_graph, true, true),
-            SubgraphTypes::DominatorTree => draw::<DominatorTree>(call_graph, true, true),
+            SubgraphTypes::None => draw::<Function>(call_graph, true, strict),
+            SubgraphTypes::CFG => draw::<CFG>(call_graph, true, strict),
+            SubgraphTypes::DominatorTree => draw::<DominatorTree>(call_graph, true, strict),
         };
 
         println!("{}", dot);

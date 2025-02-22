@@ -1,4 +1,4 @@
-strict digraph G {
+digraph G {
   compound=true
   subgraph cluster_ {
     peripheries=0
@@ -12,10 +12,15 @@ strict digraph G {
       cluster_0_2[label="multiply",shape=oval]
       cluster_0_3[label="return",shape=oval]
       cluster_0_exit[label=exit,color=purple,rank=sink]
-      cluster_0_0 -> cluster_0_1
-      cluster_0_1 -> cluster_0_2
-      cluster_0_1 -> cluster_0_3
-      cluster_0_3 -> cluster_0_exit
+      cluster_0_0 -> cluster_0_1 [color=black]
+      cluster_0_1 -> cluster_0_2 [color=black]
+      cluster_0_1 -> cluster_0_3 [color=black]
+      cluster_0_3 -> cluster_0_exit [color=black]
+      cluster_0_0 -> cluster_0_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      cluster_0_1 -> cluster_0_2 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      cluster_0_1 -> cluster_0_3 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      cluster_0_2 -> cluster_0_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      cluster_0_3 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
     }
   }
 }

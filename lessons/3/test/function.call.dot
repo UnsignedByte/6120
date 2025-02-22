@@ -1,4 +1,4 @@
-strict digraph G {
+digraph G {
   compound=true
   subgraph cluster_ {
     peripheries=0

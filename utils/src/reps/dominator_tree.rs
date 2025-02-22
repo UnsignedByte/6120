@@ -8,7 +8,7 @@ use graphviz_rust::{
 
 use crate::{Dataflow, DataflowPass, DominatorPass, GraphLike, CFG};
 
-use super::BasicBlock;
+use super::{FlowEdge, BasicBlock};
 
 pub struct DominatorTree {
     /// The control flow graph.
@@ -125,7 +125,7 @@ impl GraphLike<&BasicBlock> for DominatorTree {
         let exit_node = &format!("{}_exit", self.graph_id(gid));
         stmts.push(node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into());
 
-        // Add edges
+        // Add Dominator tree edges
         stmts.extend(
             self.immediate_doms
                 .iter()
@@ -133,15 +133,40 @@ impl GraphLike<&BasicBlock> for DominatorTree {
                 .filter_map(|(node, &dominator)| {
                     dominator.map(|dom| {
                         let src = self.node_id(gid, dom);
+                        
                         if node == self.cfg.len() {
-                            edge!(src => node_id!(exit_node))
+                            (src, node_id!(exit_node))
                         } else {
-                            let dst = self.node_id(gid, node);
-                            edge!(src => dst)
+                            (src,  self.node_id(gid, node))
                         }
                     })
                 })
-                .map(Stmt::Edge),
+                .map(|(src, dst)| {
+                    edge!(src => dst; attr!("color", "black")).into()
+                })
+        );
+
+        // Add CFG edges in dashed gray
+        stmts.extend(
+            self.cfg
+                .succs
+                .iter()
+                .enumerate()
+                .flat_map(|(src, succs)| {
+                    let src = self.node_id(gid, src);
+                    
+                    match succs {
+                    FlowEdge::Exit => 
+                    vec![(src, node_id!(exit_node), "gray")],
+                    FlowEdge::Branch(a, b) => vec![
+                        (src.clone(), self.node_id(gid, *a), "forestgreen"),
+                        (src, self.node_id(gid, *b), "firebrick"),
+                    ],
+                    FlowEdge::Jump(dst) => vec![(src, self.node_id(gid, *dst), "gray")],
+                }
+            }).map(|(src, dst, color)| {
+                edge!(src => dst; attr!("color", color), attr!("style", "dashed"), attr!("constraint", "false"), attr!("penwidth", 0.75), attr!("arrowsize", 0.75)).into()
+            })
         );
 
         stmts
