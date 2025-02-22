@@ -1,0 +1,15 @@
+# ARGS: true false false
+@main(a: bool, b: bool, c: bool) {
+    print a b c;
+    br a .left .right;
+.left:
+    b: bool = not b;
+    print a b c;
+    br b .right .end;
+.right:
+    c: bool = not c;
+    print a b c;
+    br c .left .end;
+.end:
+    print a b c;
+}

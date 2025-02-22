@@ -1,0 +1,7 @@
+
+
+[envs.domtree-dot]
+command = """
+bril2json < {filename} | ../../target/debug/gen-callgraph -s domtree
+"""
+output."domtree.dot" = "-"

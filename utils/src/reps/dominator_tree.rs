@@ -13,10 +13,14 @@ use super::{FlowEdge, BasicBlock};
 pub struct DominatorTree {
     /// The control flow graph.
     pub cfg: CFG,
-    /// The strictdominator set for each basic block.
+    /// The strict dominator set for each basic block.
     strict_doms: Vec<HashSet<usize>>,
+    /// The set of blocks strictly dominated by each block.
+    strict_dom_bys: Vec<HashSet<usize>>,
     /// Immediate dominator for each basic block.
     immediate_doms: Vec<Option<usize>>,
+    /// Dominance frontier for each basic block.
+    dominance_frontiers: Vec<HashSet<usize>>,
 }
 
 impl DominatorTree {
@@ -43,29 +47,57 @@ impl DominatorTree {
 
         // A dominator is immediate if it is in the dominator set of the block but not in the dominator set of any other dominator.
 
-        let mut immediate_doms = vec![];
-        for doms in &strict_doms {
+        let immediate_doms = strict_doms.iter().map(|sdoms| {
             // These are dominators that dominate other dominators, so cannot be immediate dominators.
-            let non_immediate_doms: HashSet<_> = doms
+            let non_immediate_doms: HashSet<_> = sdoms
                 .iter()
                 .flat_map(|&d| &strict_doms[d])
                 .copied()
                 .collect();
 
-            let candidates: Vec<_> = doms.difference(&non_immediate_doms).collect();
+            let candidates: Vec<_> = sdoms.difference(&non_immediate_doms).collect();
 
             // There should be at most one immediate dominator.
             assert!(candidates.len() <= 1, "Multiple immediate dominators found");
 
-            immediate_doms.push(candidates.into_iter().next().copied());
-        }
+            candidates.into_iter().next().copied()
+        }).collect();
 
         log::trace!("Immediate Dominaors: {:?}", immediate_doms);
+
+        // A block's dominance frontier is a set of values it does not dominate
+        // but it dominates a predecessor of the value.
+        // First, find the set of nodes dominated by each block.
+        let mut strict_dom_bys = vec![HashSet::new(); cfg.len() + 1];
+        for (i, doms) in strict_doms.iter().enumerate() {
+            for &dom in doms {
+                // dom dominates i
+                strict_dom_bys[dom].insert(i);
+            }
+        }
+
+        // Now, find the dominance frontier for each block.
+        let dominance_frontiers = strict_dom_bys
+            .iter()
+            .enumerate()
+            .map(|(i, sdom_by)| {
+                // Get the set of all successors of dominated blocks
+                let candidates = sdom_by.iter()
+                    .flat_map(|&dom| cfg.succs(dom))
+                    .chain(cfg.succs(i)) // i also dominates itself
+                    .collect::<HashSet<_>>();
+
+                // The dominance frontier is the set of all successors that are not strictly dominated by i
+                candidates.difference(sdom_by).copied().collect()
+            })
+            .collect();
 
         Self {
             cfg,
             strict_doms,
             immediate_doms,
+            dominance_frontiers,
+            strict_dom_bys,
         }
     }
 
@@ -77,12 +109,24 @@ impl DominatorTree {
         self.immediate_doms[idx]
     }
 
+    pub fn dominance_frontier(&self, idx: usize) -> &HashSet<usize> {
+        &self.dominance_frontiers[idx]
+    }
+
     pub fn strictly_dominates(&self, a: usize, b: usize) -> bool {
         self.strict_doms[b].contains(&a)
     }
 
+    pub fn strictly_dominated_by(&self, a: usize, b: usize) -> bool {
+        self.strict_dom_bys[a].contains(&b)
+    }
+
     pub fn dominates(&self, a: usize, b: usize) -> bool {
         a == b || self.strictly_dominates(a, b)
+    }
+
+    pub fn dominated_by(&self, a: usize, b: usize) -> bool {
+        a == b || self.strictly_dominated_by(a, b)
     }
 }
 
