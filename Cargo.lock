@@ -269,6 +269,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "lesson-5"
+version = "0.0.1"
+dependencies = [
+ "bril-rs",
+ "graphviz-rust",
+ "log",
+ "utils",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.169"
 source = "registry+https://github.com/rust-lang/crates.io-index"

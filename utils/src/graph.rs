@@ -41,14 +41,27 @@ pub trait GraphLike<N> {
         ))
     }
 
-    fn graph_stmts(&self, _gid: &[usize]) -> Vec<Stmt> {
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![]
+    }
+
+    fn graph_nodes(&self, _gid: &[usize]) -> Vec<Stmt> {
+        vec![]
+    }
+
+    fn graph_edges(&self, _gid: &[usize]) -> Vec<Stmt> {
         vec![]
     }
 
     fn graph(&self, gid: &[usize]) -> Subgraph {
         Subgraph {
             id: self.graph_id(gid),
-            stmts: self.graph_stmts(gid),
+            stmts: self
+                .graph_attrs()
+                .into_iter()
+                .chain(self.graph_nodes(gid))
+                .chain(self.graph_edges(gid))
+                .collect(),
         }
     }
 }

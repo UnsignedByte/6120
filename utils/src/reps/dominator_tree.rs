@@ -149,31 +149,29 @@ impl GraphLike<&BasicBlock> for DominatorTree {
         bb.node_attrs()
     }
 
-    fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
-        let mut stmts = vec![
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![
             attr!("label", &format!(r#""{}""#, self.cfg.name())).into(),
             attr!("color", "darkgray").into(),
             attr!("style", "rounded").into(),
             attr!("bgcolor", "lightgray").into(),
-        ];
+        ]
+    }
 
-        // Add nodes
-        stmts.extend(
-            self.cfg
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
+        let exit_node = &format!("{}_exit", self.graph_id(gid));
+        self.cfg
                 .func
                 .blocks
                 .iter()
                 .enumerate()
-                .map(|(i, bb)| self.node(gid, bb, i)),
-        );
+                .map(|(i, bb)| self.node(gid, bb, i))
+                .chain(std::iter::once(node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into())).collect()
+    }
 
-        // Create the exit node
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
         let exit_node = &format!("{}_exit", self.graph_id(gid));
-        stmts.push(node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into());
-
-        // Add Dominator tree edges
-        stmts.extend(
-            self.immediate_doms
+        self.immediate_doms // Add Dominator tree edges
                 .iter()
                 .enumerate()
                 .filter_map(|(node, &dominator)| {
@@ -189,12 +187,8 @@ impl GraphLike<&BasicBlock> for DominatorTree {
                 })
                 .map(|(src, dst)| {
                     edge!(src => dst; attr!("color", "black")).into()
-                })
-        );
-
-        // Add CFG edges in dashed gray
-        stmts.extend(
-            self.cfg
+                }).chain(
+        self.cfg // Add CFG edges in dashed gray
                 .succs
                 .iter()
                 .enumerate()
@@ -212,9 +206,6 @@ impl GraphLike<&BasicBlock> for DominatorTree {
                 }
             }).map(|(src, dst, color)| {
                 edge!(src => dst; attr!("color", color), attr!("style", "dashed"), attr!("constraint", "false"), attr!("penwidth", 0.75), attr!("arrowsize", 0.75)).into()
-            })
-        );
-
-        stmts
+            })).collect()
     }
 }

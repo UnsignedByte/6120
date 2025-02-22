@@ -5,7 +5,7 @@ use graphviz_rust::{
 };
 
 pub struct BasicBlock {
-    pub is_entry: bool,
+    pub idx: usize,
     pub label: Option<String>,
     pub instrs: Vec<Instruction>,
 }
@@ -19,11 +19,15 @@ impl BasicBlock {
         self.instrs.iter()
     }
 
+    pub fn is_entry(&self) -> bool {
+        self.idx == 0
+    }
+
     pub fn label_or_default(&self) -> &str {
         if let Some(label) = &self.label {
             label
         } else {
-            match self.is_entry {
+            match self.is_entry() {
                 true => "entry",
                 false => "?",
             }
@@ -36,7 +40,7 @@ impl BasicBlock {
             attr!("shape", "oval"),
         ];
 
-        if self.is_entry {
+        if self.is_entry() {
             attrs.push(attr!("color", "blue"));
             attrs.push(attr!("rank", "source"));
         }

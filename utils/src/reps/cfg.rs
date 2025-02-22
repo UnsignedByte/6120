@@ -175,50 +175,50 @@ impl GraphLike<&BasicBlock> for CFG {
         node.node_attrs()
     }
 
-    fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
-        let mut stmts = vec![
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![
             attr!("label", &format!(r#""{}""#, self.func.name)).into(),
             attr!("color", "darkgray").into(),
             attr!("style", "rounded").into(),
             attr!("bgcolor", "lightgray").into(),
-        ];
+        ]
+    }
 
-        // Add nodes
-        stmts.extend(
-            self.func
-                .blocks
-                .iter()
-                .enumerate()
-                .map(|(i, bb)| self.node(gid, bb, i)),
-        );
-
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
         // Create the exit node
         let exit_node = &format!("{}_exit", self.graph_id(gid));
-        stmts.push(node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into());
+        self.func
+            .blocks
+            .iter()
+            .enumerate()
+            .map(|(i, bb)| self.node(gid, bb, i))
+            .chain(std::iter::once(
+                node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into()
+            ))
+            .collect()
+    }
 
-        // Add edges
-        stmts.extend(
-            self.succs
-                .iter()
-                .enumerate()
-                .flat_map(|(i, succs)| match succs {
-                    FlowEdge::Exit => vec![edge!(
-                        self.node_id(gid, i) => node_id!(exit_node);
-                        attr!("color", "black")
-                    )
-                    .into()],
-                    FlowEdge::Branch(t, f) => vec![
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
+        let exit_node = &format!("{}_exit", self.graph_id(gid));
+        self.succs
+            .iter()
+            .enumerate()
+            .flat_map(|(i, succs)| match succs {
+                FlowEdge::Exit => vec![edge!(
+                    self.node_id(gid, i) => node_id!(exit_node);
+                    attr!("color", "black")
+                )
+                .into()],
+                FlowEdge::Branch(t, f) => vec![
                     edge!(self.node_id(gid, i) => self.node_id(gid, *t); attr!("color", "green"))
                         .into(),
                     edge!(self.node_id(gid, i) => self.node_id(gid, *f); attr!("color", "red"))
                         .into(),
                 ],
-                    FlowEdge::Jump(j) => {
-                        vec![edge!(self.node_id(gid, i) => self.node_id(gid, *j)).into()]
-                    }
-                }),
-        );
-
-        stmts
+                FlowEdge::Jump(j) => {
+                    vec![edge!(self.node_id(gid, i) => self.node_id(gid, *j)).into()]
+                }
+            })
+            .collect()
     }
 }

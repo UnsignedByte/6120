@@ -99,37 +99,40 @@ where
         node.graph(&new_gid).into()
     }
 
-    fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
-        let mut stmts = vec![attr!("peripheries", "0").into()];
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![attr!("peripheries", "0").into()]
+    }
 
-        // Add nodes
-        stmts.extend(
-            self.prog
-                .functions
-                .iter()
-                .enumerate()
-                .map(|(i, bb)| self.node(gid, SG::from(bb.clone()), i)),
-        );
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.prog
+            .functions
+            .iter()
+            .enumerate()
+            .map(|(i, bb)| self.node(gid, SG::from(bb.clone()), i))
+            .collect()
+    }
 
-        // Add edges
-        stmts.extend(self.succs.iter().enumerate().flat_map(|(i, succs)| {
-            succs.iter().map(move |&j| {
-                // Because of the limitations of graphviz cluster subgraphs, we need to generate the edges between the exit and entry nodes
-                let src_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, i).0;
-                let dst_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, j).0;
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.succs
+            .iter()
+            .enumerate()
+            .flat_map(|(i, succs)| {
+                succs.iter().map(move |&j| {
+                    // Because of the limitations of graphviz cluster subgraphs, we need to generate the edges between the exit and entry nodes
+                    let src_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, i).0;
+                    let dst_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, j).0;
 
-                let src_exit = format!("{}_exit", src_cluster);
-                let dst_entry = format!("{}_0", dst_cluster);
+                    let src_exit = format!("{}_exit", src_cluster);
+                    let dst_entry = format!("{}_0", dst_cluster);
 
-                edge!(
-                    node_id!(src_exit) => node_id!(dst_entry);
-                    attr!("color", "purple")
-                )
-                .into()
+                    edge!(
+                        node_id!(src_exit) => node_id!(dst_entry);
+                        attr!("color", "purple")
+                    )
+                    .into()
+                })
             })
-        }));
-
-        stmts
+            .collect()
     }
 }
 
@@ -144,32 +147,35 @@ impl GraphLike<Function> for CallGraph {
         ]
     }
 
-    fn graph_stmts(&self, gid: &[usize]) -> Vec<Stmt> {
-        let mut stmts = vec![attr!("peripheries", "0").into()];
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![attr!("peripheries", "0").into()]
+    }
 
-        // Add nodes
-        stmts.extend(
-            self.prog
-                .functions
-                .iter()
-                .enumerate()
-                .map(|(i, bb)| self.node(gid, bb.clone(), i)),
-        );
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.prog
+            .functions
+            .iter()
+            .enumerate()
+            .map(|(i, bb)| self.node(gid, bb.clone(), i))
+            .collect()
+    }
 
-        // Add edges
-        stmts.extend(self.succs.iter().enumerate().flat_map(|(i, succs)| {
-            succs.iter().map(move |&j| {
-                let src = <CallGraph as GraphLike<Function>>::node_id(self, gid, i);
-                let dst = <CallGraph as GraphLike<Function>>::node_id(self, gid, j);
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.succs
+            .iter()
+            .enumerate()
+            .flat_map(|(i, succs)| {
+                succs.iter().map(move |&j| {
+                    let src = <CallGraph as GraphLike<Function>>::node_id(self, gid, i);
+                    let dst = <CallGraph as GraphLike<Function>>::node_id(self, gid, j);
 
-                edge!(
-                    src => dst;
-                    attr!("color", "purple")
-                )
-                .into()
+                    edge!(
+                        src => dst;
+                        attr!("color", "purple")
+                    )
+                    .into()
+                })
             })
-        }));
-
-        stmts
+            .collect()
     }
 }
