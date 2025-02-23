@@ -1,0 +1,15 @@
+@main(count: int) {
+  i: int = const 0;
+  max_iters: int = const 10;
+  one: int = const 1;
+.selected:
+  cond: bool = lt i count;
+  br cond .body .after;
+.body:
+  print i;
+  i: int = add i one;
+.break:
+  cond: bool = lt i max_iters;
+  br cond .selected .after;
+.after:
+}

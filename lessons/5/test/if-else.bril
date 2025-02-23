@@ -1,0 +1,9 @@
+@main {
+    cond: bool = const false;
+    br cond .if .selected;
+.if:
+    jmp .end;
+.selected:
+    jmp .end;
+.end:
+}
