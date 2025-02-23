@@ -2,14 +2,20 @@ digraph G {
   compound=true
   subgraph cluster_ {
     peripheries=0
-    subgraph cluster_0 {
-      label="main"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_0_exit[label=exit,color=purple,rank=sink]
-      cluster_0_0 -> cluster_0_exit [color=black]
+    margin=10
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0 -> cluster_0_exit [color=black]
+      }
     }
   }
 }

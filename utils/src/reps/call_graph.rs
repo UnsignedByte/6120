@@ -2,7 +2,7 @@ use crate::{BasicBlock, GraphLike};
 use bril_rs::{Code, EffectOps, Function, Instruction, Program, ValueOps};
 use graphviz_rust::{
     dot_generator::{attr, edge, id, node_id},
-    dot_structures::{Attribute, Edge, EdgeTy, Id, NodeId, Stmt, Vertex},
+    dot_structures::{Attribute, Edge, EdgeTy, Id, NodeId, Stmt, Subgraph, Vertex},
 };
 use itertools::Itertools;
 use std::collections::HashMap;
@@ -96,11 +96,22 @@ where
     fn node(&self, gid: &[usize], node: SG, id: usize) -> Stmt {
         let new_gid = gid.iter().chain([id].iter()).copied().collect::<Vec<_>>();
 
-        node.graph(&new_gid).into()
+        Subgraph {
+            id: id!(&format!(
+                "{}_wrapper",
+                <Self as GraphLike<SG>>::graph_id(self, &new_gid)
+            )),
+            stmts: vec![
+                attr!("peripheries", 0).into(),
+                attr!("margin", 15).into(),
+                node.graph(&new_gid).into(),
+            ],
+        }
+        .into()
     }
 
     fn graph_attrs(&self) -> Vec<Stmt> {
-        vec![attr!("peripheries", "0").into()]
+        vec![attr!("peripheries", 0).into(), attr!("margin", 10).into()]
     }
 
     fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
@@ -119,15 +130,17 @@ where
             .flat_map(|(i, succs)| {
                 succs.iter().map(move |&j| {
                     // Because of the limitations of graphviz cluster subgraphs, we need to generate the edges between the exit and entry nodes
-                    let src_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, i).0;
-                    let dst_cluster = <CallGraph as GraphLike<SG>>::node_id(self, gid, j).0;
+                    let src_cluster = <Self as GraphLike<SG>>::node_id(self, gid, i).0;
+                    let dst_cluster = <Self as GraphLike<SG>>::node_id(self, gid, j).0;
 
-                    let src_exit = format!("{}_exit", src_cluster);
+                    let src_exit = format!("{}_0", src_cluster);
                     let dst_entry = format!("{}_0", dst_cluster);
 
                     edge!(
                         node_id!(src_exit) => node_id!(dst_entry);
-                        attr!("color", "purple")
+                        attr!("color", "purple"),
+                        attr!("lhead", dst_cluster),
+                        attr!("ltail", src_cluster)
                     )
                     .into()
                 })
@@ -166,8 +179,8 @@ impl GraphLike<Function> for CallGraph {
             .enumerate()
             .flat_map(|(i, succs)| {
                 succs.iter().map(move |&j| {
-                    let src = <CallGraph as GraphLike<Function>>::node_id(self, gid, i);
-                    let dst = <CallGraph as GraphLike<Function>>::node_id(self, gid, j);
+                    let src = <Self as GraphLike<Function>>::node_id(self, gid, i);
+                    let dst = <Self as GraphLike<Function>>::node_id(self, gid, j);
 
                     edge!(
                         src => dst;

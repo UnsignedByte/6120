@@ -2,29 +2,35 @@ digraph G {
   compound=true
   subgraph cluster_ {
     peripheries=0
-    subgraph cluster_0 {
-      label="main"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_0_1[label="selected",shape=oval]
-      cluster_0_2[label="body",shape=oval]
-      cluster_0_3[label="break",shape=oval]
-      cluster_0_4[label="after",shape=oval]
-      cluster_0_exit[label=exit,color=purple,rank=sink]
-      cluster_0_0 -> cluster_0_1 [color=black]
-      cluster_0_1 -> cluster_0_2 [color=black]
-      cluster_0_2 -> cluster_0_3 [color=black]
-      cluster_0_1 -> cluster_0_4 [color=black]
-      cluster_0_4 -> cluster_0_exit [color=black]
-      cluster_0_0 -> cluster_0_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_1 -> cluster_0_2 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_1 -> cluster_0_4 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_2 -> cluster_0_3 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_3 -> cluster_0_1 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_3 -> cluster_0_4 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_0_4 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+    margin=10
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_0_1[label="selected",shape=oval]
+        cluster_0_2[label="body",shape=oval]
+        cluster_0_3[label="break",shape=oval]
+        cluster_0_4[label="after",shape=oval]
+        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0 -> cluster_0_1 [color=black]
+        cluster_0_1 -> cluster_0_2 [color=black]
+        cluster_0_2 -> cluster_0_3 [color=black]
+        cluster_0_1 -> cluster_0_4 [color=black]
+        cluster_0_4 -> cluster_0_exit [color=black]
+        cluster_0_0 -> cluster_0_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_1 -> cluster_0_2 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_1 -> cluster_0_4 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_2 -> cluster_0_3 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_3 -> cluster_0_1 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_3 -> cluster_0_4 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_0_4 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
     }
   }
 }

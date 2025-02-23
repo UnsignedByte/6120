@@ -182,6 +182,7 @@ impl GraphLike<&BasicBlock> for CFG {
             attr!("color", "darkgray").into(),
             attr!("style", "rounded").into(),
             attr!("bgcolor", "lightgray").into(),
+            attr!("margin", 10).into(),
         ]
     }
 

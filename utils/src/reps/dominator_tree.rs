@@ -160,12 +160,7 @@ impl GraphLike<&BasicBlock> for DominatorTree {
     }
 
     fn graph_attrs(&self) -> Vec<Stmt> {
-        vec![
-            attr!("label", &format!(r#""{}""#, self.cfg.name())).into(),
-            attr!("color", "darkgray").into(),
-            attr!("style", "rounded").into(),
-            attr!("bgcolor", "lightgray").into(),
-        ]
+        self.cfg.graph_attrs()
     }
 
     fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {

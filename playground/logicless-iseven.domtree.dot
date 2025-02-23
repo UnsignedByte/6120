@@ -2,55 +2,76 @@ digraph G {
   compound=true
   subgraph cluster_ {
     peripheries=0
-    subgraph cluster_0 {
-      label="main"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_0_exit[label=exit,color=purple,rank=sink]
-      cluster_0_0 -> cluster_0_exit [color=black]
-      cluster_0_0 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+    margin=10
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0 -> cluster_0_exit [color=black]
+        cluster_0_0 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
     }
-    subgraph cluster_1 {
-      label="abs"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_1_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_1_1[label="negative",shape=oval]
-      cluster_1_2[label="positive",shape=oval]
-      cluster_1_exit[label=exit,color=purple,rank=sink]
-      cluster_1_0 -> cluster_1_1 [color=black]
-      cluster_1_0 -> cluster_1_2 [color=black]
-      cluster_1_2 -> cluster_1_exit [color=black]
-      cluster_1_0 -> cluster_1_1 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_1_0 -> cluster_1_2 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_1_1 -> cluster_1_2 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
-      cluster_1_2 -> cluster_1_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="abs"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_1_1[label="negative",shape=oval]
+        cluster_1_2[label="positive",shape=oval]
+        cluster_1_exit[label=exit,color=purple,rank=sink]
+        cluster_1_0 -> cluster_1_1 [color=black]
+        cluster_1_0 -> cluster_1_2 [color=black]
+        cluster_1_2 -> cluster_1_exit [color=black]
+        cluster_1_0 -> cluster_1_1 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_0 -> cluster_1_2 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_1 -> cluster_1_2 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_2 -> cluster_1_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
     }
-    subgraph cluster_2 {
-      label="is_even"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_2_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_2_exit[label=exit,color=purple,rank=sink]
-      cluster_2_0 -> cluster_2_exit [color=black]
-      cluster_2_0 -> cluster_2_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+    subgraph cluster_2_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_2 {
+        label="is_even"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_2_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_2_exit[label=exit,color=purple,rank=sink]
+        cluster_2_0 -> cluster_2_exit [color=black]
+        cluster_2_0 -> cluster_2_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
     }
-    subgraph cluster_3 {
-      label="is_odd"
-      color=darkgray
-      style=rounded
-      bgcolor=lightgray
-      cluster_3_0[label="entry",shape=oval,color=blue,rank=source]
-      cluster_3_exit[label=exit,color=purple,rank=sink]
-      cluster_3_0 -> cluster_3_exit [color=black]
-      cluster_3_0 -> cluster_3_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+    subgraph cluster_3_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_3 {
+        label="is_odd"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_3_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_3_exit[label=exit,color=purple,rank=sink]
+        cluster_3_0 -> cluster_3_exit [color=black]
+        cluster_3_0 -> cluster_3_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
     }
-    cluster_0_exit -> cluster_3_0 [color=purple]
-    cluster_2_exit -> cluster_1_0 [color=purple]
-    cluster_3_exit -> cluster_2_0 [color=purple]
+    cluster_0_0 -> cluster_3_0 [color=purple,lhead=cluster_3,ltail=cluster_0]
+    cluster_2_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_2]
+    cluster_3_0 -> cluster_2_0 [color=purple,lhead=cluster_2,ltail=cluster_3]
   }
 }
