@@ -1,0 +1,11 @@
+@main {
+  cond: bool = const false;
+  br cond .first .end;
+.first:
+  br cond .selected .third;
+.selected:
+  br cond .third .first;
+.third:
+  br cond .first .selected;
+.end:
+}

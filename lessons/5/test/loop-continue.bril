@@ -1,0 +1,18 @@
+# ARGS: 100
+@main(count: int) {
+    i: int = const 0;
+    max_iters: int = const 10;
+    one: int = const 1;
+.selected:
+    cond: bool = lt i count;
+    br cond .body .after;
+.body:
+    i: int = add i one;
+.continue:
+    cond: bool = lt i max_iters;
+    br cond .body2 .selected;
+.body2:
+    print i;
+    jmp .selected;
+.after:
+}

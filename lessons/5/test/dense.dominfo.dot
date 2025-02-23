@@ -13,17 +13,20 @@ digraph G {
         bgcolor=lightgray
         margin=10
         cluster_0_0[label="entry",shape=oval,color=blue,rank=source,style=filled,fillcolor="darkseagreen4",color=gray]
-        cluster_0_1[label="left",shape=oval,style=filled,fillcolor="cadetblue2",color=gray]
+        cluster_0_1[label="first",shape=oval,style=wedged,fillcolor="cadetblue2:darkseagreen4",color=gray]
         cluster_0_2[label="selected",shape=oval,style=filled,fillcolor="coral2",color=gray]
-        cluster_0_3[label="end",shape=oval,style=filled,fillcolor="cadetblue2",color=gray]
+        cluster_0_3[label="third",shape=oval,style=filled,fillcolor="cadetblue2",color=gray]
+        cluster_0_4[label="end",shape=oval,style=filled,fillcolor="",color=gray]
         cluster_0_exit[label=exit,color=purple,rank=sink]
         cluster_0_0 -> cluster_0_1 [color=green]
-        cluster_0_0 -> cluster_0_2 [color=red]
+        cluster_0_0 -> cluster_0_4 [color=red]
         cluster_0_1 -> cluster_0_2 [color=green]
         cluster_0_1 -> cluster_0_3 [color=red]
-        cluster_0_2 -> cluster_0_1 [color=green]
-        cluster_0_2 -> cluster_0_3 [color=red]
-        cluster_0_3 -> cluster_0_exit [color=black]
+        cluster_0_2 -> cluster_0_3 [color=green]
+        cluster_0_2 -> cluster_0_1 [color=red]
+        cluster_0_3 -> cluster_0_1 [color=green]
+        cluster_0_3 -> cluster_0_2 [color=red]
+        cluster_0_4 -> cluster_0_exit [color=black]
       }
     }
   }
