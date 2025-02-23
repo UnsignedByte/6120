@@ -3,6 +3,7 @@ use bril_rs::{Argument, Code, EffectOps, Function, Instruction, Type};
 use std::collections::HashMap;
 
 /// Function representation using basic blocks.
+#[derive(Debug, Clone)]
 pub struct BBFunction {
     pub name: String,
     pub args: Vec<Argument>,

@@ -9,5 +9,3 @@ pub use bb_function::BBFunction;
 pub use call_graph::CallGraph;
 pub use cfg::CFG;
 pub use dominator_tree::DominatorTree;
-
-use cfg::FlowEdge;

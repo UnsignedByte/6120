@@ -8,26 +8,35 @@ pub fn run_analysis(mut analysis: impl AnalysisPass) {
         .try_into()
         .unwrap();
 
-    analysis.run(&prog);
+    analysis.run(&prog).unwrap_or_else(|e| {
+        eprintln!("Analysis failed with error: {}", e);
+        std::process::exit(1);
+    });
 }
 
 pub trait AnalysisPass {
     /// Function to be called on each function in the program
-    fn function(&mut self, _func: &Function) {}
+    fn function(&mut self, _func: &Function) -> Result<(), String> {
+        Ok(())
+    }
 
     /// Function to be called to analyze an entire program
-    fn program(&mut self, _prog: &Program) {}
+    fn program(&mut self, _prog: &Program) -> Result<(), String> {
+        Ok(())
+    }
 
     /// Analysis reporting and the like
-    fn finish(&mut self) {}
+    fn finish(&mut self) -> Result<(), String> {
+        Ok(())
+    }
 
-    fn run(&mut self, prog: &Program) {
-        self.program(prog);
+    fn run(&mut self, prog: &Program) -> Result<(), String> {
+        self.program(prog)?;
 
         for func in &prog.functions {
-            self.function(func);
+            self.function(func)?;
         }
 
-        self.finish();
+        self.finish()
     }
 }

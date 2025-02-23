@@ -1,0 +1,31 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0 {
+      label="main"
+      color=darkgray
+      style=rounded
+      bgcolor=lightgray
+      cluster_0_0[label="entry",shape=oval,color=blue,rank=source,style=filled,fillcolor="darkseagreen4",color=gray]
+      cluster_0_1[label="guard1",shape=oval,style=wedged,fillcolor="cadetblue2:darkseagreen4",color=gray]
+      cluster_0_2[label="body1",shape=oval,style=filled,fillcolor="darkseagreen4",color=gray]
+      cluster_0_3[label="selected",shape=oval,style=filled,fillcolor="coral2",color=gray]
+      cluster_0_4[label="body2",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
+      cluster_0_5[label="end2",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
+      cluster_0_6[label="end1",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
+      cluster_0_7[label="return",shape=oval,style=filled,fillcolor="",color=gray]
+      cluster_0_exit[label=exit,color=purple,rank=sink]
+      cluster_0_0 -> cluster_0_1
+      cluster_0_1 -> cluster_0_2 [color=green]
+      cluster_0_1 -> cluster_0_7 [color=red]
+      cluster_0_2 -> cluster_0_3
+      cluster_0_3 -> cluster_0_4 [color=green]
+      cluster_0_3 -> cluster_0_6 [color=red]
+      cluster_0_4 -> cluster_0_5
+      cluster_0_5 -> cluster_0_3
+      cluster_0_6 -> cluster_0_1
+      cluster_0_7 -> cluster_0_exit [color=black]
+    }
+  }
+}

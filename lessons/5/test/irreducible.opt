@@ -1,11 +1,11 @@
 @main(a: bool, b: bool, c: bool) {
   print a b c;
-  br a .left .right;
+  br a .left .selected;
 .left:
   b: bool = not b;
   print a b c;
-  br b .right .end;
-.right:
+  br b .selected .end;
+.selected:
   c: bool = not c;
   print a b c;
   br c .left .end;

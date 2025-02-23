@@ -22,6 +22,7 @@ impl FlowEdge {
     }
 }
 /// Control Flow Graph representation.
+#[derive(Debug, Clone)]
 pub struct CFG {
     pub func: BBFunction,
     pub(crate) preds: Vec<Vec<usize>>,

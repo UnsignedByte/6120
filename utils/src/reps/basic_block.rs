@@ -4,6 +4,7 @@ use graphviz_rust::{
     dot_structures::{Attribute, Id},
 };
 
+#[derive(Debug, Clone)]
 pub struct BasicBlock {
     pub idx: usize,
     pub label: Option<String>,

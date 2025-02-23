@@ -46,7 +46,7 @@ impl CallDrawer {
 }
 
 impl AnalysisPass for CallDrawer {
-    fn program(&mut self, prog: &bril_rs::Program) {
+    fn program(&mut self, prog: &bril_rs::Program) -> Result<(), String> {
         let call_graph = CallGraph::new(prog.clone());
 
         let strict = false;
@@ -58,6 +58,8 @@ impl AnalysisPass for CallDrawer {
         };
 
         println!("{}", dot);
+
+        Ok(())
     }
 }
 

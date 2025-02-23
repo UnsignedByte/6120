@@ -1,7 +1,18 @@
-
-
 [envs.domtree-dot]
 command = """
 bril2json < {filename} | ../../target/debug/gen-callgraph -s domtree
 """
 output."domtree.dot" = "-"
+
+
+[envs.dominfo-dot]
+command = """
+bril2json < {filename} | ../../target/debug/dom-display
+"""
+output."dominfo.dot" = "-"
+
+[envs.domcheck]
+command = """
+bril2json < {filename} | ../../target/debug/dom-check
+"""
+return_code = 0
