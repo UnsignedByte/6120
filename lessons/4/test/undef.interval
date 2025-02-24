@@ -1,15 +1,15 @@
 main {
 .unknown:
-	in: cond = [0, 1]
-	out: cond = [0, 1]
+	in: cond = [False, True]
+	out: cond = [False, True]
 .left:
-	in: cond = [0, 1]
-	out: a = [1, 1], cond = [0, 1]
+	in: cond = [False, True]
+	out: a = [1, 1], cond = [False, True]
 .right:
-	in: cond = [0, 1]
-	out: cond = [0, 1]
+	in: cond = [False, True]
+	out: cond = [False, True]
 .end:
-	in: a = [1, 1], cond = [0, 1]
-	out: a = [1, 1], cond = [0, 1]
+	in: a = [1, 1], cond = [False, True]
+	out: a = [1, 1], cond = [False, True]
 }
 

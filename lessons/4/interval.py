@@ -12,7 +12,7 @@ class IntervalPass(DataFlowPass):
     defaults = {
         "int": (-math.inf, math.inf),
         "float": (-math.inf, math.inf),
-        "bool": (0, 1),
+        "bool": (False, True),
     }
 
     def __init__(self, func, max_iters=100):
@@ -101,7 +101,10 @@ class IntervalPass(DataFlowPass):
             ]
             if "dest" in instr:
                 dest = instr["dest"]
-                if instr.get("op", "") == "const":
+                if itx >= self.max_iterations:
+                    # Value must become unknown to be safe
+                    out_values[dest] = IntervalPass.defaults[instr["type"]]
+                elif instr.get("op", "") == "const":
                     # If the instruction is a constant, then it is constant propagatable
                     out_values[dest] = (instr["value"], instr["value"])
                 elif instr.get("op", "") == "id":
@@ -113,25 +116,7 @@ class IntervalPass(DataFlowPass):
                     # Otherwise, the value is unknown
                     out_values[dest] = IntervalPass.defaults[instr["type"]]
 
-        # If the iterations is at the max number, then anything changed in this block will become unknown
-        if itx >= self.max_iterations:
-            for k, v in out_values.items():
-                o_v = in_values.get(k, IntervalPass.defaults["int"])
-
-                # First, try to merge the two intervals to see if they are contained in each
-                # other. If they are, then the value is the same
-                v = (min(v[0], o_v[0]), max(v[1], o_v[1]))
-
-                n_v = (
-                    v[0] if v[0] == o_v[0] else -math.inf,
-                    v[1] if v[1] == o_v[1] else math.inf,
-                )
-
-                out_values[k] = n_v
-
-            return (self.max_iterations, out_values)
-
-        return (itx + 1, out_values)
+        return (min(self.max_iterations, itx + 1), out_values)
 
     def to_str(self, val):
         itx, vals = val

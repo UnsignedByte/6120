@@ -1,0 +1,15 @@
+main {
+.unknown:
+	in: count = [-inf, inf]
+	out: count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [1, 1], zero = [0, 0]
+.guard:
+	in: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+	out: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+.body:
+	in: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+	out: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+.end:
+	in: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+	out: cond = [False, True], count = [-inf, inf], neg_two = [-2, -2], one = [1, 1], x = [-inf, inf], zero = [0, 0]
+}
+

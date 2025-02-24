@@ -1,15 +1,15 @@
 main {
 .unknown:
-	in: cond = [0, 1]
-	out: b = [2, 2], c = [3, 3], cond = [0, 1]
+	in: cond = [False, True]
+	out: b = [2, 2], c = [3, 3], cond = [False, True]
 .left:
-	in: b = [2, 2], c = [3, 3], cond = [0, 1]
-	out: a = [1, 1], b = [2, 2], c = [3, 3], cond = [0, 1], x = [5, 5]
+	in: b = [2, 2], c = [3, 3], cond = [False, True]
+	out: a = [1, 1], b = [2, 2], c = [3, 3], cond = [False, True], x = [5, 5]
 .right:
-	in: b = [2, 2], c = [3, 3], cond = [0, 1]
-	out: a = [1, 1], b = [2, 2], c = [1, 1], cond = [0, 1], x = [1, 1]
+	in: b = [2, 2], c = [3, 3], cond = [False, True]
+	out: a = [1, 1], b = [2, 2], c = [1, 1], cond = [False, True], x = [1, 1]
 .end:
-	in: a = [1, 1], b = [2, 2], c = [1, 3], cond = [0, 1], x = [1, 5]
-	out: a = [1, 1], b = [2, 2], c = [1, 3], cond = [0, 1], x = [1, 5]
+	in: a = [1, 1], b = [2, 2], c = [1, 3], cond = [False, True], x = [1, 5]
+	out: a = [1, 1], b = [2, 2], c = [1, 3], cond = [False, True], x = [1, 5]
 }
 

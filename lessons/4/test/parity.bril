@@ -1,0 +1,16 @@
+# ARGS: 10
+@main(count: int) {
+    x: int = const 1;
+    zero: int = const 0;
+    one: int = const 1;
+    neg_two: int = const -2;
+.guard:
+    cond: bool = gt count zero;
+    br cond .body .end;
+.body:
+    x: int = mul x neg_two;
+    count: int = sub count one;
+    jmp .guard;
+.end:
+    print x;
+}

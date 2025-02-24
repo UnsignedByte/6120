@@ -1,15 +1,15 @@
 main {
 .unknown:
-	in: cond = [0, 1]
-	out: a = [47, 47], b = [42, 42], cond = [0, 1]
+	in: cond = [False, True]
+	out: a = [47, 47], b = [42, 42], cond = [False, True]
 .left:
-	in: a = [47, 47], b = [42, 42], cond = [0, 1]
-	out: a = [47, 47], b = [1, 1], c = [5, 5], cond = [0, 1]
+	in: a = [47, 47], b = [42, 42], cond = [False, True]
+	out: a = [47, 47], b = [1, 1], c = [5, 5], cond = [False, True]
 .right:
-	in: a = [47, 47], b = [42, 42], cond = [0, 1]
-	out: a = [2, 2], b = [42, 42], c = [10, 10], cond = [0, 1]
+	in: a = [47, 47], b = [42, 42], cond = [False, True]
+	out: a = [2, 2], b = [42, 42], c = [10, 10], cond = [False, True]
 .end:
-	in: a = [2, 47], b = [1, 42], c = [5, 10], cond = [0, 1]
-	out: a = [2, 47], b = [1, 42], c = [5, 10], cond = [0, 1], d = [-8, 42]
+	in: a = [2, 47], b = [1, 42], c = [5, 10], cond = [False, True]
+	out: a = [2, 47], b = [1, 42], c = [5, 10], cond = [False, True], d = [-8, 42]
 }
 

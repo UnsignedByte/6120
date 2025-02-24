@@ -3,13 +3,13 @@ main {
 	in: n = [-inf, inf]
 	out: i = [0, 0], n = [-inf, inf], one = [1, 1], result = [1, 1], two = [2, 2]
 .loop:
-	in: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
-	out: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
+	in: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
+	out: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
 .multiply:
-	in: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
-	out: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
+	in: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
+	out: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
 .return:
-	in: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
-	out: i = [0, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [1, inf], two = [2, 2]
+	in: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
+	out: i = [-inf, inf], i_lt_n = [False, True], n = [-inf, inf], one = [1, 1], result = [-inf, inf], two = [2, 2]
 }
 

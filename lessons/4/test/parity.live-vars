@@ -1,0 +1,15 @@
+main {
+.unknown:
+	out: count
+	in: count, neg_two, one, x, zero
+.guard:
+	out: count, neg_two, one, x, zero
+	in: count, neg_two, one, x, zero
+.body:
+	out: count, neg_two, one, x, zero
+	in: count, neg_two, one, x, zero
+.end:
+	out: x
+	in: 
+}
+
