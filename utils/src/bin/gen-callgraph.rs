@@ -3,12 +3,16 @@ use std::str::FromStr;
 use argh::FromArgs;
 use bril_rs::Function;
 use std::default::Default;
-use utils::{draw, run_analysis, setup_logger, AnalysisPass, CallGraph, DominatorTree, CFG};
+use utils::{
+    draw, run_analysis, setup_logger, AnalysisPass, CallGraph, Dataflow, DataflowPass,
+    DominatorPass, DominatorSetNode, DominatorTree, CFG,
+};
 
 pub enum SubgraphTypes {
     None,
     CFG,
     DominatorTree,
+    DominatorSets,
 }
 
 impl FromStr for SubgraphTypes {
@@ -19,6 +23,7 @@ impl FromStr for SubgraphTypes {
             "none" => Ok(Self::None),
             "cfg" => Ok(Self::CFG),
             "dominatortree" | "domtree" => Ok(Self::DominatorTree),
+            "dominatorsets" | "domsets" => Ok(Self::DominatorSets),
             _ => Err(format!("Unknown subgraph type: {}", s)),
         }
     }
@@ -55,6 +60,16 @@ impl AnalysisPass for CallDrawer {
             SubgraphTypes::None => draw::<Function>(call_graph, true, strict),
             SubgraphTypes::CFG => draw::<CFG>(call_graph, true, strict),
             SubgraphTypes::DominatorTree => draw::<DominatorTree>(call_graph, true, strict),
+            SubgraphTypes::DominatorSets => {
+                // Collect all the dominators
+                let dominators = prog
+                    .functions
+                    .iter()
+                    .map(|f| DominatorPass.cfg(CFG::from(f.clone())))
+                    .map(<Dataflow<DominatorSetNode>>::from)
+                    .collect();
+                draw((call_graph, dominators), true, strict)
+            }
         };
 
         println!("{}", dot);

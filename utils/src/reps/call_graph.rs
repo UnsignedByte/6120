@@ -1,4 +1,4 @@
-use crate::{BasicBlock, GraphLike};
+use crate::{BasicBlock, Dataflow, DataflowNode, GraphLike};
 use bril_rs::{Code, EffectOps, Function, Instruction, Program, ValueOps};
 use graphviz_rust::{
     dot_generator::{attr, edge, id, node_id},
@@ -185,6 +185,66 @@ impl GraphLike<Function> for CallGraph {
                     edge!(
                         src => dst;
                         attr!("color", "purple")
+                    )
+                    .into()
+                })
+            })
+            .collect()
+    }
+}
+
+impl<'bb, Val: 'bb> GraphLike<&Dataflow<Val>> for (CallGraph, Vec<Dataflow<Val>>)
+where
+    Dataflow<Val>: GraphLike<DataflowNode<'bb, Val>>,
+{
+    fn node(&self, gid: &[usize], node: &Dataflow<Val>, id: usize) -> Stmt {
+        let new_gid = gid.iter().chain([id].iter()).copied().collect::<Vec<_>>();
+
+        Subgraph {
+            id: id!(&format!(
+                "{}_wrapper",
+                <Self as GraphLike<&Dataflow<Val>>>::graph_id(self, &new_gid)
+            )),
+            stmts: vec![
+                attr!("peripheries", 0).into(),
+                attr!("margin", 15).into(),
+                node.graph(&new_gid).into(),
+            ],
+        }
+        .into()
+    }
+
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        vec![attr!("peripheries", "0").into()]
+    }
+
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.1
+            .iter()
+            .enumerate()
+            .map(|(i, val)| self.node(gid, val, i))
+            .collect()
+    }
+
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.0
+            .succs
+            .iter()
+            .enumerate()
+            .flat_map(|(i, succs)| {
+                succs.iter().map(move |&j| {
+                    // Because of the limitations of graphviz cluster subgraphs, we need to generate the edges between the exit and entry nodes
+                    let src_cluster = <Self as GraphLike<&Dataflow<Val>>>::node_id(self, gid, i).0;
+                    let dst_cluster = <Self as GraphLike<&Dataflow<Val>>>::node_id(self, gid, j).0;
+
+                    let src_exit = format!("{}_0", src_cluster);
+                    let dst_entry = format!("{}_0", dst_cluster);
+
+                    edge!(
+                        node_id!(src_exit) => node_id!(dst_entry);
+                        attr!("color", "purple"),
+                        attr!("lhead", dst_cluster),
+                        attr!("ltail", src_cluster)
                     )
                     .into()
                 })

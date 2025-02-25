@@ -15,6 +15,20 @@ pub struct Dataflow<Val> {
     pub exit_val: Val,
 }
 
+impl<F> Dataflow<F> {
+    pub fn from<T>(value: Dataflow<T>) -> Self
+    where
+        F: From<T>,
+    {
+        Dataflow {
+            cfg: value.cfg,
+            in_vals: value.in_vals.into_iter().map(F::from).collect(),
+            out_vals: value.out_vals.into_iter().map(F::from).collect(),
+            exit_val: F::from(value.exit_val),
+        }
+    }
+}
+
 impl<Val: Display> Display for Dataflow<Val> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "@{} {{{{", self.cfg.func.name)?;
@@ -28,15 +42,57 @@ impl<Val: Display> Display for Dataflow<Val> {
     }
 }
 
-impl<Val> GraphLike<(&BasicBlock, &Val)> for Dataflow<Val>
+/// Trait for dataflow analysis labels
+/// Allows conerting dataflow values to string labels
+pub trait DataflowLabel
 where
-    Val: Display,
+    Self: Sized,
 {
-    fn node_attrs(&self, (block, val): (&BasicBlock, &Val)) -> Vec<Attribute> {
-        vec![
-            attr!("label", &format!(r#""{{{}|{}}}""#, block.node_label(), val)),
-            attr!("shape", "MRecord"),
-        ]
+    fn in_label(&self, df: &Dataflow<Self>) -> Option<String>;
+    fn out_label(&self, df: &Dataflow<Self>) -> Option<String>;
+}
+
+/// Represents a node in the dataflow graph
+pub(crate) struct DataflowNode<'a, Val> {
+    bb: &'a BasicBlock,
+    df: &'a Dataflow<Val>,
+    i: usize,
+}
+
+impl<'a, Val> DataflowNode<'a, Val>
+where
+    Val: DataflowLabel,
+{
+    pub fn new(bb: &'a BasicBlock, df: &'a Dataflow<Val>, i: usize) -> Self {
+        DataflowNode { bb, df, i }
+    }
+
+    fn label(&self) -> String {
+        let DataflowNode {
+            bb,
+            df: dataflow,
+            i,
+        } = self;
+        format!(
+            r#""{{{}|{}}}""#,
+            bb.label_or_default(),
+            vec![
+                dataflow.in_vals[*i].in_label(dataflow),
+                dataflow.out_vals[*i].out_label(dataflow)
+            ]
+            .into_iter()
+            .flatten()
+            .join("|")
+        )
+    }
+}
+
+impl<Val> GraphLike<DataflowNode<'_, Val>> for Dataflow<Val>
+where
+    Val: DataflowLabel,
+{
+    fn node_attrs<'d>(&self, node: DataflowNode<'_, Val>) -> Vec<Attribute> {
+        vec![attr!("label", &node.label()), attr!("shape", "Mrecord")]
     }
 
     fn graph_attrs(&self) -> Vec<Stmt> {
@@ -51,7 +107,7 @@ where
             .blocks
             .iter()
             .enumerate()
-            .map(|(i, block)| self.node(gid, (block, &self.out_vals[i]), i))
+            .map(|(i, block)| self.node(gid, DataflowNode::new(block, self, i), i))
             .chain(std::iter::once(
                 node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into()
             ))

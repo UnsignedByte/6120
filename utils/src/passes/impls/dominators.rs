@@ -1,8 +1,8 @@
-use crate::DataflowPass;
+use crate::{Dataflow, DataflowLabel, DataflowPass};
 use std::collections::HashSet;
 
 /// Helper pass to calculate the dominators for a given CFG
-pub(crate) struct DominatorPass;
+pub struct DominatorPass;
 
 impl DataflowPass<HashSet<usize>> for DominatorPass {
     fn init(&self, func: &crate::BBFunction, bidx: usize) -> HashSet<usize> {
@@ -37,5 +37,36 @@ impl DataflowPass<HashSet<usize>> for DominatorPass {
         let mut doms = in_val.clone();
         doms.insert(bidx);
         doms
+    }
+}
+
+/// Dominator set node used to display graphs
+/// For dominator sets
+#[derive(Clone)]
+pub struct DominatorSetNode {
+    doms: HashSet<usize>,
+}
+
+impl DataflowLabel for DominatorSetNode {
+    fn in_label(&self, _: &Dataflow<Self>) -> Option<String> {
+        None
+    }
+
+    fn out_label(&self, df: &Dataflow<Self>) -> Option<String> {
+        // Create a set of node names
+        let names: Vec<String> = self
+            .doms
+            .iter()
+            .map(|idx| df.cfg.get(*idx).label_or_default().to_string())
+            .collect();
+
+        // Return a string representation of the set
+        Some(names.join("\\n"))
+    }
+}
+
+impl From<HashSet<usize>> for DominatorSetNode {
+    fn from(doms: HashSet<usize>) -> Self {
+        Self { doms }
     }
 }
