@@ -48,8 +48,8 @@ pub trait DataflowLabel
 where
     Self: Sized,
 {
-    fn in_label(&self, df: &Dataflow<Self>) -> Option<String>;
-    fn out_label(&self, df: &Dataflow<Self>) -> Option<String>;
+    fn in_label(&self, cfg: &CFG) -> Option<String>;
+    fn out_label(&self, cfg: &CFG) -> Option<String>;
 }
 
 /// Represents a node in the dataflow graph
@@ -99,14 +99,14 @@ where
                 r#""{{{}|{}}}""#,
                 bb.label_or_default(),
                 vec![
-                    dataflow.in_vals[*i].in_label(dataflow),
-                    dataflow.out_vals[*i].out_label(dataflow)
+                    dataflow.in_vals[*i].in_label(&dataflow.cfg),
+                    dataflow.out_vals[*i].out_label(&dataflow.cfg)
                 ]
                 .into_iter()
                 .flatten()
                 .join("|")
             )
-        } else if let Some(label) = dataflow.exit_val.out_label(dataflow) {
+        } else if let Some(label) = dataflow.exit_val.out_label(&dataflow.cfg) {
             return format!(r#""{{exit|{}}}""#, label);
         } else {
             return "exit".to_owned();

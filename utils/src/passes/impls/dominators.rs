@@ -1,4 +1,4 @@
-use crate::{Dataflow, DataflowLabel, DataflowPass};
+use crate::{DataflowLabel, DataflowPass, CFG};
 use std::collections::HashSet;
 
 /// Helper pass to calculate the dominators for a given CFG
@@ -48,16 +48,16 @@ pub struct DominatorSetNode {
 }
 
 impl DataflowLabel for DominatorSetNode {
-    fn in_label(&self, _: &Dataflow<Self>) -> Option<String> {
+    fn in_label(&self, _: &CFG) -> Option<String> {
         None
     }
 
-    fn out_label(&self, df: &Dataflow<Self>) -> Option<String> {
+    fn out_label(&self, cfg: &CFG) -> Option<String> {
         // Create a set of node names
         let names: Vec<String> = self
             .doms
             .iter()
-            .map(|idx| df.cfg.get(*idx).label_or_default().to_string())
+            .map(|idx| cfg.get(*idx).label_or_default().to_string())
             .collect();
 
         // Return a string representation of the set
