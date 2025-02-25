@@ -12,11 +12,11 @@ digraph G {
         bgcolor=lightgray
         margin=10
         cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
-        cluster_0_1[label="{l1|l1\nentry}",shape=Mrecord,color=black]
-        cluster_0_2[label="{l2|l1\nl2\nentry}",shape=Mrecord,color=black]
-        cluster_0_3[label="{l3|l3\nl2\nentry\nl1}",shape=Mrecord,color=black]
-        cluster_0_4[label="{end|end\nentry\nl2\nl1\nl3}",shape=Mrecord,color=black]
-        cluster_0_exit[label="{exit|end\nentry\nl2\nl1\nl3}",shape=Mrecord,color=purple]
+        cluster_0_1[label="{l1|entry\nl1}",shape=Mrecord,color=black]
+        cluster_0_2[label="{l2|entry\nl1\nl2}",shape=Mrecord,color=black]
+        cluster_0_3[label="{l3|entry\nl1\nl2\nl3}",shape=Mrecord,color=black]
+        cluster_0_4[label="{end|end\nentry\nl1\nl2\nl3}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|end\nentry\nl1\nl2\nl3}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2
         cluster_0_2 -> cluster_0_3

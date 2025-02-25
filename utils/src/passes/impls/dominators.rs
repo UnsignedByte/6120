@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{DataflowLabel, DataflowPass, CFG};
 use std::collections::HashSet;
 
@@ -57,6 +59,7 @@ impl DataflowLabel for DominatorSetNode {
         let names: Vec<String> = self
             .doms
             .iter()
+            .sorted_unstable()
             .map(|idx| cfg.get(*idx).label_or_default().to_string())
             .collect();
 

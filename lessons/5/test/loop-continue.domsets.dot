@@ -15,7 +15,7 @@ digraph G {
         cluster_0_1[label="{selected|entry\nselected}",shape=Mrecord,color=black]
         cluster_0_2[label="{body|entry\nselected\nbody}",shape=Mrecord,color=black]
         cluster_0_3[label="{continue|entry\nselected\nbody\ncontinue}",shape=Mrecord,color=black]
-        cluster_0_4[label="{body2|body2\nentry\nselected\nbody\ncontinue}",shape=Mrecord,color=black]
+        cluster_0_4[label="{body2|entry\nselected\nbody\ncontinue\nbody2}",shape=Mrecord,color=black]
         cluster_0_5[label="{after|entry\nselected\nafter}",shape=Mrecord,color=black]
         cluster_0_exit[label="{exit|entry\nselected\nafter}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1

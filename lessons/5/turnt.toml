@@ -4,6 +4,12 @@ bril2json < {filename} | ../../target/debug/gen-callgraph -s domtree
 """
 output."domtree.dot" = "-"
 
+[envs.domsets-dot]
+command = """
+bril2json < {filename} | ../../target/debug/gen-callgraph -s domsets
+"""
+output."domsets.dot" = "-"
+
 
 [envs.dominfo-dot]
 command = """

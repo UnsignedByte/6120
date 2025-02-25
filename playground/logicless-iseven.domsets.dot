@@ -26,7 +26,7 @@ digraph G {
         bgcolor=lightgray
         margin=10
         cluster_1_0[label="{entry|entry}",shape=Mrecord,color=blue]
-        cluster_1_1[label="{negative|negative\nentry}",shape=Mrecord,color=black]
+        cluster_1_1[label="{negative|entry\nnegative}",shape=Mrecord,color=black]
         cluster_1_2[label="{positive|entry\npositive}",shape=Mrecord,color=black]
         cluster_1_exit[label="{exit|entry\npositive}",shape=Mrecord,color=purple]
         cluster_1_0 -> cluster_1_1 [color=green]
