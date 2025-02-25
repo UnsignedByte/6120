@@ -13,13 +13,13 @@ digraph G {
         margin=10
         cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
         cluster_0_1[label="{row_loop|entry\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_2[label="{col_loop|col_loop\nentry\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_3[label="{inner_loop|col_loop\nentry\ninner_loop\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_4[label="{multiply|col_loop\nentry\ninner_loop\nmultiply\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_5[label="{end_col|col_loop\nend_col\nentry\ninner_loop\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_6[label="{add_dp|add_dp\ncol_loop\nend_col\nentry\ninner_loop\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_7[label="{return|entry\nreturn\nrow_loop}",shape=Mrecord,color=black]
-        cluster_0_exit[label="{exit|entry\nreturn\nrow_loop}",shape=Mrecord,color=purple]
+        cluster_0_2[label="{col_loop|entry\nrow_loop\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_3[label="{inner_loop|entry\nrow_loop\ncol_loop\ninner_loop}",shape=Mrecord,color=black]
+        cluster_0_4[label="{multiply|entry\nrow_loop\ncol_loop\ninner_loop\nmultiply}",shape=Mrecord,color=black]
+        cluster_0_5[label="{end_col|entry\nrow_loop\ncol_loop\ninner_loop\nend_col}",shape=Mrecord,color=black]
+        cluster_0_6[label="{add_dp|entry\nrow_loop\ncol_loop\ninner_loop\nend_col\nadd_dp}",shape=Mrecord,color=black]
+        cluster_0_7[label="{return|entry\nrow_loop\nreturn}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|entry\nrow_loop\nreturn}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2 [color=green]
         cluster_0_1 -> cluster_0_7 [color=red]
@@ -99,7 +99,7 @@ digraph G {
         margin=10
         cluster_4_0[label="{entry|entry}",shape=Mrecord,color=blue]
         cluster_4_1[label="{loop|entry\nloop}",shape=Mrecord,color=black]
-        cluster_4_2[label="{divide|divide\nentry\nloop}",shape=Mrecord,color=black]
+        cluster_4_2[label="{divide|entry\nloop\ndivide}",shape=Mrecord,color=black]
         cluster_4_3[label="{return|entry\nloop\nreturn}",shape=Mrecord,color=black]
         cluster_4_exit[label="{exit|entry\nloop\nreturn}",shape=Mrecord,color=purple]
         cluster_4_0 -> cluster_4_1
