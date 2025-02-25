@@ -1,6 +1,6 @@
 use crate::{BBFunction, BasicBlock, GraphLike, CFG};
 use graphviz_rust::{
-    dot_generator::{attr, id, node},
+    dot_generator::{attr, id, node_id},
     dot_structures::{Attribute, Id, Node, NodeId, Stmt},
 };
 use itertools::Itertools;
@@ -54,7 +54,7 @@ where
 
 /// Represents a node in the dataflow graph
 pub(crate) struct DataflowNode<'a, Val> {
-    bb: &'a BasicBlock,
+    bb: Option<&'a BasicBlock>,
     df: &'a Dataflow<Val>,
     i: usize,
 }
@@ -64,7 +64,27 @@ where
     Val: DataflowLabel,
 {
     pub fn new(bb: &'a BasicBlock, df: &'a Dataflow<Val>, i: usize) -> Self {
-        DataflowNode { bb, df, i }
+        DataflowNode {
+            bb: Some(bb),
+            df,
+            i,
+        }
+    }
+
+    pub fn exit(df: &'a Dataflow<Val>) -> Self {
+        DataflowNode {
+            bb: None,
+            df,
+            i: df.cfg.len(),
+        }
+    }
+
+    fn is_exit(&self) -> bool {
+        self.bb.is_none()
+    }
+
+    fn is_entry(&self) -> bool {
+        self.bb.map(|bb| bb.is_entry()).unwrap_or(false)
     }
 
     fn label(&self) -> String {
@@ -73,17 +93,24 @@ where
             df: dataflow,
             i,
         } = self;
-        format!(
-            r#""{{{}|{}}}""#,
-            bb.label_or_default(),
-            vec![
-                dataflow.in_vals[*i].in_label(dataflow),
-                dataflow.out_vals[*i].out_label(dataflow)
-            ]
-            .into_iter()
-            .flatten()
-            .join("|")
-        )
+
+        if let Some(bb) = bb {
+            format!(
+                r#""{{{}|{}}}""#,
+                bb.label_or_default(),
+                vec![
+                    dataflow.in_vals[*i].in_label(dataflow),
+                    dataflow.out_vals[*i].out_label(dataflow)
+                ]
+                .into_iter()
+                .flatten()
+                .join("|")
+            )
+        } else if let Some(label) = dataflow.exit_val.out_label(dataflow) {
+            return format!(r#""{{exit|{}}}""#, label);
+        } else {
+            return "exit".to_owned();
+        }
     }
 }
 
@@ -92,7 +119,19 @@ where
     Val: DataflowLabel,
 {
     fn node_attrs<'d>(&self, node: DataflowNode<'_, Val>) -> Vec<Attribute> {
-        vec![attr!("label", &node.label()), attr!("shape", "Mrecord")]
+        let color = if node.is_entry() {
+            "blue"
+        } else if node.is_exit() {
+            "purple"
+        } else {
+            "black"
+        };
+
+        vec![
+            attr!("label", &node.label()),
+            attr!("shape", "Mrecord"),
+            attr!("color", color),
+        ]
     }
 
     fn graph_attrs(&self) -> Vec<Stmt> {
@@ -109,7 +148,11 @@ where
             .enumerate()
             .map(|(i, block)| self.node(gid, DataflowNode::new(block, self, i), i))
             .chain(std::iter::once(
-                node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into()
+                Node {
+                    id: node_id!(exit_node),
+                    attributes: self.node_attrs(DataflowNode::exit(self)),
+                }
+                .into(),
             ))
             .collect()
     }

@@ -11,15 +11,15 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_0_0[label="{entry|entry}",shape=Mrecord]
-        cluster_0_1[label="{row_loop|row_loop\nentry}",shape=Mrecord]
-        cluster_0_2[label="{col_loop|col_loop\nrow_loop\nentry}",shape=Mrecord]
-        cluster_0_3[label="{inner_loop|col_loop\nrow_loop\ninner_loop\nentry}",shape=Mrecord]
-        cluster_0_4[label="{multiply|col_loop\nrow_loop\ninner_loop\nentry\nmultiply}",shape=Mrecord]
-        cluster_0_5[label="{end_col|col_loop\nrow_loop\ninner_loop\nentry\nend_col}",shape=Mrecord]
-        cluster_0_6[label="{add_dp|col_loop\nrow_loop\ninner_loop\nentry\nend_col\nadd_dp}",shape=Mrecord]
-        cluster_0_7[label="{return|row_loop\nentry\nreturn}",shape=Mrecord]
-        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{row_loop|entry\nrow_loop}",shape=Mrecord,color=black]
+        cluster_0_2[label="{col_loop|row_loop\nentry\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_3[label="{inner_loop|inner_loop\nentry\nrow_loop\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_4[label="{multiply|inner_loop\nentry\nmultiply\nrow_loop\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_5[label="{end_col|inner_loop\nentry\nend_col\nrow_loop\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_6[label="{add_dp|inner_loop\nentry\nadd_dp\nend_col\nrow_loop\ncol_loop}",shape=Mrecord,color=black]
+        cluster_0_7[label="{return|return\nentry\nrow_loop}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|return\nentry\nrow_loop}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2 [color=green]
         cluster_0_1 -> cluster_0_7 [color=red]
@@ -43,10 +43,10 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_1_0[label="{entry|entry}",shape=Mrecord]
-        cluster_1_1[label="{ret_one|entry\nret_one}",shape=Mrecord]
-        cluster_1_2[label="{ret_zero|entry\nret_zero}",shape=Mrecord]
-        cluster_1_exit[label=exit,color=purple,rank=sink]
+        cluster_1_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_1_1[label="{ret_one|ret_one\nentry}",shape=Mrecord,color=black]
+        cluster_1_2[label="{ret_zero|ret_zero\nentry}",shape=Mrecord,color=black]
+        cluster_1_exit[label="{exit|entry}",shape=Mrecord,color=purple]
         cluster_1_0 -> cluster_1_1 [color=green]
         cluster_1_0 -> cluster_1_2 [color=red]
         cluster_1_1 -> cluster_1_exit [color=black]
@@ -62,8 +62,8 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_2_0[label="{entry|entry}",shape=Mrecord]
-        cluster_2_exit[label=exit,color=purple,rank=sink]
+        cluster_2_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_2_exit[label="{exit|entry}",shape=Mrecord,color=purple]
         cluster_2_0 -> cluster_2_exit [color=black]
       }
     }
@@ -76,11 +76,11 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_3_0[label="{entry|entry}",shape=Mrecord]
-        cluster_3_1[label="{loop|entry\nloop}",shape=Mrecord]
-        cluster_3_2[label="{multiply|multiply\nentry\nloop}",shape=Mrecord]
-        cluster_3_3[label="{return|return\nentry\nloop}",shape=Mrecord]
-        cluster_3_exit[label=exit,color=purple,rank=sink]
+        cluster_3_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_3_1[label="{loop|loop\nentry}",shape=Mrecord,color=black]
+        cluster_3_2[label="{multiply|loop\nmultiply\nentry}",shape=Mrecord,color=black]
+        cluster_3_3[label="{return|loop\nentry\nreturn}",shape=Mrecord,color=black]
+        cluster_3_exit[label="{exit|loop\nentry\nreturn}",shape=Mrecord,color=purple]
         cluster_3_0 -> cluster_3_1
         cluster_3_1 -> cluster_3_2 [color=green]
         cluster_3_1 -> cluster_3_3 [color=red]
@@ -97,11 +97,11 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_4_0[label="{entry|entry}",shape=Mrecord]
-        cluster_4_1[label="{loop|entry\nloop}",shape=Mrecord]
-        cluster_4_2[label="{divide|entry\ndivide\nloop}",shape=Mrecord]
-        cluster_4_3[label="{return|entry\nreturn\nloop}",shape=Mrecord]
-        cluster_4_exit[label=exit,color=purple,rank=sink]
+        cluster_4_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_4_1[label="{loop|entry\nloop}",shape=Mrecord,color=black]
+        cluster_4_2[label="{divide|divide\nentry\nloop}",shape=Mrecord,color=black]
+        cluster_4_3[label="{return|return\nentry\nloop}",shape=Mrecord,color=black]
+        cluster_4_exit[label="{exit|return\nentry\nloop}",shape=Mrecord,color=purple]
         cluster_4_0 -> cluster_4_1
         cluster_4_1 -> cluster_4_3 [color=green]
         cluster_4_1 -> cluster_4_2 [color=red]
@@ -118,10 +118,10 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_5_0[label="{entry|entry}",shape=Mrecord]
-        cluster_5_1[label="{negative|entry\nnegative}",shape=Mrecord]
-        cluster_5_2[label="{positive|entry\npositive}",shape=Mrecord]
-        cluster_5_exit[label=exit,color=purple,rank=sink]
+        cluster_5_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_5_1[label="{negative|negative\nentry}",shape=Mrecord,color=black]
+        cluster_5_2[label="{positive|positive\nentry}",shape=Mrecord,color=black]
+        cluster_5_exit[label="{exit|positive\nentry}",shape=Mrecord,color=purple]
         cluster_5_0 -> cluster_5_1 [color=green]
         cluster_5_0 -> cluster_5_2 [color=red]
         cluster_5_1 -> cluster_5_2
@@ -137,8 +137,8 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_6_0[label="{entry|entry}",shape=Mrecord]
-        cluster_6_exit[label=exit,color=purple,rank=sink]
+        cluster_6_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_6_exit[label="{exit|entry}",shape=Mrecord,color=purple]
         cluster_6_0 -> cluster_6_exit [color=black]
       }
     }
@@ -151,8 +151,8 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_7_0[label="{entry|entry}",shape=Mrecord]
-        cluster_7_exit[label=exit,color=purple,rank=sink]
+        cluster_7_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_7_exit[label="{exit|entry}",shape=Mrecord,color=purple]
         cluster_7_0 -> cluster_7_exit [color=black]
       }
     }

@@ -1,0 +1,70 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_0_exit[label="{exit|entry}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_exit [color=black]
+      }
+    }
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="abs"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_1_1[label="{negative|negative\nentry}",shape=Mrecord,color=black]
+        cluster_1_2[label="{positive|entry\npositive}",shape=Mrecord,color=black]
+        cluster_1_exit[label="{exit|entry\npositive}",shape=Mrecord,color=purple]
+        cluster_1_0 -> cluster_1_1 [color=green]
+        cluster_1_0 -> cluster_1_2 [color=red]
+        cluster_1_1 -> cluster_1_2
+        cluster_1_2 -> cluster_1_exit [color=black]
+      }
+    }
+    subgraph cluster_2_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_2 {
+        label="is_even"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_2_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_2_exit[label="{exit|entry}",shape=Mrecord,color=purple]
+        cluster_2_0 -> cluster_2_exit [color=black]
+      }
+    }
+    subgraph cluster_3_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_3 {
+        label="is_odd"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_3_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_3_exit[label="{exit|entry}",shape=Mrecord,color=purple]
+        cluster_3_0 -> cluster_3_exit [color=black]
+      }
+    }
+    cluster_0_0 -> cluster_3_0 [color=purple,lhead=cluster_3,ltail=cluster_0]
+    cluster_2_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_2]
+    cluster_3_0 -> cluster_2_0 [color=purple,lhead=cluster_2,ltail=cluster_3]
+  }
+}
