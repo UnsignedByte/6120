@@ -1,9 +1,9 @@
 [workspace]
-members = ["utils", "lessons/3", "lessons/5"]
+members = ["utils", "lessons/3", "lessons/4", "lessons/5"]
 resolver = "2"
 
 [workspace.package]
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 bril-rs = { path = "bril/bril-rs", features = [
