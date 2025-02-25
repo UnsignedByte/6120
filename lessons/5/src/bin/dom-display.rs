@@ -11,42 +11,43 @@ use utils::{
 #[derive(Debug, Clone)]
 struct DomDisplay {
     tree: DominatorTree,
-    selected: usize,
+    selected: Option<usize>,
 }
 
 impl GraphLike<&BasicBlock> for DomDisplay {
     fn node_attrs(&self, node: &BasicBlock) -> Vec<Attribute> {
         let mut attrs = self.tree.cfg.node_attrs(node);
 
-        log::debug!("Selected: {}, Node: {}", self.selected, node.idx);
-
         let mut colors = vec![];
+        if let Some(selected) = self.selected {
+            log::debug!("Selected: {}, Node: {}", selected, node.idx);
 
-        if self
-            .tree
-            .dominance_frontier(self.selected)
-            .contains(&node.idx)
-        {
-            // Node is in the dominance frontier of the selected node
-            colors.push("cadetblue2");
+            if self.tree.dominance_frontier(selected).contains(&node.idx) {
+                // Node is in the dominance frontier of the selected node
+                colors.push("cadetblue2");
+            }
+
+            if self.tree.strictly_dominates(node.idx, selected) {
+                // Node is strictly dominated by the selected node
+                colors.push("darkseagreen4");
+            }
+
+            if node.idx == selected {
+                // Node is the selected node
+                colors.push("coral2");
+            }
+
+            if self.tree.strictly_dominated_by(node.idx, selected) {
+                // Node strictly dominates the selected node
+                colors.push("darkseagreen1");
+            }
         }
 
-        if self.tree.strictly_dominates(node.idx, self.selected) {
-            // Node is strictly dominated by the selected node
-            colors.push("darkseagreen4");
-        }
-
-        if node.idx == self.selected {
-            // Node is the selected node
-            colors.push("coral2");
-        }
-
-        if self.tree.strictly_dominated_by(node.idx, self.selected) {
-            // Node strictly dominates the selected node
-            colors.push("darkseagreen1");
-        }
-
-        let style = if colors.len() > 1 { "wedged" } else { "filled" };
+        let style = match colors.len() {
+            0 => "none",
+            1 => "filled",
+            _ => "wedged",
+        };
         let color = format!(r#""{}""#, colors.join(":"));
 
         // Change the colors based on the dominance relationship
@@ -90,10 +91,7 @@ impl From<Function> for DomDisplay {
             .blocks
             .iter()
             .find(|bb| bb.label == Some("selected".to_owned()))
-            .map(|bb| bb.idx)
-            .expect("No block named 'selected'");
-
-        log::debug!("{} selected block: {}", tree.cfg.name(), selected);
+            .map(|bb| bb.idx);
 
         Self { tree, selected }
     }

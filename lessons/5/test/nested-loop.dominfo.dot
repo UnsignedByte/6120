@@ -19,7 +19,7 @@ digraph G {
         cluster_0_4[label="body2",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
         cluster_0_5[label="end2",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
         cluster_0_6[label="end1",shape=oval,style=filled,fillcolor="darkseagreen1",color=gray]
-        cluster_0_7[label="return",shape=oval,style=filled,fillcolor="",color=gray]
+        cluster_0_7[label="return",shape=oval,style=none,fillcolor="",color=gray]
         cluster_0_exit[label=exit,color=purple,rank=sink]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2 [color=green]

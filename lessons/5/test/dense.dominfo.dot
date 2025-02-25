@@ -16,7 +16,7 @@ digraph G {
         cluster_0_1[label="first",shape=oval,style=wedged,fillcolor="cadetblue2:darkseagreen4",color=gray]
         cluster_0_2[label="selected",shape=oval,style=filled,fillcolor="coral2",color=gray]
         cluster_0_3[label="third",shape=oval,style=filled,fillcolor="cadetblue2",color=gray]
-        cluster_0_4[label="end",shape=oval,style=filled,fillcolor="",color=gray]
+        cluster_0_4[label="end",shape=oval,style=none,fillcolor="",color=gray]
         cluster_0_exit[label=exit,color=purple,rank=sink]
         cluster_0_0 -> cluster_0_1 [color=green]
         cluster_0_0 -> cluster_0_4 [color=red]

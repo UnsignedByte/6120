@@ -13,7 +13,7 @@ digraph G {
         bgcolor=lightgray
         margin=10
         cluster_0_0[label="entry",shape=oval,color=blue,rank=source,style=filled,fillcolor="darkseagreen4",color=gray]
-        cluster_0_1[label="if",shape=oval,style=filled,fillcolor="",color=gray]
+        cluster_0_1[label="if",shape=oval,style=none,fillcolor="",color=gray]
         cluster_0_2[label="selected",shape=oval,style=filled,fillcolor="coral2",color=gray]
         cluster_0_3[label="end",shape=oval,style=filled,fillcolor="cadetblue2",color=gray]
         cluster_0_exit[label=exit,color=purple,rank=sink]

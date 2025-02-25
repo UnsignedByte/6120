@@ -1,0 +1,148 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    margin=10
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0 -> cluster_0_exit [color=black]
+      }
+    }
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="cordic"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_1_1[label="for.cond.12",shape=oval]
+        cluster_1_2[label="for.body.12",shape=oval]
+        cluster_1_3[label="then.31",shape=oval]
+        cluster_1_4[label="then.39",shape=oval]
+        cluster_1_5[label="else.39",shape=oval]
+        cluster_1_6[label="then.46",shape=oval]
+        cluster_1_7[label="else.46",shape=oval]
+        cluster_1_8[label="then.53",shape=oval]
+        cluster_1_9[label="else.53",shape=oval]
+        cluster_1_10[label="then.60",shape=oval]
+        cluster_1_11[label="else.60",shape=oval]
+        cluster_1_12[label="then.67",shape=oval]
+        cluster_1_13[label="else.67",shape=oval]
+        cluster_1_14[label="then.74",shape=oval]
+        cluster_1_15[label="else.74",shape=oval]
+        cluster_1_16[label="then.81",shape=oval]
+        cluster_1_17[label="else.81",shape=oval]
+        cluster_1_18[label="selected",shape=oval]
+        cluster_1_19[label="endif.74",shape=oval]
+        cluster_1_20[label="endif.67",shape=oval]
+        cluster_1_21[label="endif.60",shape=oval]
+        cluster_1_22[label="endif.53",shape=oval]
+        cluster_1_23[label="endif.46",shape=oval]
+        cluster_1_24[label="endif.39",shape=oval]
+        cluster_1_25[label="else.31",shape=oval]
+        cluster_1_26[label="then.97",shape=oval]
+        cluster_1_27[label="else.97",shape=oval]
+        cluster_1_28[label="then.104",shape=oval]
+        cluster_1_29[label="else.104",shape=oval]
+        cluster_1_30[label="then.111",shape=oval]
+        cluster_1_31[label="else.111",shape=oval]
+        cluster_1_32[label="then.118",shape=oval]
+        cluster_1_33[label="else.118",shape=oval]
+        cluster_1_34[label="then.125",shape=oval]
+        cluster_1_35[label="else.125",shape=oval]
+        cluster_1_36[label="then.132",shape=oval]
+        cluster_1_37[label="else.132",shape=oval]
+        cluster_1_38[label="then.139",shape=oval]
+        cluster_1_39[label="else.139",shape=oval]
+        cluster_1_40[label="endif.139",shape=oval]
+        cluster_1_41[label="endif.132",shape=oval]
+        cluster_1_42[label="endif.125",shape=oval]
+        cluster_1_43[label="endif.118",shape=oval]
+        cluster_1_44[label="endif.111",shape=oval]
+        cluster_1_45[label="endif.104",shape=oval]
+        cluster_1_46[label="endif.97",shape=oval]
+        cluster_1_47[label="endif.31",shape=oval]
+        cluster_1_48[label="for.end.12",shape=oval]
+        cluster_1_exit[label=exit,color=purple,rank=sink]
+        cluster_1_0 -> cluster_1_1
+        cluster_1_1 -> cluster_1_2 [color=green]
+        cluster_1_1 -> cluster_1_48 [color=red]
+        cluster_1_2 -> cluster_1_3 [color=green]
+        cluster_1_2 -> cluster_1_25 [color=red]
+        cluster_1_3 -> cluster_1_4 [color=green]
+        cluster_1_3 -> cluster_1_5 [color=red]
+        cluster_1_4 -> cluster_1_24
+        cluster_1_5 -> cluster_1_6 [color=green]
+        cluster_1_5 -> cluster_1_7 [color=red]
+        cluster_1_6 -> cluster_1_23
+        cluster_1_7 -> cluster_1_8 [color=green]
+        cluster_1_7 -> cluster_1_9 [color=red]
+        cluster_1_8 -> cluster_1_22
+        cluster_1_9 -> cluster_1_10 [color=green]
+        cluster_1_9 -> cluster_1_11 [color=red]
+        cluster_1_10 -> cluster_1_21
+        cluster_1_11 -> cluster_1_12 [color=green]
+        cluster_1_11 -> cluster_1_13 [color=red]
+        cluster_1_12 -> cluster_1_20
+        cluster_1_13 -> cluster_1_14 [color=green]
+        cluster_1_13 -> cluster_1_15 [color=red]
+        cluster_1_14 -> cluster_1_19
+        cluster_1_15 -> cluster_1_16 [color=green]
+        cluster_1_15 -> cluster_1_17 [color=red]
+        cluster_1_16 -> cluster_1_18
+        cluster_1_17 -> cluster_1_18
+        cluster_1_18 -> cluster_1_19
+        cluster_1_19 -> cluster_1_20
+        cluster_1_20 -> cluster_1_21
+        cluster_1_21 -> cluster_1_22
+        cluster_1_22 -> cluster_1_23
+        cluster_1_23 -> cluster_1_24
+        cluster_1_24 -> cluster_1_47
+        cluster_1_25 -> cluster_1_26 [color=green]
+        cluster_1_25 -> cluster_1_27 [color=red]
+        cluster_1_26 -> cluster_1_46
+        cluster_1_27 -> cluster_1_28 [color=green]
+        cluster_1_27 -> cluster_1_29 [color=red]
+        cluster_1_28 -> cluster_1_45
+        cluster_1_29 -> cluster_1_30 [color=green]
+        cluster_1_29 -> cluster_1_31 [color=red]
+        cluster_1_30 -> cluster_1_44
+        cluster_1_31 -> cluster_1_32 [color=green]
+        cluster_1_31 -> cluster_1_33 [color=red]
+        cluster_1_32 -> cluster_1_43
+        cluster_1_33 -> cluster_1_34 [color=green]
+        cluster_1_33 -> cluster_1_35 [color=red]
+        cluster_1_34 -> cluster_1_42
+        cluster_1_35 -> cluster_1_36 [color=green]
+        cluster_1_35 -> cluster_1_37 [color=red]
+        cluster_1_36 -> cluster_1_41
+        cluster_1_37 -> cluster_1_38 [color=green]
+        cluster_1_37 -> cluster_1_39 [color=red]
+        cluster_1_38 -> cluster_1_40
+        cluster_1_39 -> cluster_1_40
+        cluster_1_40 -> cluster_1_41
+        cluster_1_41 -> cluster_1_42
+        cluster_1_42 -> cluster_1_43
+        cluster_1_43 -> cluster_1_44
+        cluster_1_44 -> cluster_1_45
+        cluster_1_45 -> cluster_1_46
+        cluster_1_46 -> cluster_1_47
+        cluster_1_47 -> cluster_1_1
+        cluster_1_48 -> cluster_1_exit [color=black]
+      }
+    }
+    cluster_0_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_0]
+  }
+}

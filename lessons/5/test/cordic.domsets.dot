@@ -1,0 +1,147 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_0_exit[label="{exit|entry}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_exit [color=black]
+      }
+    }
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="cordic"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_1_1[label="{for.cond.12|entry\nfor.cond.12}",shape=Mrecord,color=black]
+        cluster_1_2[label="{for.body.12|entry\nfor.cond.12\nfor.body.12}",shape=Mrecord,color=black]
+        cluster_1_3[label="{then.31|entry\nfor.cond.12\nfor.body.12\nthen.31}",shape=Mrecord,color=black]
+        cluster_1_4[label="{then.39|entry\nfor.cond.12\nfor.body.12\nthen.31\nthen.39}",shape=Mrecord,color=black]
+        cluster_1_5[label="{else.39|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39}",shape=Mrecord,color=black]
+        cluster_1_6[label="{then.46|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nthen.46}",shape=Mrecord,color=black]
+        cluster_1_7[label="{else.46|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46}",shape=Mrecord,color=black]
+        cluster_1_8[label="{then.53|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nthen.53}",shape=Mrecord,color=black]
+        cluster_1_9[label="{selected|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected}",shape=Mrecord,color=black]
+        cluster_1_10[label="{then.60|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nthen.60}",shape=Mrecord,color=black]
+        cluster_1_11[label="{else.60|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60}",shape=Mrecord,color=black]
+        cluster_1_12[label="{then.67|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nthen.67}",shape=Mrecord,color=black]
+        cluster_1_13[label="{else.67|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67}",shape=Mrecord,color=black]
+        cluster_1_14[label="{then.74|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nthen.74}",shape=Mrecord,color=black]
+        cluster_1_15[label="{else.74|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nelse.74}",shape=Mrecord,color=black]
+        cluster_1_16[label="{then.81|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nelse.74\nthen.81}",shape=Mrecord,color=black]
+        cluster_1_17[label="{else.81|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nelse.74\nelse.81}",shape=Mrecord,color=black]
+        cluster_1_18[label="{endif.81|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nelse.74\nendif.81}",shape=Mrecord,color=black]
+        cluster_1_19[label="{endif.74|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nelse.67\nendif.74}",shape=Mrecord,color=black]
+        cluster_1_20[label="{endif.67|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nelse.60\nendif.67}",shape=Mrecord,color=black]
+        cluster_1_21[label="{endif.60|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nselected\nendif.60}",shape=Mrecord,color=black]
+        cluster_1_22[label="{endif.53|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nelse.46\nendif.53}",shape=Mrecord,color=black]
+        cluster_1_23[label="{endif.46|entry\nfor.cond.12\nfor.body.12\nthen.31\nelse.39\nendif.46}",shape=Mrecord,color=black]
+        cluster_1_24[label="{endif.39|entry\nfor.cond.12\nfor.body.12\nthen.31\nendif.39}",shape=Mrecord,color=black]
+        cluster_1_25[label="{else.31|entry\nfor.cond.12\nfor.body.12\nelse.31}",shape=Mrecord,color=black]
+        cluster_1_26[label="{then.97|entry\nfor.cond.12\nfor.body.12\nelse.31\nthen.97}",shape=Mrecord,color=black]
+        cluster_1_27[label="{else.97|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97}",shape=Mrecord,color=black]
+        cluster_1_28[label="{then.104|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nthen.104}",shape=Mrecord,color=black]
+        cluster_1_29[label="{else.104|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104}",shape=Mrecord,color=black]
+        cluster_1_30[label="{then.111|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nthen.111}",shape=Mrecord,color=black]
+        cluster_1_31[label="{else.111|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111}",shape=Mrecord,color=black]
+        cluster_1_32[label="{then.118|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nthen.118}",shape=Mrecord,color=black]
+        cluster_1_33[label="{else.118|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118}",shape=Mrecord,color=black]
+        cluster_1_34[label="{then.125|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nthen.125}",shape=Mrecord,color=black]
+        cluster_1_35[label="{else.125|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125}",shape=Mrecord,color=black]
+        cluster_1_36[label="{then.132|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nthen.132}",shape=Mrecord,color=black]
+        cluster_1_37[label="{else.132|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nelse.132}",shape=Mrecord,color=black]
+        cluster_1_38[label="{then.139|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nelse.132\nthen.139}",shape=Mrecord,color=black]
+        cluster_1_39[label="{else.139|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nelse.132\nelse.139}",shape=Mrecord,color=black]
+        cluster_1_40[label="{endif.139|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nelse.132\nendif.139}",shape=Mrecord,color=black]
+        cluster_1_41[label="{endif.132|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nelse.125\nendif.132}",shape=Mrecord,color=black]
+        cluster_1_42[label="{endif.125|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nelse.118\nendif.125}",shape=Mrecord,color=black]
+        cluster_1_43[label="{endif.118|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nelse.111\nendif.118}",shape=Mrecord,color=black]
+        cluster_1_44[label="{endif.111|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nelse.104\nendif.111}",shape=Mrecord,color=black]
+        cluster_1_45[label="{endif.104|entry\nfor.cond.12\nfor.body.12\nelse.31\nelse.97\nendif.104}",shape=Mrecord,color=black]
+        cluster_1_46[label="{endif.97|entry\nfor.cond.12\nfor.body.12\nelse.31\nendif.97}",shape=Mrecord,color=black]
+        cluster_1_47[label="{endif.31|entry\nfor.cond.12\nfor.body.12\nendif.31}",shape=Mrecord,color=black]
+        cluster_1_48[label="{for.end.12|entry\nfor.cond.12\nfor.end.12}",shape=Mrecord,color=black]
+        cluster_1_exit[label="{exit|entry\nfor.cond.12\nfor.end.12}",shape=Mrecord,color=purple]
+        cluster_1_0 -> cluster_1_1
+        cluster_1_1 -> cluster_1_2 [color=green]
+        cluster_1_1 -> cluster_1_48 [color=red]
+        cluster_1_2 -> cluster_1_3 [color=green]
+        cluster_1_2 -> cluster_1_25 [color=red]
+        cluster_1_3 -> cluster_1_4 [color=green]
+        cluster_1_3 -> cluster_1_5 [color=red]
+        cluster_1_4 -> cluster_1_24
+        cluster_1_5 -> cluster_1_6 [color=green]
+        cluster_1_5 -> cluster_1_7 [color=red]
+        cluster_1_6 -> cluster_1_23
+        cluster_1_7 -> cluster_1_8 [color=green]
+        cluster_1_7 -> cluster_1_9 [color=red]
+        cluster_1_8 -> cluster_1_22
+        cluster_1_9 -> cluster_1_10 [color=green]
+        cluster_1_9 -> cluster_1_11 [color=red]
+        cluster_1_10 -> cluster_1_21
+        cluster_1_11 -> cluster_1_12 [color=green]
+        cluster_1_11 -> cluster_1_13 [color=red]
+        cluster_1_12 -> cluster_1_20
+        cluster_1_13 -> cluster_1_14 [color=green]
+        cluster_1_13 -> cluster_1_15 [color=red]
+        cluster_1_14 -> cluster_1_19
+        cluster_1_15 -> cluster_1_16 [color=green]
+        cluster_1_15 -> cluster_1_17 [color=red]
+        cluster_1_16 -> cluster_1_18
+        cluster_1_17 -> cluster_1_18
+        cluster_1_18 -> cluster_1_19
+        cluster_1_19 -> cluster_1_20
+        cluster_1_20 -> cluster_1_21
+        cluster_1_21 -> cluster_1_22
+        cluster_1_22 -> cluster_1_23
+        cluster_1_23 -> cluster_1_24
+        cluster_1_24 -> cluster_1_47
+        cluster_1_25 -> cluster_1_26 [color=green]
+        cluster_1_25 -> cluster_1_27 [color=red]
+        cluster_1_26 -> cluster_1_46
+        cluster_1_27 -> cluster_1_28 [color=green]
+        cluster_1_27 -> cluster_1_29 [color=red]
+        cluster_1_28 -> cluster_1_45
+        cluster_1_29 -> cluster_1_30 [color=green]
+        cluster_1_29 -> cluster_1_31 [color=red]
+        cluster_1_30 -> cluster_1_44
+        cluster_1_31 -> cluster_1_32 [color=green]
+        cluster_1_31 -> cluster_1_33 [color=red]
+        cluster_1_32 -> cluster_1_43
+        cluster_1_33 -> cluster_1_34 [color=green]
+        cluster_1_33 -> cluster_1_35 [color=red]
+        cluster_1_34 -> cluster_1_42
+        cluster_1_35 -> cluster_1_36 [color=green]
+        cluster_1_35 -> cluster_1_37 [color=red]
+        cluster_1_36 -> cluster_1_41
+        cluster_1_37 -> cluster_1_38 [color=green]
+        cluster_1_37 -> cluster_1_39 [color=red]
+        cluster_1_38 -> cluster_1_40
+        cluster_1_39 -> cluster_1_40
+        cluster_1_40 -> cluster_1_41
+        cluster_1_41 -> cluster_1_42
+        cluster_1_42 -> cluster_1_43
+        cluster_1_43 -> cluster_1_44
+        cluster_1_44 -> cluster_1_45
+        cluster_1_45 -> cluster_1_46
+        cluster_1_46 -> cluster_1_47
+        cluster_1_47 -> cluster_1_1
+        cluster_1_48 -> cluster_1_exit [color=black]
+      }
+    }
+    cluster_0_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_0]
+  }
+}
