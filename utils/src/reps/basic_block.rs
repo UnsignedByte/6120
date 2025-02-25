@@ -35,11 +35,12 @@ impl BasicBlock {
         }
     }
 
+    pub fn node_label(&self) -> String {
+        format!(r#""{}""#, self.label_or_default())
+    }
+
     pub fn node_attrs(&self) -> Vec<Attribute> {
-        let mut attrs = vec![
-            attr!("label", &format!(r#""{}""#, self.label_or_default())),
-            attr!("shape", "oval"),
-        ];
+        let mut attrs = vec![attr!("label", &self.node_label()), attr!("shape", "oval")];
 
         if self.is_entry() {
             attrs.push(attr!("color", "blue"));

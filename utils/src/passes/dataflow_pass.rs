@@ -1,4 +1,8 @@
-use crate::{BBFunction, CFG};
+use crate::{BBFunction, BasicBlock, GraphLike, CFG};
+use graphviz_rust::{
+    dot_generator::{attr, id, node},
+    dot_structures::{Attribute, Id, Node, NodeId, Stmt},
+};
 use itertools::Itertools;
 use std::fmt::Debug;
 use std::{collections::LinkedList, fmt::Display};
@@ -21,6 +25,41 @@ impl<Val: Display> Display for Dataflow<Val> {
         }
         writeln!(f, "}}}}")?;
         Ok(())
+    }
+}
+
+impl<Val> GraphLike<(&BasicBlock, &Val)> for Dataflow<Val>
+where
+    Val: Display,
+{
+    fn node_attrs(&self, (block, val): (&BasicBlock, &Val)) -> Vec<Attribute> {
+        vec![
+            attr!("label", &format!(r#""{{{}|{}}}""#, block.node_label(), val)),
+            attr!("shape", "MRecord"),
+        ]
+    }
+
+    fn graph_attrs(&self) -> Vec<Stmt> {
+        self.cfg.graph_attrs()
+    }
+
+    fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
+        // Create the exit node
+        let exit_node = &format!("{}_exit", self.graph_id(gid));
+        self.cfg
+            .func
+            .blocks
+            .iter()
+            .enumerate()
+            .map(|(i, block)| self.node(gid, (block, &self.out_vals[i]), i))
+            .chain(std::iter::once(
+                node!(exit_node; attr!("label", "exit"), attr!("color", "purple"), attr!("rank", "sink")).into()
+            ))
+            .collect()
+    }
+
+    fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
+        self.cfg.graph_edges(gid)
     }
 }
 
