@@ -1,3 +1,5 @@
+use std::fmt::{Debug, Display};
+
 use bril_rs::Instruction;
 use graphviz_rust::{
     dot_generator::{attr, id},
@@ -57,5 +59,19 @@ impl IntoIterator for BasicBlock {
 
     fn into_iter(self) -> Self::IntoIter {
         self.instrs.into_iter()
+    }
+}
+
+impl Display for BasicBlock {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(label) = &self.label {
+            writeln!(f, ".{label}:")?;
+        }
+
+        for instr in &self.instrs {
+            writeln!(f, "\t{}", instr)?;
+        }
+
+        Ok(())
     }
 }

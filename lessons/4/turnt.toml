@@ -2,9 +2,9 @@
 
 [envs.reaching-defs]
 command = """
-bril2json < {filename} | ./reaching-defs.py
+bril2json < {filename} | ../../target/debug/reaching-defs
 """
-output.reaching-defs = "-"
+output."reaching-defs.dot" = "-"
 
 [envs.live-vars]
 command = """

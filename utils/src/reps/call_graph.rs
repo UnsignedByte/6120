@@ -67,6 +67,10 @@ impl CallGraph {
         }
     }
 
+    pub fn prog(&self) -> &Program {
+        &self.prog
+    }
+
     pub fn len(&self) -> usize {
         self.prog.functions.len()
     }

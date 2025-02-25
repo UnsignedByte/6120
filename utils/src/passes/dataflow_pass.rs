@@ -1,4 +1,4 @@
-use crate::{BBFunction, BasicBlock, GraphLike, CFG};
+use crate::{BBFunction, BasicBlock, CFG, CallGraph, GraphLike, draw};
 use graphviz_rust::{
     dot_generator::{attr, id, node_id},
     dot_structures::{Attribute, Id, Node, NodeId, Stmt},
@@ -165,16 +165,21 @@ where
 /// Trait for dataflow analysis passes
 pub trait DataflowPass<Val>
 where
-    Val: Eq + Clone + Default + Debug,
+    Val: Eq + Clone + Debug,
 {
+    /// Initial values generated from arguments
+    fn entry(&self, func: &BBFunction) -> Val {
+        self.init(func)
+    }
+
     /// Initial values for entry blocks
-    fn init(&self, func: &BBFunction, bidx: usize) -> Val;
+    fn init(&self, func: &BBFunction) -> Val;
 
     /// Meet function
     fn meet(&self, in_vals: &[Val]) -> Val;
 
     /// Transfer function
-    fn transfer(&self, func: &BBFunction, bidx: usize, in_val: &Val) -> Val;
+    fn transfer(&self, block: &BasicBlock, in_val: &Val) -> Val;
 
     /// Transfer function for the exit block
     fn finish(&self, _func: &BBFunction, exit_val: Val) -> Val {
@@ -184,27 +189,26 @@ where
     fn cfg(&mut self, cfg: CFG) -> Dataflow<Val> {
         let n = cfg.len();
 
-        let mut in_vals = vec![Val::default(); n];
-        let mut out_vals = vec![];
-        for i in 0..n {
-            out_vals.push(self.init(&cfg.func, i));
-        }
+        let mut in_vals = vec![self.init(&cfg.func); n];
+        let mut out_vals = vec![self.init(&cfg.func); n];
 
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
-            let inputs = cfg
-                .preds(i)
-                .iter()
-                .map(|&j| out_vals[j].clone())
-                .collect_vec();
-
-            log::trace!("Collected inputs for block {}: {:?}", i, inputs);
-
-            in_vals[i] = self.meet(&inputs);
+            in_vals[i] = if cfg.func.blocks[i].is_entry() {
+                self.entry(&cfg.func)
+            } else {
+                let inputs = cfg
+                    .preds(i)
+                    .iter()
+                    .map(|&j| out_vals[j].clone())
+                    .collect_vec();
+                log::trace!("Collected inputs for block {}: {:?}", i, inputs);
+                self.meet(&inputs)
+            };
 
             log::trace!("Merged inputs for block {}: {:?}", i, in_vals[i]);
 
-            let new_vals = self.transfer(&cfg.func, i, &in_vals[i]);
+            let new_vals = self.transfer(&cfg.func.blocks[i], &in_vals[i]);
 
             log::trace!("New values for block {}: {:?}", i, new_vals);
 
@@ -232,4 +236,26 @@ where
             exit_val,
         }
     }
+}
+
+pub fn draw_dataflow<Pass, Val, GraphNode>(
+    call_graph: CallGraph,
+    directional: bool,
+    strict: bool,
+) -> String
+where
+    Val: Eq + Clone + Debug,
+    Pass: DataflowPass<Val> + Default,
+    GraphNode: From<Val> + DataflowLabel,
+    Dataflow<GraphNode>:,
+{
+    let results: Vec<_> = call_graph
+        .prog()
+        .functions
+        .iter()
+        .map(|f| Pass::default().cfg(CFG::from(f.clone())))
+        .map(<Dataflow<GraphNode>>::from)
+        .collect();
+
+    draw((call_graph, results), directional, strict)
 }

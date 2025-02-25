@@ -1,8 +1,10 @@
+use crate::{CFG, CallGraph, Dataflow, DataflowLabel, DataflowPass};
 use graphviz_rust::{
     dot_generator::{attr, id},
     dot_structures::{Attribute, Graph, Id, Node, NodeId, Stmt, Subgraph},
     printer::{DotPrinter, PrinterContext},
 };
+use std::fmt::Debug;
 
 pub trait GraphLike<N> {
     fn node_id(&self, gid: &[usize], id: usize) -> NodeId {

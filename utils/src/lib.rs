@@ -6,12 +6,12 @@ mod passes;
 mod reps;
 
 pub use extensions::{InstrExt, LiteralExt};
-pub use graph::{draw, GraphLike};
-pub use logger::{setup_logger, setup_logger_from_env, LogArgs};
+pub use graph::{GraphLike, draw};
+pub use logger::{LogArgs, setup_logger, setup_logger_from_env};
 pub use misc::HashableLiteral;
 pub(crate) use passes::DataflowNode;
 pub use passes::{
-    run_analysis, run_passes, AnalysisPass, CanonicalizeLiterals, Dataflow, DataflowLabel,
-    DataflowPass, DominatorPass, DominatorSetNode, FunctionPass, Pass,
+    AnalysisPass, CanonicalizeLiterals, Dataflow, DataflowLabel, DataflowPass, DominatorPass,
+    DominatorSetNode, FunctionPass, Pass, draw_dataflow, run_analysis, run_passes,
 };
-pub use reps::{BBFunction, BasicBlock, CallGraph, DominatorTree, CFG};
+pub use reps::{BBFunction, BasicBlock, CFG, CallGraph, DominatorTree};

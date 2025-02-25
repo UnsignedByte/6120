@@ -1,4 +1,5 @@
-use bril_rs::{EffectOps, Instruction, Literal, Type, ValueOps};
+use bril_rs::{ConstOps, EffectOps, Instruction, Literal, Type, ValueOps};
+use std::fmt::Write;
 
 pub trait InstrExt {
     fn args(&self) -> Option<Vec<String>>;
@@ -9,6 +10,9 @@ pub trait InstrExt {
     fn branch(&self) -> Option<Vec<String>>;
     fn is_commutative(&self) -> bool;
     fn is_pure(&self) -> bool;
+
+    /// Convert the expression body (after let x =) to a string
+    fn value_str(&self) -> Result<String, std::fmt::Error>;
 }
 
 impl InstrExt for Instruction {
@@ -126,6 +130,62 @@ impl InstrExt for Instruction {
             Instruction::Value { .. } => false, // Unknown value operations are assumed to be impure
             Instruction::Effect { .. } => false,
         }
+    }
+
+    fn value_str(&self) -> Result<String, std::fmt::Error> {
+        // String representation of the output
+        let mut output = String::new();
+        match self {
+            Instruction::Constant {
+                op: ConstOps::Const,
+                dest: _,
+                const_type: _,
+                value,
+                pos: _,
+            } => {
+                write!(&mut output, "{value}")?;
+            }
+            Instruction::Value {
+                op,
+                dest: _,
+                op_type: _,
+                args,
+                funcs,
+                labels,
+                pos: _,
+            } => {
+                write!(&mut output, "{op}")?;
+                for func in funcs {
+                    write!(&mut output, " @{func}")?;
+                }
+                for arg in args {
+                    write!(&mut output, " {arg}")?;
+                }
+                for label in labels {
+                    write!(&mut output, " .{label}")?;
+                }
+            }
+            Instruction::Effect {
+                op,
+                args,
+                funcs,
+                labels,
+                pos: _,
+            } => {
+                write!(&mut output, "{op}")?;
+                for func in funcs {
+                    write!(&mut output, " @{func}")?;
+                }
+                for arg in args {
+                    write!(&mut output, " {arg}")?;
+                }
+                for label in labels {
+                    write!(&mut output, " .{label}")?;
+                }
+            }
+        }
+
+        Ok(output)
     }
 }
 
