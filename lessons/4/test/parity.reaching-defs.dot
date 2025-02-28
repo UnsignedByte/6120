@@ -11,11 +11,11 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_0_0[label="{entry|count = [.entry: ?]\l\lneg_two = [.entry: -2]\l\lone = [.entry: 1]\l\lx = [.entry: 1]\l\lzero = [.entry: 0]\l}",shape=Mrecord,color=blue]
-        cluster_0_1[label="{guard|cond = [.guard: gt count zero]\l\lcount = [.body: sub count one], [.entry: ?]\l\lneg_two = [.entry: -2]\l\lone = [.entry: 1]\l\lx = [.body: mul x neg_two], [.entry: 1]\l\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
-        cluster_0_2[label="{body|cond = [.guard: gt count zero]\l\lcount = [.body: sub count one]\l\lneg_two = [.entry: -2]\l\lone = [.entry: 1]\l\lx = [.body: mul x neg_two]\l\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
-        cluster_0_3[label="{end|cond = [.guard: gt count zero]\l\lcount = [.body: sub count one], [.entry: ?]\l\lneg_two = [.entry: -2]\l\lone = [.entry: 1]\l\lx = [.body: mul x neg_two], [.entry: 1]\l\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
-        cluster_0_exit[label="{exit|cond = [.guard: gt count zero]\l\lcount = [.body: sub count one], [.entry: ?]\l\lneg_two = [.entry: -2]\l\lone = [.entry: 1]\l\lx = [.body: mul x neg_two], [.entry: 1]\l\lzero = [.entry: 0]\l}",shape=Mrecord,color=purple]
+        cluster_0_0[label="{entry|count = [.entry: ?]\lneg_two = [.entry: -2]\lone = [.entry: 1]\lx = [.entry: 1]\lzero = [.entry: 0]\l}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{guard|cond = [.guard: gt count zero]\lcount = [.body: sub count one], [.entry: ?]\lneg_two = [.entry: -2]\lone = [.entry: 1]\lx = [.body: mul x neg_two], [.entry: 1]\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
+        cluster_0_2[label="{body|cond = [.guard: gt count zero]\lcount = [.body: sub count one]\lneg_two = [.entry: -2]\lone = [.entry: 1]\lx = [.body: mul x neg_two]\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
+        cluster_0_3[label="{end|cond = [.guard: gt count zero]\lcount = [.body: sub count one], [.entry: ?]\lneg_two = [.entry: -2]\lone = [.entry: 1]\lx = [.body: mul x neg_two], [.entry: 1]\lzero = [.entry: 0]\l}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|cond = [.guard: gt count zero]\lcount = [.body: sub count one], [.entry: ?]\lneg_two = [.entry: -2]\lone = [.entry: 1]\lx = [.body: mul x neg_two], [.entry: 1]\lzero = [.entry: 0]\l}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2 [color=green]
         cluster_0_1 -> cluster_0_3 [color=red]

@@ -101,14 +101,14 @@ impl DataflowLabel for GraphNode {
             .into_iter()
             .map(|(name, mut defs)| {
                 defs.sort_unstable();
-                format!("{} = {}\\l", name, defs.join(", "))
+                format!("{} = {}", name, defs.join(", "))
             })
             .collect_vec();
 
         names.sort_unstable();
 
         // Return a string representation of the set
-        Some(names.join("\\l"))
+        Some(format!("{}\\l", names.join("\\l")))
     }
 }
 

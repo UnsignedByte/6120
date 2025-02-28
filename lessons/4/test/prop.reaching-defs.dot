@@ -11,11 +11,11 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_0_0[label="{entry|a = [.entry: 5]\l\lb = [.entry: 6]\l\lcond = [.entry: ?]\l}",shape=Mrecord,color=blue]
-        cluster_0_1[label="{l1|a = [.entry: 5]\l\lb = [.l1: 7]\l\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_2[label="{l2|a = [.entry: 5]\l\lb = [.entry: 6]\l\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_3[label="{end|a = [.entry: 5]\l\lb = [.entry: 6], [.l1: 7]\l\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_exit[label="{exit|a = [.entry: 5]\l\lb = [.entry: 6], [.l1: 7]\l\lcond = [.entry: ?]\l}",shape=Mrecord,color=purple]
+        cluster_0_0[label="{entry|a = [.entry: 5]\lb = [.entry: 6]\lcond = [.entry: ?]\l}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{l1|a = [.entry: 5]\lb = [.l1: 7]\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
+        cluster_0_2[label="{l2|a = [.entry: 5]\lb = [.entry: 6]\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
+        cluster_0_3[label="{end|a = [.entry: 5]\lb = [.entry: 6], [.l1: 7]\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|a = [.entry: 5]\lb = [.entry: 6], [.l1: 7]\lcond = [.entry: ?]\l}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1 [color=green]
         cluster_0_0 -> cluster_0_2 [color=red]
         cluster_0_1 -> cluster_0_3
