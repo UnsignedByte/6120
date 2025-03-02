@@ -26,6 +26,14 @@ impl BBFunction {
         self.blocks.is_empty()
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = &BasicBlock> {
+        self.blocks.iter()
+    }
+
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut BasicBlock> {
+        self.blocks.iter_mut()
+    }
+
     pub fn get(&self, idx: usize) -> &BasicBlock {
         &self.blocks[idx]
     }
@@ -46,33 +54,30 @@ impl From<Function> for BBFunction {
                     if let Some(block) = curr_block {
                         blocks.push(block);
                     }
-                    curr_block = Some(BasicBlock {
-                        idx: blocks.len(),
-                        label: Some(label),
-                        instrs: Vec::new(),
-                    });
+                    curr_block = Some(BasicBlock::new(blocks.len(), Some(label), vec![]));
                 }
                 Code::Instruction(i) => {
-                    curr_block = match curr_block {
-                        Some(mut block) => {
-                            block.instrs.push(i.clone());
-                            if let Instruction::Effect {
-                                op: EffectOps::Jump | EffectOps::Branch | EffectOps::Return,
-                                ..
-                            } = i
-                            {
-                                blocks.push(block);
-                                None
-                            } else {
-                                Some(block)
-                            }
+                    if let Instruction::Effect {
+                        op: EffectOps::Jump | EffectOps::Branch | EffectOps::Return,
+                        ..
+                    } = i
+                    {
+                        if let Some(mut block) = curr_block {
+                            block.push(i.clone());
+                            blocks.push(block);
+                        } else {
+                            // There was no last block, but this block is a single control flow instruction
+                            // So it is a single-instruction block
+                            blocks.push(BasicBlock::new(blocks.len(), None, vec![i]));
                         }
-                        None => Some(BasicBlock {
-                            idx: blocks.len(),
-                            label: None,
-                            instrs: vec![i],
-                        }),
-                    }
+
+                        // Reset the current block
+                        curr_block = None;
+                    } else if let Some(block) = &mut curr_block {
+                        block.push(i.clone());
+                    } else {
+                        curr_block = Some(BasicBlock::new(blocks.len(), None, vec![i]));
+                    };
                 }
             }
         }
@@ -104,13 +109,7 @@ impl From<BBFunction> for Function {
             instrs: bb_func
                 .blocks
                 .into_iter()
-                .flat_map(|block| {
-                    block
-                        .label
-                        .map(|label| Code::Label { label, pos: None })
-                        .into_iter()
-                        .chain(block.instrs.into_iter().map(Code::Instruction))
-                })
+                .flat_map(BasicBlock::flatten)
                 .collect(),
             name: bb_func.name,
             pos: None,

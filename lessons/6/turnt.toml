@@ -1,0 +1,11 @@
+[envs.ssa]
+command = """
+bril2json < {filename} | ../../target/debug/to-ssa | bril2txt
+"""
+output."ssa" = "-"
+
+[envs.check-ssa]
+command = """
+bril2json < {filename} | ../../target/debug/to-ssa | brilirs -p {args}
+"""
+output.expect = "-"

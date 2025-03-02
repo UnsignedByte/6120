@@ -32,7 +32,7 @@ impl DataflowPass<HashSet<Definition>> for ReachingDefs {
 
     fn transfer(&self, block: &BasicBlock, in_val: &HashSet<Definition>) -> HashSet<Definition> {
         // Set of defined names in this block
-        let defines: HashSet<_> = block.instrs.iter().filter_map(|insn| insn.dest()).collect();
+        let defines: HashSet<_> = block.iter().filter_map(|insn| insn.dest()).collect();
 
         // Kill all definitions in in_vals that write to this name
         let mut out_vals: HashSet<_> = in_val
@@ -73,7 +73,6 @@ impl DataflowLabel for GraphNode {
                 let block = cfg.get(*block);
                 log::debug!("Finding {} in {}", name, block);
                 let last_def = block
-                    .instrs
                     .iter()
                     .rev()
                     .find(|instr| match instr.dest() {

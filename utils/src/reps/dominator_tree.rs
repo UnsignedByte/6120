@@ -6,7 +6,7 @@ use graphviz_rust::{
     dot_structures::{Attribute, Edge, EdgeTy, Id, NodeId, Stmt, Vertex},
 };
 
-use crate::{Dataflow, DataflowPass, DominatorPass, GraphLike, CFG};
+use crate::{CFG, Dataflow, DataflowPass, DominatorPass, GraphLike};
 
 use super::BasicBlock;
 
@@ -117,7 +117,7 @@ impl DominatorTree {
             .collect()
     }
 
-    pub fn immediate_dom(&self, idx: usize) -> Option<usize> {
+    pub fn immediate_doms(&self, idx: usize) -> Option<usize> {
         self.immediate_doms[idx]
     }
 
@@ -140,6 +140,31 @@ impl DominatorTree {
     pub fn dominated_by(&self, a: usize, b: usize) -> bool {
         self.dominates(b, a)
     }
+
+    pub fn len(&self) -> usize {
+        self.cfg.len()
+    }
+
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.cfg.is_empty()
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &BasicBlock> {
+        self.cfg.iter()
+    }
+
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut BasicBlock> {
+        self.cfg.iter_mut()
+    }
+
+    pub fn get(&self, idx: usize) -> &BasicBlock {
+        self.cfg.get(idx)
+    }
+
+    pub fn get_mut(&mut self, idx: usize) -> &mut BasicBlock {
+        self.cfg.get_mut(idx)
+    }
 }
 
 impl From<CFG> for DominatorTree {
@@ -151,6 +176,18 @@ impl From<CFG> for DominatorTree {
 impl From<Function> for DominatorTree {
     fn from(func: Function) -> Self {
         CFG::from(func).into()
+    }
+}
+
+impl From<DominatorTree> for CFG {
+    fn from(doms: DominatorTree) -> Self {
+        doms.cfg
+    }
+}
+
+impl From<DominatorTree> for Function {
+    fn from(doms: DominatorTree) -> Self {
+        doms.cfg.into()
     }
 }
 

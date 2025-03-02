@@ -53,7 +53,6 @@ dependencies = [
 name = "bril-rs"
 version = "0.1.0"
 dependencies = [
- "bril-rs",
  "serde",
  "serde_json",
  "thiserror",
@@ -264,6 +263,7 @@ name = "lesson-3"
 version = "0.0.1"
 dependencies = [
  "bril-rs",
+ "itertools",
  "log",
  "utils",
 ]
@@ -284,6 +284,17 @@ version = "0.0.1"
 dependencies = [
  "bril-rs",
  "graphviz-rust",
+ "log",
+ "utils",
+]
+
+[[package]]
+name = "lesson-6"
+version = "0.0.1"
+dependencies = [
+ "bril-rs",
+ "graphviz-rust",
+ "itertools",
  "log",
  "utils",
 ]

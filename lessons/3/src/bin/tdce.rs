@@ -1,7 +1,8 @@
 use std::collections::HashSet;
 
 use bril_rs::{Code, Function, Instruction, Program};
-use utils::{run_passes, BasicBlock, FunctionPass, Pass};
+use itertools::Itertools;
+use utils::{BasicBlock, FunctionPass, Pass, run_passes};
 
 pub struct TDCEPass;
 
@@ -70,15 +71,14 @@ impl Pass for TDCEPass {
 }
 
 impl FunctionPass for TDCEPass {
-    fn basic_block(&mut self, mut bb: BasicBlock) -> BasicBlock {
+    fn basic_block(&mut self, bb: BasicBlock) -> BasicBlock {
         let mut written_unread = HashSet::new();
 
         // Iterate in reverse to discard writes that occur
         // without a subsequent read
-        bb.instrs = bb
-            .instrs
-            .clone()
-            .into_iter()
+        let mut instrs = bb
+            .iter()
+            .cloned()
             .rev()
             .filter(|instr| {
                 let live = if let Instruction::Value { dest, .. }
@@ -106,12 +106,11 @@ impl FunctionPass for TDCEPass {
 
                 live
             })
-            .collect();
+            .collect_vec();
 
-        // Reverse the instructions back to their original order
-        bb.instrs.reverse();
+        instrs.reverse();
 
-        bb
+        BasicBlock::new(bb.idx, bb.label, instrs)
     }
 }
 

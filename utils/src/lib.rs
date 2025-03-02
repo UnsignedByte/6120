@@ -14,4 +14,4 @@ pub use passes::{
     AnalysisPass, CanonicalizeLiterals, Dataflow, DataflowLabel, DataflowPass, DominatorPass,
     DominatorSetNode, FunctionPass, Pass, draw_dataflow, run_analysis, run_passes,
 };
-pub use reps::{BBFunction, BasicBlock, CFG, CallGraph, DominatorTree};
+pub use reps::{BBFunction, BasicBlock, CFG, CallGraph, ControlFlow, DominatorTree};

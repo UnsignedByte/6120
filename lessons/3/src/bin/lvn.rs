@@ -1,10 +1,11 @@
 use bril_rs::{Argument, ConstOps, Function, Instruction, Type, ValueOps};
+use itertools::Itertools;
 use lesson_3::Foldable;
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use utils::{
-    run_passes, setup_logger_from_env, CanonicalizeLiterals, FunctionPass, HashableLiteral,
-    InstrExt, Pass,
+    BasicBlock, CanonicalizeLiterals, FunctionPass, HashableLiteral, InstrExt, Pass, run_passes,
+    setup_logger_from_env,
 };
 
 /// A value interned in the LVN table
@@ -285,7 +286,7 @@ impl FunctionPass for LVNPass {
         self.names.extend(
             func.blocks
                 .iter()
-                .flat_map(|bb| bb.instrs.iter().filter_map(InstrExt::dest)),
+                .flat_map(|bb| bb.iter().filter_map(InstrExt::dest)),
         );
 
         self.args = func.args.clone();
@@ -293,11 +294,10 @@ impl FunctionPass for LVNPass {
         func
     }
 
-    fn basic_block(&mut self, mut bb: utils::BasicBlock) -> utils::BasicBlock {
+    fn basic_block(&mut self, bb: utils::BasicBlock) -> utils::BasicBlock {
         self.table = LVNTable::new(&self.args);
         // Map of the instruction index to the last write of the variable
         let last_write_map: HashMap<_, _> = bb
-            .instrs
             .iter()
             .enumerate()
             .filter_map(|(idx, instr)| instr.dest().map(|dest| (dest.clone(), idx)))
@@ -306,9 +306,9 @@ impl FunctionPass for LVNPass {
         log::debug!("Last write map: {:#?}", last_write_map);
 
         // Loop through instructions
-        bb.instrs = bb
-            .instrs
-            .into_iter()
+        let instrs = bb
+            .iter()
+            .cloned()
             .enumerate()
             .map(|(i, instr)| {
                 log::debug!("Original: {}", instr);
@@ -351,9 +351,9 @@ impl FunctionPass for LVNPass {
                 log::debug!("Transformed: {}", instr);
                 instr
             })
-            .collect();
+            .collect_vec();
 
-        bb
+        BasicBlock::new(bb.idx, bb.label, instrs)
     }
 }
 

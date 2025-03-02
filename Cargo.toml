@@ -1,6 +1,7 @@
 [workspace]
-members = ["utils", "lessons/3", "lessons/4", "lessons/5"]
+members = ["utils", "lessons/3", "lessons/4", "lessons/5", "lessons/6"]
 resolver = "2"
+exclude = ["bril"]
 
 [workspace.package]
 edition = "2024"

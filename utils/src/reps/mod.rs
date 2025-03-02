@@ -4,7 +4,7 @@ mod call_graph;
 mod cfg;
 mod dominator_tree;
 
-pub use basic_block::BasicBlock;
+pub use basic_block::{BasicBlock, ControlFlow};
 pub use bb_function::BBFunction;
 pub use call_graph::CallGraph;
 pub use cfg::CFG;

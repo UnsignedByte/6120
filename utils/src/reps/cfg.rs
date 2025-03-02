@@ -39,32 +39,34 @@ impl CFG {
             .iter()
             .map(|block| {
                 // Branch/Return/Jump Instruction handling
-                block.instrs.iter().last().and_then(|instr| match instr {
-                    Instruction::Effect {
-                        op: op @ (EffectOps::Jump | EffectOps::Branch),
-                        labels,
-                        ..
-                    } => {
-                        let mut labels = labels.iter().map(|l| {
-                            func.get_block_idx(l).unwrap_or_else(|| {
-                                panic!("Label {} not found", l);
-                            })
-                        });
+                block.control_flow().map(|instr| {
+                    log::trace!("Block {} has control flow instruction {}", block.idx, instr);
+                    match instr {
+                        Instruction::Effect {
+                            op: op @ (EffectOps::Jump | EffectOps::Branch),
+                            labels,
+                            ..
+                        } => {
+                            let mut labels = labels.iter().map(|l| {
+                                func.get_block_idx(l).unwrap_or_else(|| {
+                                    panic!("Label {} not found", l);
+                                })
+                            });
 
-                        match op {
-                            EffectOps::Jump => Some(FlowEdge::Jump(labels.next().unwrap())),
-                            EffectOps::Branch => Some(FlowEdge::Branch(
-                                labels.next().unwrap(),
-                                labels.next().unwrap(),
-                            )),
-                            _ => unreachable!(),
+                            match op {
+                                EffectOps::Jump => FlowEdge::Jump(labels.next().unwrap()),
+                                EffectOps::Branch => {
+                                    FlowEdge::Branch(labels.next().unwrap(), labels.next().unwrap())
+                                }
+                                _ => unreachable!(),
+                            }
                         }
+                        Instruction::Effect {
+                            op: EffectOps::Return,
+                            ..
+                        } => FlowEdge::Exit,
+                        _ => unreachable!("Expected control flow instruction"),
                     }
-                    Instruction::Effect {
-                        op: EffectOps::Return,
-                        ..
-                    } => Some(FlowEdge::Exit),
-                    _ => None, // Defer handling to later
                 })
             })
             .enumerate()
@@ -126,6 +128,14 @@ impl CFG {
         self.func.is_empty()
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = &BasicBlock> {
+        self.func.iter()
+    }
+
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut BasicBlock> {
+        self.func.iter_mut()
+    }
+
     /// Check whether a block idx is an entry block (no predecessors)
     pub fn is_entry(&self, idx: usize) -> bool {
         match self.reversed {
@@ -157,6 +167,10 @@ impl CFG {
     pub fn get(&self, idx: usize) -> &BasicBlock {
         &self.func.blocks[idx]
     }
+
+    pub fn get_mut(&mut self, idx: usize) -> &mut BasicBlock {
+        &mut self.func.blocks[idx]
+    }
 }
 
 impl From<BBFunction> for CFG {
@@ -168,6 +182,18 @@ impl From<BBFunction> for CFG {
 impl From<Function> for CFG {
     fn from(func: Function) -> Self {
         BBFunction::new(func).into()
+    }
+}
+
+impl From<CFG> for BBFunction {
+    fn from(cfg: CFG) -> Self {
+        cfg.func
+    }
+}
+
+impl From<CFG> for Function {
+    fn from(cfg: CFG) -> Self {
+        cfg.func.into()
     }
 }
 
@@ -206,11 +232,13 @@ impl GraphLike<&BasicBlock> for CFG {
             .iter()
             .enumerate()
             .flat_map(|(i, succs)| match succs {
-                FlowEdge::Exit => vec![edge!(
-                    self.node_id(gid, i) => node_id!(exit_node);
-                    attr!("color", "black")
-                )
-                .into()],
+                FlowEdge::Exit => vec![
+                    edge!(
+                        self.node_id(gid, i) => node_id!(exit_node);
+                        attr!("color", "black")
+                    )
+                    .into(),
+                ],
                 FlowEdge::Branch(t, f) => vec![
                     edge!(self.node_id(gid, i) => self.node_id(gid, *t); attr!("color", "green"))
                         .into(),
