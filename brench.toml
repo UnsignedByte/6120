@@ -9,11 +9,23 @@ benchmarks = [
 pipeline = ["bril2json", "brilirs -p {args}"]
 timeout = 100
 
-[runs.opt]
+[runs.lvn-dce]
 pipeline = [
     "bril2json",
     "target/release/lvn",
     "target/release/tdce",
     "brilirs -p {args}",
 ]
+
+[runs.ssa]
+pipeline = ["bril2json", "target/debug/to-ssa", "brilirs -p {args}"]
+
+[runs.ssa-roundtrip]
+pipeline = [
+    "bril2json",
+    "target/debug/to-ssa",
+    "target/debug/from-ssa",
+    "brilirs -p {args}",
+]
+
 timeout = 100

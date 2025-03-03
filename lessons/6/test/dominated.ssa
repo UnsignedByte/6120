@@ -1,0 +1,19 @@
+@main(cond: bool) {
+  x.0.0: int = const 2;
+  set x.5.shadow x.0.0;
+  br cond .block .end;
+.block:
+  x.1.0: int = const 1;
+  br cond .sub1 .sub2;
+.sub1:
+  jmp .sub3;
+.sub2:
+  set x.5.shadow x.1.0;
+  br cond .sub3 .end;
+.sub3:
+  set x.5.shadow x.1.0;
+  jmp .end;
+.end:
+  x.5.shadow: int = get;
+  print cond x.5.shadow;
+}

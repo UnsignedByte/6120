@@ -1,6 +1,7 @@
 mod extensions;
 mod graph;
 mod logger;
+mod macros;
 mod misc;
 mod passes;
 mod reps;

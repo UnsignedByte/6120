@@ -1,5 +1,0 @@
-@main {
-  jmp .end;
-.selected:
-.end:
-}

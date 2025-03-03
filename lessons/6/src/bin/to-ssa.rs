@@ -3,29 +3,40 @@ use std::{
     vec,
 };
 
-use bril_rs::{EffectOps, Function, Instruction, Type, ValueOps};
+use bril_rs::{Argument, EffectOps, Function, Instruction, Type, ValueOps};
 use itertools::Itertools;
-use utils::{
-    AnalysisPass, BBFunction, CFG, DominatorTree, FunctionPass, InstrExt, Pass, run_passes,
-    setup_logger_from_env,
-};
+use utils::{DominatorTree, InstrExt, Pass, pass_pipeline, setup_logger_from_env};
 
 #[derive(Debug, Default)]
 struct NameStack {
-    levels: Vec<usize>,
+    levels: HashMap<String, Vec<usize>>,
     names: HashMap<String, Vec<String>>,
 }
 
 impl NameStack {
+    pub fn new(args: &[Argument]) -> Self {
+        let mut names = HashMap::new();
+        for arg in args {
+            names.insert(arg.name.clone(), vec![arg.name.clone()]);
+        }
+
+        Self {
+            levels: HashMap::new(),
+            names,
+        }
+    }
+
     pub fn push_level(&mut self) {
-        self.levels.push(0);
+        for name in self.names.keys() {
+            self.levels.entry(name.clone()).or_default().push(0);
+        }
     }
 
     pub fn pop_level(&mut self) {
-        let level = self.levels.pop();
+        for (key, v) in self.names.iter_mut() {
+            let level = self.levels.get(key).and_then(|v| v.last().copied());
 
-        if let Some(level) = level {
-            for (_, v) in self.names.iter_mut() {
+            if let Some(level) = level {
                 if level >= v.len() {
                     v.clear();
                 } else {
@@ -35,19 +46,18 @@ impl NameStack {
         }
     }
 
-    pub fn get(&self, name: &str) -> String {
-        self.names
-            .get(name)
-            .and_then(|v| v.last())
-            .cloned()
-            .unwrap_or_else(|| name.to_owned())
+    pub fn get(&self, name: &str) -> Option<String> {
+        self.names.get(name).and_then(|v| v.last()).cloned()
     }
 
     pub fn push(&mut self, name: &str, new: String) -> String {
         let entry = self.names.entry(name.to_owned()).or_default();
 
-        if let Some(level) = self.levels.last_mut() {
-            *level += 1;
+        let level = self.levels.entry(name.to_owned()).or_default();
+        if let Some(last) = level.last_mut() {
+            *last += 1;
+        } else {
+            level.push(1);
         }
 
         entry.push(new.clone());
@@ -67,7 +77,6 @@ impl NameStack {
 }
 
 struct PhiNodes {
-    writes: Vec<HashSet<(Type, String)>>,
     nodes: Vec<HashSet<(Type, String)>>,
 }
 
@@ -90,7 +99,7 @@ impl PhiNodes {
             }
         }
 
-        Self { nodes, writes }
+        Self { nodes }
     }
 
     pub fn get(&self, block: usize) -> &HashSet<(Type, String)> {
@@ -101,7 +110,13 @@ impl PhiNodes {
 struct ToSSA;
 
 impl ToSSA {
-    fn rename(doms: &mut DominatorTree, bidx: usize, stack: &mut NameStack, phi_nodes: &PhiNodes) {
+    fn rename(
+        doms: &mut DominatorTree,
+        bidx: usize,
+        stack: &mut NameStack,
+        phi_nodes: &PhiNodes,
+        undefined: &mut HashMap<String, Type>,
+    ) {
         stack.push_level();
         log::debug!("Renaming block {}", doms.get(bidx).label_or_default());
         log::debug!("Stack: {:?}", stack);
@@ -136,7 +151,7 @@ impl ToSSA {
                 }
                 Instruction::Value { args, dest, .. } => {
                     for arg in args {
-                        *arg = stack.get(arg);
+                        *arg = stack.get(arg).unwrap();
                     }
 
                     let new = NameStack::unique_name(dest, bidx, i);
@@ -145,7 +160,7 @@ impl ToSSA {
                 }
                 Instruction::Effect { args, .. } => {
                     for arg in args {
-                        *arg = stack.get(arg);
+                        *arg = stack.get(arg).unwrap();
                     }
                 }
             }
@@ -163,12 +178,23 @@ impl ToSSA {
             .succs(bidx)
             .into_iter()
             .flat_map(|v| phi_nodes.get(v).iter().map(move |(ty, dst)| (v, ty, dst)))
-            .map(|(succ, _, dst)| Instruction::Effect {
-                args: vec![NameStack::shadow_name(dst, succ), stack.get(dst)],
-                funcs: vec![],
-                labels: vec![],
-                op: EffectOps::Set,
-                pos: None,
+            .map(|(succ, ty, dst)| {
+                let old_name = match stack.get(dst) {
+                    Some(name) => name,
+                    None => {
+                        // Add it to the undefined set
+                        undefined.insert(dst.clone(), ty.clone());
+                        dst.clone()
+                    }
+                };
+
+                Instruction::Effect {
+                    args: vec![NameStack::shadow_name(dst, succ), old_name],
+                    funcs: vec![],
+                    labels: vec![],
+                    op: EffectOps::Set,
+                    pos: None,
+                }
             })
             .collect_vec();
 
@@ -177,7 +203,7 @@ impl ToSSA {
         // Rename all immediately dominated blocks
         for child in 0..doms.len() {
             if doms.immediate_doms(child) == Some(bidx) {
-                ToSSA::rename(doms, child, stack, phi_nodes);
+                ToSSA::rename(doms, child, stack, phi_nodes, undefined);
             }
         }
 
@@ -187,13 +213,31 @@ impl ToSSA {
 
 impl Pass for ToSSA {
     fn function(&mut self, func: Function) -> Function {
-        let mut name_stack = NameStack::default();
+        log::debug!("Converting function {} to SSA", func.name);
+        let mut name_stack = NameStack::new(&func.args);
 
         let mut doms = DominatorTree::from(func);
 
         let phi_nodes = PhiNodes::new(&doms);
 
-        ToSSA::rename(&mut doms, 0, &mut name_stack, &phi_nodes);
+        let mut undefined = HashMap::new();
+
+        ToSSA::rename(&mut doms, 0, &mut name_stack, &phi_nodes, &mut undefined);
+
+        // Add x: type = undef for all undefined variables
+        for (undef, ty) in undefined {
+            let instr = Instruction::Value {
+                args: vec![],
+                dest: undef,
+                funcs: vec![],
+                labels: vec![],
+                op: ValueOps::Undef,
+                pos: None,
+                op_type: ty,
+            };
+
+            doms.get_mut(0).insert(0, instr);
+        }
 
         doms.into()
     }
@@ -201,5 +245,5 @@ impl Pass for ToSSA {
 
 fn main() {
     setup_logger_from_env();
-    run_passes(&mut [Box::new(ToSSA)]);
+    pass_pipeline!(ToSSA);
 }

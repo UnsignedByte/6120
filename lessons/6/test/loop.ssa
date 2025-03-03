@@ -1,0 +1,21 @@
+@main(iters: int) {
+  x: int = undef;
+  one.0.0: int = const 1;
+  i.0.1: int = const 0;
+  set x.1.shadow x;
+  set i.1.shadow i.0.1;
+.head:
+  i.1.shadow: int = get;
+  x.1.shadow: int = get;
+  cond.1.0: bool = lt i.1.shadow iters;
+  br cond.1.0 .body .end;
+.body:
+  print i.1.shadow;
+  x.2.1: int = add i.1.shadow one.0.0;
+  i.2.2: int = id x.2.1;
+  set x.1.shadow x.2.1;
+  set i.1.shadow i.2.2;
+  jmp .head;
+.end:
+  print i.1.shadow iters;
+}

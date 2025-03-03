@@ -1,0 +1,15 @@
+@main {
+    x: int = const 1;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    x: int = id x;
+    print x;
+}

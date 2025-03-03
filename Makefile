@@ -1,4 +1,4 @@
-.PHONY: build release graphs test brench
+.PHONY: build release graphs test brench bench
 build:
 	@cargo build
 
@@ -12,5 +12,7 @@ test: build
 graphs: build
 	-turnt -j $(nproc) -c turnt-global.toml -e cfg-dot -e call-dot -e domtree-dot -e domsets-dot --save playground/*.bril lessons/*/test/*.bril
 
-brench: build release
+brench: build
 	@! brench brench.toml | tee results.csv | grep -q "incorrect"
+
+bench: brench

@@ -1,0 +1,18 @@
+@main(cond: bool) {
+  x.0.0: int = const 2;
+  x.5.shadow: int = id x.0.0;
+  br cond .block .end;
+.block:
+  x.1.0: int = const 1;
+  br cond .sub1 .sub2;
+.sub1:
+  jmp .sub3;
+.sub2:
+  x.5.shadow: int = id x.1.0;
+  br cond .sub3 .end;
+.sub3:
+  x.5.shadow: int = id x.1.0;
+  jmp .end;
+.end:
+  print cond x.5.shadow;
+}

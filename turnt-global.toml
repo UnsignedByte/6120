@@ -3,13 +3,12 @@ command = """
 bril2json < {filename} | brilirs -p {args}
 """
 output.expect = "-"
-output.prof = "2"
 
-[envs.opt]
+[envs.opt-check]
 command = """
-utils/pipeline.sh target/debug/lvn target/debug/tdce < {filename} | bril2txt
+utils/pipeline.sh target/debug/lvn target/debug/tdce < {filename} | brilirs -p {args}
 """
-output.opt = "-"
+output.expect = "-"
 
 
 [envs.call-dot]

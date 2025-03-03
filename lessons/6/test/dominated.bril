@@ -1,0 +1,16 @@
+# ARGS: false
+@main(cond: bool) {
+    x: int = const 2;
+    br cond .block .end;
+.block:
+    x: int = const 1;
+    br cond .sub1 .sub2;
+.sub1:
+    jmp .sub3;
+.sub2:
+    br cond .sub3 .end;
+.sub3:
+    jmp .end;
+.end:
+    print cond x;
+}

@@ -1,0 +1,11 @@
+@main(cond: bool) {
+  x.0.0: int = const 1;
+  y.0.1: int = id x.0.0;
+  z.0.2: int = id x.0.0;
+  br cond .then .else;
+.then:
+  jmp .end;
+.else:
+.end:
+  print x.0.0 y.0.1 z.0.2;
+}

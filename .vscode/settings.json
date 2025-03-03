@@ -4,5 +4,6 @@
     "*.lvn": "bril",
     "*.lvn-dce": "bril",
     "*.trivial-dce": "bril",
+    "*.ssa": "bril",
   }
 }

@@ -9,3 +9,16 @@ command = """
 bril2json < {filename} | ../../target/debug/to-ssa | brilirs -p {args}
 """
 output.expect = "-"
+
+
+[envs.ssa-roundtrip]
+command = """
+bril2json < {filename} | ../../target/debug/to-ssa | ../../target/debug/from-ssa | bril2txt
+"""
+output.ssa-roundtrip = "-"
+
+[envs.check-roundtrip]
+command = """
+bril2json < {filename} | ../../target/debug/to-ssa | ../../target/debug/from-ssa | brilirs -p {args}
+"""
+output.expect = "-"

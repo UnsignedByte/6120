@@ -1,5 +1,0 @@
-@main {
-  four: int = const 1;
-.block2:
-  print four;
-}

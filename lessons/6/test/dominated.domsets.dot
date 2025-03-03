@@ -1,0 +1,33 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{block|entry\nblock}",shape=Mrecord,color=black]
+        cluster_0_2[label="{sub1|entry\nblock\nsub1}",shape=Mrecord,color=black]
+        cluster_0_3[label="{sub2|entry\nblock\nsub2}",shape=Mrecord,color=black]
+        cluster_0_4[label="{sub3|entry\nblock\nsub3}",shape=Mrecord,color=black]
+        cluster_0_5[label="{end|entry\nend}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|entry\nend}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_1 [color=green]
+        cluster_0_0 -> cluster_0_5 [color=red]
+        cluster_0_1 -> cluster_0_2 [color=green]
+        cluster_0_1 -> cluster_0_3 [color=red]
+        cluster_0_2 -> cluster_0_4
+        cluster_0_3 -> cluster_0_4 [color=green]
+        cluster_0_3 -> cluster_0_5 [color=red]
+        cluster_0_4 -> cluster_0_5
+        cluster_0_5 -> cluster_0_exit [color=black]
+      }
+    }
+  }
+}
