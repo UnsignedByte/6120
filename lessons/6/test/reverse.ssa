@@ -1,0 +1,65 @@
+@main(input: int) {
+  comp1: bool = undef;
+  a: int = undef;
+  floor: int = undef;
+  remainder: int = undef;
+  v5: int = undef;
+  n.0.0: int = id input;
+  v0.0.1: int = const 0;
+  v1.0.2: int = const 10;
+  result.0.3: int = id v0.0.1;
+  v2.0.4: bool = const true;
+  notdone.0.5: bool = id v2.0.4;
+  set n.1.shadow n.0.0;
+  set v5.1.shadow v5;
+  set remainder.1.shadow remainder;
+  set floor.1.shadow floor;
+  set a.1.shadow a;
+  set result.1.shadow result.0.3;
+  set comp1.1.shadow comp1;
+  set notdone.1.shadow notdone.0.5;
+.for.cond.3:
+  notdone.1.shadow: bool = get;
+  comp1.1.shadow: bool = get;
+  result.1.shadow: int = get;
+  a.1.shadow: int = get;
+  floor.1.shadow: int = get;
+  remainder.1.shadow: int = get;
+  v5.1.shadow: int = get;
+  n.1.shadow: int = get;
+  v4.1.0: bool = id notdone.1.shadow;
+  br v4.1.0 .for.body.3 .for.end.3;
+.for.body.3:
+  v5.2.0: int = id n.1.shadow;
+  a.2.1: int = div v5.2.0 v1.0.2;
+  floor.2.2: int = mul a.2.1 v1.0.2;
+  remainder.2.3: int = sub v5.2.0 floor.2.2;
+  result.2.4: int = mul result.1.shadow v1.0.2;
+  result.2.5: int = add result.2.4 remainder.2.3;
+  n.2.6: int = id a.2.1;
+  comp1.2.7: bool = eq n.2.6 v0.0.1;
+  br comp1.2.7 .if.body .for.incre;
+.if.body:
+  notdone.3.0: bool = const false;
+  set n.1.shadow n.2.6;
+  set v5.1.shadow v5.2.0;
+  set remainder.1.shadow remainder.2.3;
+  set floor.1.shadow floor.2.2;
+  set a.1.shadow a.2.1;
+  set result.1.shadow result.2.5;
+  set comp1.1.shadow comp1.2.7;
+  set notdone.1.shadow notdone.3.0;
+  jmp .for.cond.3;
+.for.incre:
+  set n.1.shadow n.2.6;
+  set v5.1.shadow v5.2.0;
+  set remainder.1.shadow remainder.2.3;
+  set floor.1.shadow floor.2.2;
+  set a.1.shadow a.2.1;
+  set result.1.shadow result.2.5;
+  set comp1.1.shadow comp1.2.7;
+  set notdone.1.shadow notdone.1.shadow;
+  jmp .for.cond.3;
+.for.end.3:
+  print result.1.shadow;
+}

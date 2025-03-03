@@ -10,9 +10,8 @@ use utils::{
     DominatorTree, InstrExt, Pass, RemoveUnlabeledBlocks, pass_pipeline, setup_logger_from_env,
 };
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 struct NameStack {
-    levels: HashMap<String, Vec<usize>>,
     names: HashMap<String, Vec<String>>,
 }
 
@@ -23,30 +22,7 @@ impl NameStack {
             names.insert(arg.name.clone(), vec![arg.name.clone()]);
         }
 
-        Self {
-            levels: HashMap::new(),
-            names,
-        }
-    }
-
-    pub fn push_level(&mut self) {
-        for name in self.names.keys() {
-            self.levels.entry(name.clone()).or_default().push(0);
-        }
-    }
-
-    pub fn pop_level(&mut self) {
-        for (key, v) in self.names.iter_mut() {
-            let level = self.levels.get(key).and_then(|v| v.last().copied());
-
-            if let Some(level) = level {
-                if level >= v.len() {
-                    v.clear();
-                } else {
-                    v.truncate(v.len() - level);
-                }
-            }
-        }
+        Self { names }
     }
 
     pub fn get(&self, name: &str) -> Option<String> {
@@ -55,13 +31,6 @@ impl NameStack {
 
     pub fn push(&mut self, name: &str, new: String) -> String {
         let entry = self.names.entry(name.to_owned()).or_default();
-
-        let level = self.levels.entry(name.to_owned()).or_default();
-        if let Some(last) = level.last_mut() {
-            *last += 1;
-        } else {
-            level.push(1);
-        }
 
         entry.push(new.clone());
 
@@ -120,7 +89,7 @@ impl ToSSA {
         phi_nodes: &PhiNodes,
         undefined: &mut LinkedHashMap<String, Type>,
     ) {
-        stack.push_level();
+        let old_stack = stack.clone();
         log::debug!("Renaming block {}", doms.get(bidx).label_or_default());
         log::debug!("Stack: {:?}", stack);
 
@@ -210,7 +179,8 @@ impl ToSSA {
             }
         }
 
-        stack.pop_level();
+        // Undo the stack changes
+        *stack = old_stack;
     }
 }
 
