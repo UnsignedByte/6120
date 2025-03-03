@@ -9,3 +9,5 @@ utils.workspace = true
 log.workspace = true
 graphviz-rust.workspace = true
 itertools.workspace = true
+linked-hash-map.workspace = true
+linked_hash_set.workspace = true

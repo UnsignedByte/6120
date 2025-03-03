@@ -1,6 +1,7 @@
 mod canonicalize_literals;
 mod dominators;
-
-pub use dominators::{DominatorPass, DominatorSetNode};
+mod remove_unlabeled;
 
 pub use canonicalize_literals::CanonicalizeLiterals;
+pub use dominators::{DominatorPass, DominatorSetNode};
+pub use remove_unlabeled::RemoveUnlabeledBlocks;

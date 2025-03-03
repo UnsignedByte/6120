@@ -1,11 +1,14 @@
+use bril_rs::{Argument, EffectOps, Function, Instruction, Type, ValueOps};
+use itertools::Itertools;
+use linked_hash_map::LinkedHashMap;
+use linked_hash_set::LinkedHashSet;
 use std::{
     collections::{HashMap, HashSet},
     vec,
 };
-
-use bril_rs::{Argument, EffectOps, Function, Instruction, Type, ValueOps};
-use itertools::Itertools;
-use utils::{DominatorTree, InstrExt, Pass, pass_pipeline, setup_logger_from_env};
+use utils::{
+    DominatorTree, InstrExt, Pass, RemoveUnlabeledBlocks, pass_pipeline, setup_logger_from_env,
+};
 
 #[derive(Debug, Default)]
 struct NameStack {
@@ -77,7 +80,7 @@ impl NameStack {
 }
 
 struct PhiNodes {
-    nodes: Vec<HashSet<(Type, String)>>,
+    nodes: Vec<LinkedHashSet<(Type, String)>>,
 }
 
 impl PhiNodes {
@@ -91,7 +94,7 @@ impl PhiNodes {
             })
             .collect();
 
-        let mut nodes = vec![HashSet::new(); doms.len()];
+        let mut nodes = vec![LinkedHashSet::new(); doms.len()];
         for bb in doms.iter() {
             // bb's domination frontier needs phi nodes
             for df in doms.dominance_frontier(bb.idx) {
@@ -102,7 +105,7 @@ impl PhiNodes {
         Self { nodes }
     }
 
-    pub fn get(&self, block: usize) -> &HashSet<(Type, String)> {
+    pub fn get(&self, block: usize) -> &LinkedHashSet<(Type, String)> {
         &self.nodes[block]
     }
 }
@@ -115,7 +118,7 @@ impl ToSSA {
         bidx: usize,
         stack: &mut NameStack,
         phi_nodes: &PhiNodes,
-        undefined: &mut HashMap<String, Type>,
+        undefined: &mut LinkedHashMap<String, Type>,
     ) {
         stack.push_level();
         log::debug!("Renaming block {}", doms.get(bidx).label_or_default());
@@ -220,7 +223,7 @@ impl Pass for ToSSA {
 
         let phi_nodes = PhiNodes::new(&doms);
 
-        let mut undefined = HashMap::new();
+        let mut undefined = LinkedHashMap::new();
 
         ToSSA::rename(&mut doms, 0, &mut name_stack, &phi_nodes, &mut undefined);
 
@@ -245,5 +248,5 @@ impl Pass for ToSSA {
 
 fn main() {
     setup_logger_from_env();
-    pass_pipeline!(ToSSA);
+    pass_pipeline!(RemoveUnlabeledBlocks, ToSSA);
 }

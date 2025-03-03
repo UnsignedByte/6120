@@ -13,6 +13,7 @@ pub use misc::HashableLiteral;
 pub(crate) use passes::DataflowNode;
 pub use passes::{
     AnalysisPass, CanonicalizeLiterals, Dataflow, DataflowLabel, DataflowPass, DominatorPass,
-    DominatorSetNode, FunctionPass, Pass, draw_dataflow, run_analysis, run_passes,
+    DominatorSetNode, FunctionPass, Pass, RemoveUnlabeledBlocks, draw_dataflow, run_analysis,
+    run_passes,
 };
 pub use reps::{BBFunction, BasicBlock, CFG, CallGraph, ControlFlow, DominatorTree};

@@ -1,0 +1,12 @@
+# ARGS: true
+@main(cond: bool) {
+    x: int = const 1;
+    br cond .then .else;
+.then:
+    ret;
+    jmp .end;
+.else:
+    jmp .end;
+.end:
+    print x;
+}
