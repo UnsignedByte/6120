@@ -1,25 +1,22 @@
-use std::collections::HashSet;
-
+use super::BasicBlock;
+use crate::{CFG, Dataflow, DataflowPass, DominatorPass, GraphLike};
 use bril_rs::Function;
 use graphviz_rust::{
     dot_generator::{attr, edge, id, node_id},
     dot_structures::{Attribute, Edge, EdgeTy, Id, NodeId, Stmt, Vertex},
 };
-
-use crate::{CFG, Dataflow, DataflowPass, DominatorPass, GraphLike};
-
-use super::BasicBlock;
+use linked_hash_set::LinkedHashSet;
 
 #[derive(Debug, Clone)]
 pub struct DominatorTree {
     /// The control flow graph.
     pub cfg: CFG,
     /// The strict dominator set for each basic block.
-    strict_doms: Vec<HashSet<usize>>,
+    strict_doms: Vec<LinkedHashSet<usize>>,
     /// Immediate dominator for each basic block.
     immediate_doms: Vec<Option<usize>>,
     /// Dominance frontier for each basic block.
-    dominance_frontiers: Vec<HashSet<usize>>,
+    dominance_frontiers: Vec<LinkedHashSet<usize>>,
 }
 
 impl DominatorTree {
@@ -39,7 +36,7 @@ impl DominatorTree {
         // A block's dominance frontier is a set of values it does not dominate
         // but it dominates a predecessor of the value.
         // First, find the set of nodes dominated by each block.
-        let mut dom_bys = vec![HashSet::new(); n + 1];
+        let mut dom_bys = vec![LinkedHashSet::new(); n + 1];
         for (i, doms) in doms.iter().enumerate() {
             for &dom in doms {
                 // dom dominates i
@@ -52,10 +49,10 @@ impl DominatorTree {
             .iter()
             .map(|dom_by| {
                 // Get the set of all successors of dominated blocks
-                let candidates = dom_by
+                let candidates: LinkedHashSet<_> = dom_by
                     .iter()
                     .flat_map(|&dom| if dom < n { cfg.succs(dom) } else { vec![] })
-                    .collect::<HashSet<_>>();
+                    .collect();
 
                 // The dominance frontier is the set of all successors that are not strictly dominated by i
                 candidates.difference(dom_by).copied().collect()
@@ -78,7 +75,7 @@ impl DominatorTree {
             .iter()
             .map(|sdoms| {
                 // These are dominators that dominate other dominators, so cannot be immediate dominators.
-                let non_immediate_doms: HashSet<_> = sdoms
+                let non_immediate_doms: LinkedHashSet<_> = sdoms
                     .iter()
                     .flat_map(|&d| &strict_doms[d])
                     .copied()
@@ -105,11 +102,11 @@ impl DominatorTree {
         }
     }
 
-    pub fn strict_doms(&self, idx: usize) -> &HashSet<usize> {
+    pub fn strict_doms(&self, idx: usize) -> &LinkedHashSet<usize> {
         &self.strict_doms[idx]
     }
 
-    pub fn dominators(&self, idx: usize) -> HashSet<usize> {
+    pub fn dominators(&self, idx: usize) -> LinkedHashSet<usize> {
         self.strict_doms[idx]
             .iter()
             .copied()
@@ -121,7 +118,7 @@ impl DominatorTree {
         self.immediate_doms[idx]
     }
 
-    pub fn dominance_frontier(&self, idx: usize) -> &HashSet<usize> {
+    pub fn dominance_frontier(&self, idx: usize) -> &LinkedHashSet<usize> {
         &self.dominance_frontiers[idx]
     }
 

@@ -22,3 +22,9 @@ command = """
 bril2json < {filename} | ../../target/debug/to-ssa | ../../target/debug/from-ssa | brilirs -p {args}
 """
 output.expect = "-"
+
+[envs.is-ssa]
+command = """
+bril2json < {filename} | ../../target/debug/to-ssa | ../../target/debug/is-ssa
+"""
+return_code = 0

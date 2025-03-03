@@ -13,6 +13,7 @@
   print i.1.shadow;
   x.2.1: int = add i.1.shadow one.0.0;
   i.2.2: int = id x.2.1;
+.finally:
   set i.1.shadow i.2.2;
   set x.1.shadow x.2.1;
   jmp .head;

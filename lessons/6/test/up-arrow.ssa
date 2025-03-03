@@ -1,0 +1,46 @@
+@main(n: int, arrows: int, repeats: int) {
+  ans.0.0: int = call @up_arrow n arrows repeats;
+  print ans.0.0;
+}
+@up_arrow(num: int, arrows: int, repeats: int): int {
+  new_arrows: int = undef;
+  base_case: bool = undef;
+  one.0.0: int = const 1;
+  ans.0.1: int = id num;
+  i.0.2: int = const 1;
+  set ans.1.shadow ans.0.1;
+  set i.1.shadow i.0.2;
+  set base_case.1.shadow base_case;
+  set new_arrows.1.shadow new_arrows;
+.loopstart:
+  new_arrows.1.shadow: int = get;
+  base_case.1.shadow: bool = get;
+  i.1.shadow: int = get;
+  ans.1.shadow: int = get;
+  keepgoing.1.0: bool = lt i.1.shadow repeats;
+  br keepgoing.1.0 .loopbody .endloop;
+.loopbody:
+  base_case.2.0: bool = le arrows one.0.0;
+  br base_case.2.0 .base .arrowsgreaterthan1;
+.base:
+  ans.3.0: int = mul ans.1.shadow num;
+  set ans.5.shadow ans.3.0;
+  set new_arrows.5.shadow new_arrows.1.shadow;
+  jmp .finally;
+.arrowsgreaterthan1:
+  new_arrows.4.0: int = sub arrows one.0.0;
+  ans.4.1: int = call @up_arrow num new_arrows.4.0 ans.1.shadow;
+  set ans.5.shadow ans.4.1;
+  set new_arrows.5.shadow new_arrows.4.0;
+.finally:
+  new_arrows.5.shadow: int = get;
+  ans.5.shadow: int = get;
+  i.5.0: int = add i.1.shadow one.0.0;
+  set ans.1.shadow ans.5.shadow;
+  set i.1.shadow i.5.0;
+  set base_case.1.shadow base_case.2.0;
+  set new_arrows.1.shadow new_arrows.5.shadow;
+  jmp .loopstart;
+.endloop:
+  ret ans.1.shadow;
+}

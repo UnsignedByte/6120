@@ -1,0 +1,59 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    margin=10
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_0_exit[label=exit,color=purple,rank=sink]
+        cluster_0_0 -> cluster_0_exit [color=black]
+        cluster_0_0 -> cluster_0_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
+    }
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="up_arrow"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="entry",shape=oval,color=blue,rank=source]
+        cluster_1_1[label="loopstart",shape=oval]
+        cluster_1_2[label="loopbody",shape=oval]
+        cluster_1_3[label="base",shape=oval]
+        cluster_1_4[label="arrowsgreaterthan1",shape=oval]
+        cluster_1_5[label="finally",shape=oval]
+        cluster_1_6[label="endloop",shape=oval]
+        cluster_1_exit[label=exit,color=purple,rank=sink]
+        cluster_1_0 -> cluster_1_1 [color=black]
+        cluster_1_1 -> cluster_1_2 [color=black]
+        cluster_1_2 -> cluster_1_3 [color=black]
+        cluster_1_2 -> cluster_1_4 [color=black]
+        cluster_1_2 -> cluster_1_5 [color=black]
+        cluster_1_1 -> cluster_1_6 [color=black]
+        cluster_1_6 -> cluster_1_exit [color=black]
+        cluster_1_0 -> cluster_1_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_1 -> cluster_1_2 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_1 -> cluster_1_6 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_2 -> cluster_1_3 [color=forestgreen,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_2 -> cluster_1_4 [color=firebrick,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_3 -> cluster_1_5 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_4 -> cluster_1_5 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_5 -> cluster_1_1 [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+        cluster_1_6 -> cluster_1_exit [color=gray,style=dashed,constraint=false,penwidth=0.75,arrowsize=0.75]
+      }
+    }
+    cluster_0_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_0]
+    cluster_1_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_1]
+  }
+}

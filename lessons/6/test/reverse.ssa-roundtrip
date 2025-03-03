@@ -1,23 +1,23 @@
 @main(input: int) {
-  floor: int = undef;
-  v5: int = undef;
   comp1: bool = undef;
   remainder: int = undef;
+  floor: int = undef;
   a: int = undef;
+  v5: int = undef;
   n.0.0: int = id input;
   v0.0.1: int = const 0;
   v1.0.2: int = const 10;
   result.0.3: int = id v0.0.1;
   v2.0.4: bool = const true;
   notdone.0.5: bool = id v2.0.4;
-  a.1.shadow: int = id a;
-  remainder.1.shadow: int = id remainder;
   n.1.shadow: int = id n.0.0;
-  comp1.1.shadow: bool = id comp1;
-  v5.1.shadow: int = id v5;
   result.1.shadow: int = id result.0.3;
-  floor.1.shadow: int = id floor;
   notdone.1.shadow: bool = id notdone.0.5;
+  v5.1.shadow: int = id v5;
+  a.1.shadow: int = id a;
+  floor.1.shadow: int = id floor;
+  remainder.1.shadow: int = id remainder;
+  comp1.1.shadow: bool = id comp1;
 .for.cond.3:
   v4.1.0: bool = id notdone.1.shadow;
   br v4.1.0 .for.body.3 .for.end.3;
@@ -33,24 +33,24 @@
   br comp1.2.7 .if.body .for.incre;
 .if.body:
   notdone.3.0: bool = const false;
-  a.1.shadow: int = id a.2.1;
-  remainder.1.shadow: int = id remainder.2.3;
   n.1.shadow: int = id n.2.6;
-  comp1.1.shadow: bool = id comp1.2.7;
-  v5.1.shadow: int = id v5.2.0;
   result.1.shadow: int = id result.2.5;
-  floor.1.shadow: int = id floor.2.2;
   notdone.1.shadow: bool = id notdone.3.0;
+  v5.1.shadow: int = id v5.2.0;
+  a.1.shadow: int = id a.2.1;
+  floor.1.shadow: int = id floor.2.2;
+  remainder.1.shadow: int = id remainder.2.3;
+  comp1.1.shadow: bool = id comp1.2.7;
   jmp .for.cond.3;
 .for.incre:
-  a.1.shadow: int = id a.2.1;
-  remainder.1.shadow: int = id remainder.2.3;
   n.1.shadow: int = id n.2.6;
-  comp1.1.shadow: bool = id comp1.2.7;
-  v5.1.shadow: int = id v5.2.0;
   result.1.shadow: int = id result.2.5;
-  floor.1.shadow: int = id floor.2.2;
   notdone.1.shadow: bool = id notdone.1.shadow;
+  v5.1.shadow: int = id v5.2.0;
+  a.1.shadow: int = id a.2.1;
+  floor.1.shadow: int = id floor.2.2;
+  remainder.1.shadow: int = id remainder.2.3;
+  comp1.1.shadow: bool = id comp1.2.7;
   jmp .for.cond.3;
 .for.end.3:
   print result.1.shadow;

@@ -5,7 +5,7 @@ use simple_logger::SimpleLogger;
 /// Logger arguments
 pub struct LogArgs {
     /// the log level
-    #[argh(option, short = 'l', default = "log::LevelFilter::Info")]
+    #[argh(option, short = 'l', default = "log::LevelFilter::Warn")]
     log: log::LevelFilter,
 }
 

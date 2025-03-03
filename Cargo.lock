@@ -612,6 +612,7 @@ version = "0.0.1"
 dependencies = [
  "bril-rs",
  "graphviz-rust",
+ "linked_hash_set",
  "log",
  "utils",
 ]
@@ -1201,6 +1202,8 @@ dependencies = [
  "derivative",
  "graphviz-rust",
  "itertools",
+ "linked-hash-map",
+ "linked_hash_set",
  "log",
  "plotters",
  "simple_logger",

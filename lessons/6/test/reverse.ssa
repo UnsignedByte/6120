@@ -1,8 +1,8 @@
 @main(input: int) {
   comp1: bool = undef;
-  a: int = undef;
-  floor: int = undef;
   remainder: int = undef;
+  floor: int = undef;
+  a: int = undef;
   v5: int = undef;
   n.0.0: int = id input;
   v0.0.1: int = const 0;
@@ -11,21 +11,21 @@
   v2.0.4: bool = const true;
   notdone.0.5: bool = id v2.0.4;
   set n.1.shadow n.0.0;
-  set v5.1.shadow v5;
-  set remainder.1.shadow remainder;
-  set floor.1.shadow floor;
-  set a.1.shadow a;
   set result.1.shadow result.0.3;
-  set comp1.1.shadow comp1;
   set notdone.1.shadow notdone.0.5;
+  set v5.1.shadow v5;
+  set a.1.shadow a;
+  set floor.1.shadow floor;
+  set remainder.1.shadow remainder;
+  set comp1.1.shadow comp1;
 .for.cond.3:
-  notdone.1.shadow: bool = get;
   comp1.1.shadow: bool = get;
-  result.1.shadow: int = get;
-  a.1.shadow: int = get;
-  floor.1.shadow: int = get;
   remainder.1.shadow: int = get;
+  floor.1.shadow: int = get;
+  a.1.shadow: int = get;
   v5.1.shadow: int = get;
+  notdone.1.shadow: bool = get;
+  result.1.shadow: int = get;
   n.1.shadow: int = get;
   v4.1.0: bool = id notdone.1.shadow;
   br v4.1.0 .for.body.3 .for.end.3;
@@ -42,23 +42,23 @@
 .if.body:
   notdone.3.0: bool = const false;
   set n.1.shadow n.2.6;
-  set v5.1.shadow v5.2.0;
-  set remainder.1.shadow remainder.2.3;
-  set floor.1.shadow floor.2.2;
-  set a.1.shadow a.2.1;
   set result.1.shadow result.2.5;
-  set comp1.1.shadow comp1.2.7;
   set notdone.1.shadow notdone.3.0;
+  set v5.1.shadow v5.2.0;
+  set a.1.shadow a.2.1;
+  set floor.1.shadow floor.2.2;
+  set remainder.1.shadow remainder.2.3;
+  set comp1.1.shadow comp1.2.7;
   jmp .for.cond.3;
 .for.incre:
   set n.1.shadow n.2.6;
-  set v5.1.shadow v5.2.0;
-  set remainder.1.shadow remainder.2.3;
-  set floor.1.shadow floor.2.2;
-  set a.1.shadow a.2.1;
   set result.1.shadow result.2.5;
-  set comp1.1.shadow comp1.2.7;
   set notdone.1.shadow notdone.1.shadow;
+  set v5.1.shadow v5.2.0;
+  set a.1.shadow a.2.1;
+  set floor.1.shadow floor.2.2;
+  set remainder.1.shadow remainder.2.3;
+  set comp1.1.shadow comp1.2.7;
   jmp .for.cond.3;
 .for.end.3:
   print result.1.shadow;

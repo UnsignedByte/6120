@@ -9,6 +9,7 @@
   print i;
   x: int = add i one; # This value is defined in here but needs a phi node technically
   i: int = id x;
+.finally:
   jmp .head;
 .end:
   print i iters;

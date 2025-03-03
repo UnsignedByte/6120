@@ -1,7 +1,5 @@
-use std::collections::HashSet;
-
-use utils::{run_analysis, setup_logger_from_env, AnalysisPass, DominatorTree, CFG};
-
+use linked_hash_set::LinkedHashSet;
+use utils::{AnalysisPass, CFG, DominatorTree, run_analysis, setup_logger_from_env};
 struct DomChecker;
 
 impl DomChecker {
@@ -10,7 +8,7 @@ impl DomChecker {
         pos: usize,
         target: usize,
         cfg: &CFG,
-        doms: &HashSet<usize>,
+        doms: &LinkedHashSet<usize>,
         visited: &mut [bool],
     ) -> Result<(), String> {
         if pos == target {
@@ -39,7 +37,11 @@ impl DomChecker {
     }
 
     /// Check that all paths from a block to a dominator are acyclic
-    pub fn check_paths(target: usize, cfg: &CFG, doms: &HashSet<usize>) -> Result<(), String> {
+    pub fn check_paths(
+        target: usize,
+        cfg: &CFG,
+        doms: &LinkedHashSet<usize>,
+    ) -> Result<(), String> {
         let mut visited = vec![false; cfg.len()];
         visited[0] = true;
 

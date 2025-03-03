@@ -12,3 +12,5 @@ simple_logger.workspace = true
 graphviz-rust.workspace = true
 itertools.workspace = true
 plotters.workspace = true
+linked_hash_set.workspace = true
+linked-hash-map.workspace = true

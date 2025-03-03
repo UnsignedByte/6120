@@ -1,0 +1,50 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_0_exit[label="{exit|entry}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_exit [color=black]
+      }
+    }
+    subgraph cluster_1_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_1 {
+        label="up_arrow"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_1_0[label="{entry|entry}",shape=Mrecord,color=blue]
+        cluster_1_1[label="{loopstart|entry\nloopstart}",shape=Mrecord,color=black]
+        cluster_1_2[label="{loopbody|entry\nloopstart\nloopbody}",shape=Mrecord,color=black]
+        cluster_1_3[label="{base|entry\nloopstart\nloopbody\nbase}",shape=Mrecord,color=black]
+        cluster_1_4[label="{arrowsgreaterthan1|entry\nloopstart\nloopbody\narrowsgreaterthan1}",shape=Mrecord,color=black]
+        cluster_1_5[label="{finally|entry\nloopstart\nloopbody\nfinally}",shape=Mrecord,color=black]
+        cluster_1_6[label="{endloop|entry\nloopstart\nendloop}",shape=Mrecord,color=black]
+        cluster_1_exit[label="{exit|entry\nloopstart\nendloop}",shape=Mrecord,color=purple]
+        cluster_1_0 -> cluster_1_1
+        cluster_1_1 -> cluster_1_2 [color=green]
+        cluster_1_1 -> cluster_1_6 [color=red]
+        cluster_1_2 -> cluster_1_3 [color=green]
+        cluster_1_2 -> cluster_1_4 [color=red]
+        cluster_1_3 -> cluster_1_5
+        cluster_1_4 -> cluster_1_5
+        cluster_1_5 -> cluster_1_1
+        cluster_1_6 -> cluster_1_exit [color=black]
+      }
+    }
+    cluster_0_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_0]
+    cluster_1_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_1]
+  }
+}

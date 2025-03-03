@@ -1,29 +1,28 @@
-use itertools::Itertools;
-
 use crate::{BasicBlock, CFG, DataflowLabel, DataflowPass};
-use std::collections::HashSet;
+use itertools::Itertools;
+use linked_hash_set::LinkedHashSet;
 
 /// Helper pass to calculate the dominators for a given CFG
 pub struct DominatorPass;
 
-impl DataflowPass<HashSet<usize>> for DominatorPass {
-    fn entry(&self, _: &crate::BBFunction) -> HashSet<usize> {
+impl DataflowPass<LinkedHashSet<usize>> for DominatorPass {
+    fn entry(&self, _: &crate::BBFunction) -> LinkedHashSet<usize> {
         std::iter::once(0).collect()
     }
 
-    fn init(&self, func: &crate::BBFunction) -> HashSet<usize> {
+    fn init(&self, func: &crate::BBFunction) -> LinkedHashSet<usize> {
         (0..func.len()).collect()
     }
 
-    fn meet(&self, in_vals: &[HashSet<usize>]) -> HashSet<usize> {
+    fn meet(&self, in_vals: &[LinkedHashSet<usize>]) -> LinkedHashSet<usize> {
         match in_vals {
-            [] => HashSet::new(),
+            [] => LinkedHashSet::new(),
             [first] => first.clone(),
             [first, rest @ ..] => rest.iter().fold(first.clone(), |acc, val| &acc & val),
         }
     }
 
-    fn transfer(&self, block: &BasicBlock, in_val: &HashSet<usize>) -> HashSet<usize> {
+    fn transfer(&self, block: &BasicBlock, in_val: &LinkedHashSet<usize>) -> LinkedHashSet<usize> {
         // The dominators of a block are always the block itself
 
         let mut doms = in_val.clone();
@@ -36,7 +35,7 @@ impl DataflowPass<HashSet<usize>> for DominatorPass {
 /// For dominator sets
 #[derive(Clone)]
 pub struct DominatorSetNode {
-    doms: HashSet<usize>,
+    doms: LinkedHashSet<usize>,
 }
 
 impl DataflowLabel for DominatorSetNode {
@@ -58,8 +57,8 @@ impl DataflowLabel for DominatorSetNode {
     }
 }
 
-impl From<HashSet<usize>> for DominatorSetNode {
-    fn from(doms: HashSet<usize>) -> Self {
+impl From<LinkedHashSet<usize>> for DominatorSetNode {
+    fn from(doms: LinkedHashSet<usize>) -> Self {
         Self { doms }
     }
 }

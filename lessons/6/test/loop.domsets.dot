@@ -14,13 +14,15 @@ digraph G {
         cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
         cluster_0_1[label="{head|entry\nhead}",shape=Mrecord,color=black]
         cluster_0_2[label="{body|entry\nhead\nbody}",shape=Mrecord,color=black]
-        cluster_0_3[label="{end|entry\nhead\nend}",shape=Mrecord,color=black]
+        cluster_0_3[label="{finally|entry\nhead\nbody\nfinally}",shape=Mrecord,color=black]
+        cluster_0_4[label="{end|entry\nhead\nend}",shape=Mrecord,color=black]
         cluster_0_exit[label="{exit|entry\nhead\nend}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1
         cluster_0_1 -> cluster_0_2 [color=green]
-        cluster_0_1 -> cluster_0_3 [color=red]
-        cluster_0_2 -> cluster_0_1
-        cluster_0_3 -> cluster_0_exit [color=black]
+        cluster_0_1 -> cluster_0_4 [color=red]
+        cluster_0_2 -> cluster_0_3
+        cluster_0_3 -> cluster_0_1
+        cluster_0_4 -> cluster_0_exit [color=black]
       }
     }
   }

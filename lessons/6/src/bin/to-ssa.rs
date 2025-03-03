@@ -2,10 +2,7 @@ use bril_rs::{Argument, EffectOps, Function, Instruction, Type, ValueOps};
 use itertools::Itertools;
 use linked_hash_map::LinkedHashMap;
 use linked_hash_set::LinkedHashSet;
-use std::{
-    collections::{HashMap, HashSet},
-    vec,
-};
+use std::{collections::HashMap, vec};
 use utils::{
     DominatorTree, InstrExt, Pass, RemoveUnlabeledBlocks, pass_pipeline, setup_logger_from_env,
 };
@@ -49,33 +46,57 @@ impl NameStack {
 }
 
 struct PhiNodes {
-    nodes: Vec<LinkedHashSet<(Type, String)>>,
+    nodes: Vec<LinkedHashMap<String, Type>>,
 }
 
 impl PhiNodes {
     pub fn new(doms: &DominatorTree) -> Self {
-        let writes: Vec<HashSet<_>> = doms
+        let writes: Vec<LinkedHashMap<_, _>> = doms
             .iter()
             .map(|bb| {
                 bb.iter()
-                    .filter_map(|i| i.dest().and_then(|d| i.get_type().map(|t| (t, d))))
+                    .filter_map(|i| i.dest().and_then(|d| i.get_type().map(|t| (d, t))))
                     .collect()
             })
             .collect();
 
-        let mut nodes = vec![LinkedHashSet::new(); doms.len()];
-        for bb in doms.iter() {
-            // bb's domination frontier needs phi nodes
-            for df in doms.dominance_frontier(bb.idx) {
-                nodes[*df].extend(writes[bb.idx].iter().cloned());
+        // Map from variable to the blocks that write to it
+        let mut defs = LinkedHashMap::new();
+        for (block, writes) in writes.iter().enumerate() {
+            for (dest, ty) in writes {
+                defs.entry((dest.clone(), ty.clone()))
+                    .or_insert_with(LinkedHashSet::new)
+                    .insert(block);
+            }
+        }
+        /*
+        for v in vars:
+           for d in Defs[v]:  # Blocks where v is assigned.
+             for block in DF[d]:  # Dominance frontier.
+               Add a ϕ-node to block,
+                 unless we have done so already.
+               Add block to Defs[v] (because it now writes to v!),
+                 unless it's already in there
+         */
+
+        let mut nodes = vec![LinkedHashMap::new(); doms.len()];
+
+        for ((dest, ty), mut defs) in defs {
+            while let Some(d) = defs.pop_front() {
+                for block in doms.dominance_frontier(d) {
+                    if nodes[*block].insert(dest.clone(), ty.clone()).is_none() {
+                        // Newly inserted, add it to the defs
+                        defs.insert(*block);
+                    }
+                }
             }
         }
 
         Self { nodes }
     }
 
-    pub fn get(&self, block: usize) -> &LinkedHashSet<(Type, String)> {
-        &self.nodes[block]
+    pub fn get(&self, block: usize) -> impl Iterator<Item = (&String, &Type)> {
+        self.nodes[block].iter()
     }
 }
 
@@ -90,15 +111,14 @@ impl ToSSA {
         undefined: &mut LinkedHashMap<String, Type>,
     ) {
         let old_stack = stack.clone();
-        log::debug!("Renaming block {}", doms.get(bidx).label_or_default());
+        log::info!("Renaming block {}", doms.get(bidx).label_or_default());
         log::debug!("Stack: {:?}", stack);
 
         let block = doms.get_mut(bidx);
         // Insert the get instructions
         let gets = phi_nodes
             .get(bidx)
-            .iter()
-            .map(|(ty, dst)| {
+            .map(|(dst, ty)| {
                 let shadow = NameStack::shadow_name(dst, bidx);
                 stack.push(dst, shadow.clone());
                 Instruction::Value {
@@ -149,8 +169,8 @@ impl ToSSA {
             .cfg
             .succs(bidx)
             .into_iter()
-            .flat_map(|v| phi_nodes.get(v).iter().map(move |(ty, dst)| (v, ty, dst)))
-            .map(|(succ, ty, dst)| {
+            .flat_map(|v| phi_nodes.get(v).map(move |(dst, ty)| (v, dst, ty)))
+            .map(|(succ, dst, ty)| {
                 let old_name = match stack.get(dst) {
                     Some(name) => name,
                     None => {
@@ -186,7 +206,7 @@ impl ToSSA {
 
 impl Pass for ToSSA {
     fn function(&mut self, func: Function) -> Function {
-        log::debug!("Converting function {} to SSA", func.name);
+        log::info!("Converting function {} to SSA", func.name);
         let mut name_stack = NameStack::new(&func.args);
 
         let mut doms = DominatorTree::from(func);
