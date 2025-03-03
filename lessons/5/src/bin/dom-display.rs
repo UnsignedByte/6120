@@ -4,8 +4,8 @@ use graphviz_rust::{
     dot_structures::{Attribute, Id, Node, NodeId, Stmt},
 };
 use utils::{
-    draw, run_analysis, setup_logger_from_env, AnalysisPass, BasicBlock, CallGraph, DominatorTree,
-    GraphLike,
+    AnalysisPass, BasicBlock, CallGraph, DominatorTree, GraphLike, draw, run_analysis,
+    setup_logger_from_env,
 };
 
 #[derive(Debug, Clone)]
@@ -67,8 +67,6 @@ impl GraphLike<&BasicBlock> for DomDisplay {
     fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
         let exit_node = &format!("{}_exit", self.graph_id(gid));
         self.tree.cfg
-                .func
-                .blocks
                 .iter()
                 .enumerate()
                 .map(|(i, bb)| self.node(gid, bb, i))
@@ -87,8 +85,6 @@ impl From<Function> for DomDisplay {
         // Find the block in the function named "selected"
         let selected = tree
             .cfg
-            .func
-            .blocks
             .iter()
             .find(|bb| bb.label == Some("selected".to_owned()))
             .map(|bb| bb.idx);

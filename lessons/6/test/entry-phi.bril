@@ -1,0 +1,12 @@
+# ARGS: 46 98
+@main(a: int, b: int) {
+.head:
+  cond: bool = eq a b;
+  br cond .end .body;
+.body:
+  a: int = const 1;
+  b: int = const 1;
+  jmp .head;
+.end:
+  print b;
+}

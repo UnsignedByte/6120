@@ -1,0 +1,17 @@
+@main(a: int, b: int) {
+  set a.1.shadow a;
+  set b.1.shadow b;
+.head:
+  b.1.shadow: int = get;
+  a.1.shadow: int = get;
+  cond.1.0: bool = eq a.1.shadow b.1.shadow;
+  br cond.1.0 .end .body;
+.body:
+  a.2.0: int = const 1;
+  b.2.1: int = const 1;
+  set a.1.shadow a.2.0;
+  set b.1.shadow b.2.1;
+  jmp .head;
+.end:
+  print b.1.shadow;
+}

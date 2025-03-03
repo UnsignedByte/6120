@@ -1,4 +1,4 @@
-use super::BasicBlock;
+use super::{BBFunction, BasicBlock};
 use crate::{CFG, Dataflow, DataflowPass, DominatorPass, GraphLike};
 use bril_rs::Function;
 use graphviz_rust::{
@@ -167,6 +167,12 @@ impl DominatorTree {
 impl From<CFG> for DominatorTree {
     fn from(cfg: CFG) -> Self {
         Self::new(cfg)
+    }
+}
+
+impl From<BBFunction> for DominatorTree {
+    fn from(func: BBFunction) -> Self {
+        CFG::from(func).into()
     }
 }
 

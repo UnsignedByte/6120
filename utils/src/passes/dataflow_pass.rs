@@ -142,8 +142,6 @@ where
         // Create the exit node
         let exit_node = &format!("{}_exit", self.graph_id(gid));
         self.cfg
-            .func
-            .blocks
             .iter()
             .enumerate()
             .map(|(i, block)| self.node(gid, DataflowNode::new(block, self, i), i))
@@ -194,7 +192,7 @@ where
 
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
-            in_vals[i] = if cfg.func.blocks[i].is_entry() {
+            in_vals[i] = if cfg.func.get(i).is_entry() {
                 self.entry(&cfg.func)
             } else {
                 let inputs = cfg
@@ -208,7 +206,7 @@ where
 
             log::trace!("Merged inputs for block {}: {:?}", i, in_vals[i]);
 
-            let new_vals = self.transfer(&cfg.func.blocks[i], &in_vals[i]);
+            let new_vals = self.transfer(cfg.func.get(i), &in_vals[i]);
 
             log::trace!("New values for block {}: {:?}", i, new_vals);
 

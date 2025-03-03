@@ -7,7 +7,7 @@ use std::collections::HashMap;
 pub struct BBFunction {
     pub name: String,
     pub args: Vec<Argument>,
-    pub blocks: Vec<BasicBlock>,
+    blocks: Vec<BasicBlock>,
     pub return_type: Option<Type>,
     name_map: HashMap<String, usize>,
 }
@@ -38,8 +38,36 @@ impl BBFunction {
         &self.blocks[idx]
     }
 
+    pub fn get_mut(&mut self, idx: usize) -> &mut BasicBlock {
+        &mut self.blocks[idx]
+    }
+
     pub fn get_block_idx(&self, label: &str) -> Option<usize> {
         self.name_map.get(label).copied()
+    }
+
+    /// Create a new [BBFunction] using this one but with a new set of blocks.
+    /// Often useful in passes that add or remove new blocks.
+    /// Makes sure the name map stays consistent.
+    pub fn with_blocks(self, f: impl FnOnce(Vec<BasicBlock>) -> Vec<BasicBlock>) -> Self {
+        let mut blocks = f(self.blocks);
+
+        let mut name_map = HashMap::new();
+        // Reconstruct the name map and idxs of each block
+        for (idx, block) in blocks.iter_mut().enumerate() {
+            block.idx = idx;
+            if let Some(label) = &block.label {
+                name_map.insert(label.clone(), idx);
+            }
+        }
+
+        Self {
+            name: self.name,
+            args: self.args,
+            blocks,
+            return_type: self.return_type,
+            name_map,
+        }
     }
 }
 

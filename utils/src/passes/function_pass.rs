@@ -12,12 +12,11 @@ pub trait FunctionPass {
     }
 
     fn func(&mut self, func: BBFunction) -> BBFunction {
-        let mut func = self.before(func);
-        func.blocks = func
-            .blocks
-            .into_iter()
-            .map(|bb| self.basic_block(bb))
-            .collect();
+        let func = self.before(func);
+
+        let func =
+            func.with_blocks(|blocks| blocks.into_iter().map(|bb| self.basic_block(bb)).collect());
+
         self.after(func)
     }
 }

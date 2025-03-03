@@ -32,10 +32,9 @@ pub struct CFG {
 
 impl CFG {
     pub fn new(func: BBFunction) -> Self {
-        let blocks = &func.blocks;
-        let n = blocks.len();
+        let n: usize = func.len();
 
-        let succs: Vec<_> = blocks
+        let succs: Vec<_> = func
             .iter()
             .map(|block| {
                 // Branch/Return/Jump Instruction handling
@@ -165,11 +164,11 @@ impl CFG {
     }
 
     pub fn get(&self, idx: usize) -> &BasicBlock {
-        &self.func.blocks[idx]
+        self.func.get(idx)
     }
 
     pub fn get_mut(&mut self, idx: usize) -> &mut BasicBlock {
-        &mut self.func.blocks[idx]
+        self.func.get_mut(idx)
     }
 }
 
@@ -216,7 +215,6 @@ impl GraphLike<&BasicBlock> for CFG {
         // Create the exit node
         let exit_node = &format!("{}_exit", self.graph_id(gid));
         self.func
-            .blocks
             .iter()
             .enumerate()
             .map(|(i, bb)| self.node(gid, bb, i))

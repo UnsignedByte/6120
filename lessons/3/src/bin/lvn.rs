@@ -284,8 +284,7 @@ impl FunctionPass for LVNPass {
             .extend(func.args.iter().map(|arg| arg.name.clone()));
 
         self.names.extend(
-            func.blocks
-                .iter()
+            func.iter()
                 .flat_map(|bb| bb.iter().filter_map(InstrExt::dest)),
         );
 

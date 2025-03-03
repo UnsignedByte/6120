@@ -1,0 +1,15 @@
+@main(a: int, b: int) {
+  a.1.shadow: int = id a;
+  b.1.shadow: int = id b;
+.head:
+  cond.1.0: bool = eq a.1.shadow b.1.shadow;
+  br cond.1.0 .end .body;
+.body:
+  a.2.0: int = const 1;
+  b.2.1: int = const 1;
+  a.1.shadow: int = id a.2.0;
+  b.1.shadow: int = id b.2.1;
+  jmp .head;
+.end:
+  print b.1.shadow;
+}

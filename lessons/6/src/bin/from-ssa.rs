@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use bril_rs::{Code, EffectOps, Function, Instruction, ValueOps};
+use bril_rs::{Argument, Code, EffectOps, Function, Instruction, ValueOps};
 use utils::{InstrExt, Pass, pass_pipeline, setup_logger_from_env};
 
 struct FromSSA;
@@ -19,6 +19,11 @@ impl Pass for FromSSA {
                     None
                 }
             })
+            .chain(
+                func.args
+                    .iter()
+                    .map(|Argument { name, arg_type }| (name.clone(), arg_type.clone())),
+            )
             .collect();
 
         func.instrs = func

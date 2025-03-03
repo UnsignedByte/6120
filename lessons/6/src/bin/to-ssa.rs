@@ -4,7 +4,8 @@ use linked_hash_map::LinkedHashMap;
 use linked_hash_set::LinkedHashSet;
 use std::{collections::HashMap, vec};
 use utils::{
-    DominatorTree, InstrExt, Pass, RemoveUnlabeledBlocks, pass_pipeline, setup_logger_from_env,
+    BBFunction, BasicBlock, DominatorTree, InstrExt, Pass, RemoveUnlabeledBlocks, pass_pipeline,
+    setup_logger_from_env,
 };
 
 #[derive(Debug, Default, Clone)]
@@ -69,15 +70,6 @@ impl PhiNodes {
                     .insert(block);
             }
         }
-        /*
-        for v in vars:
-           for d in Defs[v]:  # Blocks where v is assigned.
-             for block in DF[d]:  # Dominance frontier.
-               Add a ϕ-node to block,
-                 unless we have done so already.
-               Add block to Defs[v] (because it now writes to v!),
-                 unless it's already in there
-         */
 
         let mut nodes = vec![LinkedHashMap::new(); doms.len()];
 
@@ -206,6 +198,19 @@ impl ToSSA {
 
 impl Pass for ToSSA {
     fn function(&mut self, func: Function) -> Function {
+        let func = BBFunction::from(func);
+        // If the entry node has a label, create a dummy entry label.
+        // This is to deal with the case that the entry node has a `get`.
+        let func = if func.get(0).label.is_some() {
+            func.with_blocks(|blocks| {
+                std::iter::once(BasicBlock::new(0, None, vec![]))
+                    .chain(blocks)
+                    .collect()
+            })
+        } else {
+            func
+        };
+
         log::info!("Converting function {} to SSA", func.name);
         let mut name_stack = NameStack::new(&func.args);
 
