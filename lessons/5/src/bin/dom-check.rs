@@ -53,9 +53,9 @@ impl AnalysisPass for DomChecker {
     fn function(&mut self, func: &bril_rs::Function) -> Result<(), String> {
         let tree = DominatorTree::from(func.clone());
 
-        for i in 0..tree.cfg.len() {
+        for i in 0..tree.len() {
             let doms = tree.dominators(i);
-            Self::check_paths(i, &tree.cfg, &doms)?;
+            Self::check_paths(i, tree.cfg(), &doms)?;
         }
 
         Ok(())

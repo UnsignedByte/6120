@@ -158,7 +158,7 @@ impl ToSSA {
         }
 
         let phis = doms
-            .cfg
+            .cfg()
             .succs(bidx)
             .into_iter()
             .flat_map(|v| phi_nodes.get(v).map(move |(dst, ty)| (v, dst, ty)))

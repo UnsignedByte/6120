@@ -10,7 +10,7 @@ use linked_hash_set::LinkedHashSet;
 #[derive(Debug, Clone)]
 pub struct DominatorTree {
     /// The control flow graph.
-    pub cfg: CFG,
+    cfg: CFG,
     /// The strict dominator set for each basic block.
     strict_doms: Vec<LinkedHashSet<usize>>,
     /// Immediate dominator for each basic block.
@@ -161,6 +161,10 @@ impl DominatorTree {
 
     pub fn get_mut(&mut self, idx: usize) -> &mut BasicBlock {
         self.cfg.get_mut(idx)
+    }
+
+    pub fn cfg(&self) -> &CFG {
+        &self.cfg
     }
 }
 

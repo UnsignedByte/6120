@@ -16,7 +16,7 @@ struct DomDisplay {
 
 impl GraphLike<&BasicBlock> for DomDisplay {
     fn node_attrs(&self, node: &BasicBlock) -> Vec<Attribute> {
-        let mut attrs = self.tree.cfg.node_attrs(node);
+        let mut attrs = self.tree.cfg().node_attrs(node);
 
         let mut colors = vec![];
         if let Some(selected) = self.selected {
@@ -61,12 +61,12 @@ impl GraphLike<&BasicBlock> for DomDisplay {
     }
 
     fn graph_attrs(&self) -> Vec<Stmt> {
-        self.tree.cfg.graph_attrs()
+        self.tree.cfg().graph_attrs()
     }
 
     fn graph_nodes(&self, gid: &[usize]) -> Vec<Stmt> {
         let exit_node = &format!("{}_exit", self.graph_id(gid));
-        self.tree.cfg
+        self.tree.cfg()
                 .iter()
                 .enumerate()
                 .map(|(i, bb)| self.node(gid, bb, i))
@@ -74,7 +74,7 @@ impl GraphLike<&BasicBlock> for DomDisplay {
     }
 
     fn graph_edges(&self, gid: &[usize]) -> Vec<Stmt> {
-        self.tree.cfg.graph_edges(gid)
+        self.tree.cfg().graph_edges(gid)
     }
 }
 
@@ -84,7 +84,7 @@ impl From<Function> for DomDisplay {
 
         // Find the block in the function named "selected"
         let selected = tree
-            .cfg
+            .cfg()
             .iter()
             .find(|bb| bb.label == Some("selected".to_owned()))
             .map(|bb| bb.idx);

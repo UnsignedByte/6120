@@ -6,7 +6,7 @@ use graphviz_rust::{
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum FlowEdge {
+enum FlowEdge {
     Exit,
     Branch(usize, usize),
     Jump(usize),
@@ -24,9 +24,9 @@ impl FlowEdge {
 /// Control Flow Graph representation.
 #[derive(Debug, Clone)]
 pub struct CFG {
-    pub func: BBFunction,
-    pub(crate) preds: Vec<Vec<usize>>,
-    pub(crate) succs: Vec<FlowEdge>,
+    func: BBFunction,
+    preds: Vec<Vec<usize>>,
+    succs: Vec<FlowEdge>,
     reversed: bool,
 }
 
@@ -107,6 +107,10 @@ impl CFG {
 
     pub fn name(&self) -> &str {
         &self.func.name
+    }
+
+    pub fn func(&self) -> &BBFunction {
+        &self.func
     }
 
     pub fn reverse(self) -> Self {

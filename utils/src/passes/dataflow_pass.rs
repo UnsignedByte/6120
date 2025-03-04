@@ -31,7 +31,7 @@ impl<F> Dataflow<F> {
 
 impl<Val: Display> Display for Dataflow<Val> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "@{} {{{{", self.cfg.func.name)?;
+        writeln!(f, "@{} {{{{", self.cfg.name())?;
         for (i, (in_val, out_val)) in self.in_vals.iter().zip(&self.out_vals).enumerate() {
             writeln!(f, ".{}:", i)?;
             writeln!(f, "  In:  {}", in_val)?;
@@ -187,13 +187,13 @@ where
     fn cfg(&mut self, cfg: CFG) -> Dataflow<Val> {
         let n = cfg.len();
 
-        let mut in_vals = vec![self.init(&cfg.func); n];
-        let mut out_vals = vec![self.init(&cfg.func); n];
+        let mut in_vals = vec![self.init(cfg.func()); n];
+        let mut out_vals = vec![self.init(cfg.func()); n];
 
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
-            in_vals[i] = if cfg.func.get(i).is_entry() {
-                self.entry(&cfg.func)
+            in_vals[i] = if cfg.func().get(i).is_entry() {
+                self.entry(cfg.func())
             } else {
                 let inputs = cfg
                     .preds(i)
@@ -206,7 +206,7 @@ where
 
             log::trace!("Merged inputs for block {}: {:?}", i, in_vals[i]);
 
-            let new_vals = self.transfer(cfg.func.get(i), &in_vals[i]);
+            let new_vals = self.transfer(cfg.func().get(i), &in_vals[i]);
 
             log::trace!("New values for block {}: {:?}", i, new_vals);
 
@@ -225,7 +225,7 @@ where
             .map(|i| out_vals[i].clone())
             .collect_vec();
         let exit_val = self.meet(&exit_val);
-        let exit_val = self.finish(&cfg.func, exit_val);
+        let exit_val = self.finish(cfg.func(), exit_val);
 
         Dataflow {
             cfg,
