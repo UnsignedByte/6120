@@ -1,5 +1,17 @@
 [envs.skeleton]
 command = """
-clang -fpass-plugin=../../build/lessons/7/SkeletonPass.so {filename} -o /dev/null
+clang -O0 -fpass-plugin=../../build/lessons/7/SkeletonPass.so {filename} -o /dev/null
 """
 output.skeleton = "2"
+
+[envs.blockdisplay-ll]
+command = """
+clang -O0 -fpass-plugin=../../build/lessons/7/BlockDisplayPass.so {filename} -emit-llvm -S -o /dev/stdout
+"""
+output."blockdisplay.ll" = "-"
+
+[envs.llvm]
+command = """
+clang -O0 {filename} -emit-llvm -S -o /dev/stdout
+"""
+output.ll = "-"
