@@ -15,3 +15,9 @@ command = """
 clang -O0 {filename} -emit-llvm -S -o /dev/stdout
 """
 output.ll = "-"
+
+[envs.blockdisplay]
+command = """
+clang -O0 -fpass-plugin=../../build/lessons/7/BlockDisplayPass.so {filename} ../../build/lessons/7/libBlockDisplayRT.a -o {base}.tmpout && ./{base}.tmpout && rm {base}.tmpout
+"""
+output.blockdisplay = "-"

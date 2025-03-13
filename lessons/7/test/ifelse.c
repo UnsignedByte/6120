@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 // ARGS: 1 2 3
 int main(int argc, char** argv) {
     register int x = 5;
@@ -7,5 +9,7 @@ int main(int argc, char** argv) {
         x = 15;
     }
 
-    return x;
+    printf("%d\n", x);
+
+    return 0;
 }
