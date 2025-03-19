@@ -1,9 +1,14 @@
 {
   "files.associations": {
+    "*.v": "systemverilog",
     "*.opt": "bril",
     "*.lvn": "bril",
     "*.lvn-dce": "bril",
     "*.trivial-dce": "bril",
     "*.ssa": "bril",
+    "string_view": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp"
   }
 }

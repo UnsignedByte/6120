@@ -1,0 +1,7 @@
+[envs.llvm]
+command = """
+clang -emit-llvm -S -O0 -Xclang -disable-O0-optnone {filename} -o - | opt -S -passes='mem2reg'
+"""
+output.ll = "-"
+
+

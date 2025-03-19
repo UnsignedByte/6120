@@ -1,0 +1,12 @@
+Analyzing function main
+Found 1 loops
+Found loop header: 
+Found Instruction   %.0 = phi i32 [ 0, %2 ], [ %9, %5 ]
+Found Instruction   %4 = icmp slt i32 %.0, %0
+Found Instruction   br i1 %4, label %5, label %10
+Found Instruction   %6 = mul nsw i32 %.0, 3
+Found Instruction   %7 = add nsw i32 %6, 4
+Found Instruction   %8 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 noundef %7)
+Found Instruction   %9 = add nsw i32 %.0, 2
+Found Instruction   br label %3, !llvm.loop !6
+Analyzing function printf

@@ -1,0 +1,19 @@
+Analyzing function main
+Found 1 loops
+Found loop header: 
+Found Instruction   %.0 = phi i32 [ 0, %7 ], [ %11, %12 ]
+Found Instruction   %9 = sdiv i32 %.01, 10
+Operand i32 10 was not an instruction!
+Found Instruction   %10 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 noundef %9)
+Found Instruction   %11 = add nsw i32 %.0, %9
+Found Instruction   br label %12
+Found Instruction   %.0 = phi i32 [ 0, %7 ], [ %11, %12 ]
+Found Instruction   %10 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 noundef %9)
+Found Instruction   %11 = add nsw i32 %.0, %9
+Found Instruction   br label %12
+Found Instruction   %13 = icmp slt i32 %11, %.01
+Found Instruction   br i1 %13, label %8, label %14, !llvm.loop !6
+Found Invariant 	  %9 = sdiv i32 %.01, 10
+Checking that it dominates   br i1 %13, label %8, label %14, !llvm.loop !6
+Moved Invariant Instruction to Preheader:   %8 = sdiv i32 %.01, 10
+Analyzing function printf

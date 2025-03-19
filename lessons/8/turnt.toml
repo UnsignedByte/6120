@@ -1,0 +1,14 @@
+[envs.ive]
+default = false
+command = """
+clang -emit-llvm -S -O0 -Xclang -disable-O0-optnone {filename} -o - | opt -S -passes='mem2reg' | clang -O0 -x ir -fpass-plugin=../../build/lessons/8/InductionVariableEliminationPass.so -emit-llvm -S - -o /dev/stdout
+"""
+output."ive.ll" = "-"
+output."ive" = "2"
+
+[envs.licm]
+command = """
+clang -emit-llvm -S -O0 -Xclang -disable-O0-optnone {filename} -o - | opt -S -passes='mem2reg' | clang -O0 -x ir -fpass-plugin=../../build/lessons/8/LoopInvariantCodeMotionPass.so -emit-llvm -S - -o /dev/stdout
+"""
+output."licm.ll" = "-"
+output."licm" = "2"
