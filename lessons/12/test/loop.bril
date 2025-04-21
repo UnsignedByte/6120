@@ -1,0 +1,15 @@
+# ARGS: 10 15
+@main(iters: int) {
+  one: int = const 1;
+  i: int = const 0;
+.head:
+  cond: bool = lt i iters;
+  br cond .body .end;
+.body:
+  x: int = add i one;
+  i: int = id x;
+.finally:
+  jmp .head;
+.end:
+  print i iters;
+}

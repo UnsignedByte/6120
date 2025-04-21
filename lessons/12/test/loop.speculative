@@ -1,0 +1,74 @@
+@main(iters: int) {
+  speculate;
+  one: int = const 1;
+  i: int = const 0;
+  cond: bool = lt i iters;
+  __trace3_cond: bool = id cond;
+  guard __trace3_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace8_cond: bool = id cond;
+  guard __trace8_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace13_cond: bool = id cond;
+  guard __trace13_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace18_cond: bool = id cond;
+  guard __trace18_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace23_cond: bool = id cond;
+  guard __trace23_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace28_cond: bool = id cond;
+  guard __trace28_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace33_cond: bool = id cond;
+  guard __trace33_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace38_cond: bool = id cond;
+  guard __trace38_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace43_cond: bool = id cond;
+  guard __trace43_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace48_cond: bool = id cond;
+  guard __trace48_cond .__trace_failed;
+  x: int = add i one;
+  i: int = id x;
+  cond: bool = lt i iters;
+  __trace53_cond: bool = not cond;
+  guard __trace53_cond .__trace_failed;
+  commit;
+  jmp .__trace_succeeded;
+.__trace_failed:
+  one: int = const 1;
+  i: int = const 0;
+.head:
+  cond: bool = lt i iters;
+  br cond .body .end;
+.body:
+  x: int = add i one;
+  i: int = id x;
+.finally:
+  jmp .head;
+.end:
+.__trace_succeeded:
+  print i iters;
+}
