@@ -1,0 +1,40 @@
+@main(x: int) {
+  speculate;
+  one: int = const 1;
+  hundred: int = const 100;
+  y: int = add x one;
+  cond: bool = lt x hundred;
+  __trace4_cond: bool = id cond;
+  guard __trace4_cond .__trace_failed;
+  __trace_f_a: int = id y;
+  __trace_f_one: int = const 1;
+  __trace_f_r: int = sub __trace_f_a __trace_f_one;
+  z: int = id __trace_f_r;
+  commit;
+  jmp .__trace_succeeded;
+.__trace_failed:
+  one: int = const 1;
+  hundred: int = const 100;
+  y: int = add x one;
+  cond: bool = lt x hundred;
+  br cond .then .else;
+.then:
+  z: int = call @f y;
+  jmp .exit;
+.else:
+  z: int = call @g y;
+  jmp .exit;
+.exit:
+.__trace_succeeded:
+  print z;
+}
+@f(a: int): int {
+  one: int = const 1;
+  r: int = sub a one;
+  ret r;
+}
+@g(a: int): int {
+  one: int = const 1;
+  r: int = add a one;
+  ret r;
+}

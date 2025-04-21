@@ -1,0 +1,28 @@
+# ARGS: 42 105
+@main(x: int) {
+    one: int = const 1;
+    hundred: int = const 100;
+    y: int = add x one;
+    cond: bool = lt x hundred;
+    br cond .then .else;
+.then:
+    z: int = call @f y;
+    jmp .exit;
+.else:
+    z: int = call @g y;
+    jmp .exit;
+.exit:
+    print z;
+}
+
+@f(a: int): int {
+    one: int = const 1;
+    r: int = sub a one;
+    ret r;
+}
+
+@g(a: int): int {
+    one: int = const 1;
+    r: int = add a one;
+    ret r;
+}

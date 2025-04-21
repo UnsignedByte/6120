@@ -1,0 +1,18 @@
+[package]
+name = "lesson-12"
+version = "0.0.1"
+edition.workspace = true
+
+[dependencies]
+bril-rs.workspace = true
+brilirs.workspace = true
+bril2json.workspace = true
+utils.workspace = true
+log.workspace = true
+graphviz-rust.workspace = true
+itertools.workspace = true
+fxhash = "0.2.1"
+mimalloc = "0.1.46"
+itoa = "1.0.15"
+clap = "4.5.37"
+lesson-3.workspace = true

@@ -1,0 +1,7 @@
+# Empty to disable global tests from running here
+[envs.dummy]
+command = """
+echo "Dummy test"
+"""
+return_code = 0
+default = false

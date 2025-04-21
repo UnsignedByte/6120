@@ -1,9 +1,5 @@
 extract = 'total_dyn_inst: (\d+)'
-benchmarks = [
-    'bril/benchmarks/*/*.bril',
-    'lessons/*/test/*.bril',
-    'playground/*.bril',
-]
+benchmarks = ['bril/benchmarks/*/*.bril']
 
 [runs.baseline]
 pipeline = ["bril2json", "brilirs -p {args}"]
@@ -27,5 +23,8 @@ pipeline = [
     "target/debug/from-ssa",
     "brilirs -p {args}",
 ]
+
+[runs.trace-speculation]
+pipeline = ["bril2json", "target/debug/brilitrace {args}", "brili -p {args}"]
 
 timeout = 100

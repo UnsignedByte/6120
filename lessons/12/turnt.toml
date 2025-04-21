@@ -1,0 +1,21 @@
+[envs.speculative]
+command = """
+bash -c 'set -- {args} && \
+bril2json < {filename} \
+    | ../../target/debug/brilitrace "${{@:1:$(( $#/2 ))}}" | bril2txt'
+"""
+output."speculative" = "-"
+
+[envs.speculative-expect]
+command = """
+bash -c 'set -- {args} && \
+bril2json < {filename} \
+    | ../../target/debug/brilitrace "${{@:1:$(( $#/2 ))}}" | brili "${{@: $(( $#/2 + 1 ))}}"'
+"""
+output.expect = "-"
+
+[envs.expect]
+command = """
+bash -c 'set -- {args} && bril2json < {filename} | brili "${{@: $(( $#/2 + 1 ))}}"'
+"""
+output.expect = "-"

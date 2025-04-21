@@ -5,6 +5,7 @@
     "*.lvn": "bril",
     "*.lvn-dce": "bril",
     "*.trivial-dce": "bril",
+    "*.speculative": "bril",
     "*.ssa": "bril",
     "string_view": "cpp",
     "deque": "cpp",
