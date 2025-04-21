@@ -259,7 +259,7 @@ pub struct LVNPass {
 impl LVNPass {
     pub fn unique_name(&mut self, pref: &str) -> String {
         loop {
-            let name = format!("_{}-{}", pref, self.nid);
+            let name = format!("_{}_{}", pref, self.nid);
             self.nid += 1;
 
             if !self.names.contains(&name) {

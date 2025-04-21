@@ -284,8 +284,8 @@ impl Trace {
 
         let func = BBFunction::from(func);
 
-        // let func = LVNPass::default().func(func);
-        // let func = TDCEPass.func(func);
+        let func = LVNPass::default().func(func);
+        let func = TDCEPass.func(func);
 
         let mut instrs = Function::from(func).instrs;
 

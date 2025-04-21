@@ -98,14 +98,6 @@
   n3: float = const 1.0;
   n4: float = const 9.0;
   n5: float = const 7.0;
-  __trace_pack_size: int = id size;
-  __trace_pack_n1: float = id n1;
-  __trace_pack_n2: float = id n2;
-  __trace_pack_n3: float = id n3;
-  __trace_pack_n4: float = id n4;
-  __trace_pack_n5: float = id n5;
-  __trace_pack_one: int = const 1;
-  __trace_pack_i: int = const 0;
   commit;
   jmp .__trace_succeeded;
 .__trace_failed:

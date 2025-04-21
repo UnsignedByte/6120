@@ -1,6 +1,6 @@
 @main {
-  _a-0: int = call @dummy;
-  print _a-0;
+  _a_0: int = call @dummy;
+  print _a_0;
   b: int = call @dummy;
   a: int = call @dummy;
   sum: int = add a b;
