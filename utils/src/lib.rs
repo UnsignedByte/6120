@@ -6,6 +6,7 @@ mod misc;
 mod passes;
 mod reps;
 
+pub use bril_rs;
 pub use extensions::{InstrExt, LiteralExt};
 pub use graph::{GraphLike, draw};
 pub use logger::{LogArgs, setup_logger, setup_logger_from_env};
