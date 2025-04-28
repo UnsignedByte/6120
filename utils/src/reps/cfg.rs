@@ -122,6 +122,10 @@ impl CFG {
         }
     }
 
+    pub fn reversed(&self) -> bool {
+        self.reversed
+    }
+
     pub fn len(&self) -> usize {
         self.func.len()
     }
