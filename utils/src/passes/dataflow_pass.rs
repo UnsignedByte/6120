@@ -42,6 +42,19 @@ impl<Val: Display> Display for Dataflow<Val> {
     }
 }
 
+impl<Val: Debug> Debug for Dataflow<Val> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "@{} {{{{", self.cfg.name())?;
+        for (i, (in_val, out_val)) in self.in_vals.iter().zip(&self.out_vals).enumerate() {
+            writeln!(f, ".{}:", i)?;
+            writeln!(f, "  In:  {:?}", in_val)?;
+            writeln!(f, "  Out: {:?}", out_val)?;
+        }
+        writeln!(f, "}}}}")?;
+        Ok(())
+    }
+}
+
 /// Trait for dataflow analysis labels
 /// Allows conerting dataflow values to string labels
 pub trait DataflowLabel
