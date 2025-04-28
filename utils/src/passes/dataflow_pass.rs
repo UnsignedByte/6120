@@ -29,6 +29,16 @@ impl<F> Dataflow<F> {
     }
 }
 
+impl<Val: PartialEq> PartialEq for Dataflow<Val> {
+    fn eq(&self, other: &Self) -> bool {
+        self.in_vals == other.in_vals
+            && self.out_vals == other.out_vals
+            && self.exit_val == other.exit_val
+    }
+}
+
+impl<Val: Eq> Eq for Dataflow<Val> {}
+
 impl<Val: Display> Display for Dataflow<Val> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "@{} {{{{", self.cfg.name())?;
