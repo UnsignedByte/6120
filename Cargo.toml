@@ -22,7 +22,7 @@ bril-rs = { git = "https://github.com/sampsyo/bril", features = [
   "position",
   "import",
   "char",
-] }
+], version = "0.1.0" }
 brilirs = { git = "https://github.com/sampsyo/bril", version = "0.1.0" }
 bril2json = { git = "https://github.com/sampsyo/bril", version = "0.1.0" }
 utils = { version = "0.0.1", path = "utils" }
