@@ -1,5 +1,12 @@
 [workspace]
-members = ["utils", "lessons/3", "lessons/4", "lessons/5", "lessons/6", "lessons/12"]
+members = [
+  "utils",
+  "lessons/3",
+  "lessons/4",
+  "lessons/5",
+  "lessons/6",
+  "lessons/12",
+]
 resolver = "2"
 exclude = ["bril"]
 
@@ -7,7 +14,7 @@ exclude = ["bril"]
 edition = "2024"
 
 [workspace.dependencies]
-bril-rs = { path = "bril/bril-rs", features = [
+bril-rs = { git = "https://github.com/sampsyo/bril", features = [
   "memory",
   "float",
   "ssa",
@@ -16,10 +23,10 @@ bril-rs = { path = "bril/bril-rs", features = [
   "import",
   "char",
 ] }
-brilirs = { path = "bril/brilirs", version="0.1.0" }
-bril2json = { path = "bril/bril-rs/bril2json", version="0.1.0" }
+brilirs = { git = "https://github.com/sampsyo/bril", version = "0.1.0" }
+bril2json = { git = "https://github.com/sampsyo/bril", version = "0.1.0" }
 utils = { version = "0.0.1", path = "utils" }
-lesson-3 = { version = "0.0.1", path = "lessons/3"}
+lesson-3 = { version = "0.0.1", path = "lessons/3" }
 serde = "1.0.217"
 derivative = "2.2.0"
 log = "0.4"
