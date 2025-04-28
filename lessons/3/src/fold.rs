@@ -48,7 +48,10 @@ impl Foldable<String, Literal> for Instruction {
                         | ValueOps::Lt
                         | ValueOps::Le => {
                             let [Literal::Int(a), Literal::Int(b)] = args[..] else {
-                                panic!("Invalid arguments for binary arithmetic operation, expected 2 ints, got {:?}", args);
+                                panic!(
+                                    "Invalid arguments for binary arithmetic operation, expected 2 ints, got {:?}",
+                                    args
+                                );
                             };
                             Some(match op {
                                 ValueOps::Add => Literal::Int(a + b),
@@ -65,7 +68,10 @@ impl Foldable<String, Literal> for Instruction {
                         }
                         ValueOps::And | ValueOps::Or => {
                             let [Literal::Bool(a), Literal::Bool(b)] = args[..] else {
-                                panic!("Invalid arguments for binary boolean operation, expected 2 bools, got {:?}", args);
+                                panic!(
+                                    "Invalid arguments for binary boolean operation, expected 2 bools, got {:?}",
+                                    args
+                                );
                             };
                             Some(Literal::Bool(match op {
                                 ValueOps::And => a && b,
@@ -92,7 +98,10 @@ impl Foldable<String, Literal> for Instruction {
                         | ValueOps::Flt
                         | ValueOps::Fle => {
                             let [Literal::Float(a), Literal::Float(b)] = args[..] else {
-                                panic!("Invalid arguments for binary arithmetic operation, expected 2 floats, got {:?}", args);
+                                panic!(
+                                    "Invalid arguments for binary arithmetic operation, expected 2 floats, got {:?}",
+                                    args
+                                );
                             };
                             Some(match op {
                                 ValueOps::Fadd => Literal::Float(a + b),
@@ -113,7 +122,10 @@ impl Foldable<String, Literal> for Instruction {
                         | ValueOps::Clt
                         | ValueOps::Cle => {
                             let [Literal::Char(a), Literal::Char(b)] = args[..] else {
-                                panic!("Invalid arguments for binary arithmetic operation, expected 2 chars, got {:?}", args);
+                                panic!(
+                                    "Invalid arguments for binary arithmetic operation, expected 2 chars, got {:?}",
+                                    args
+                                );
                             };
                             Some(match op {
                                 ValueOps::Ceq => Literal::Bool(a == b),
