@@ -1,0 +1,27 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|i = 0\lone = 1\lresult = 1\ltwo = 2\l}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{loop|i = T\li_lt_n = T\lone = 1\lresult = T\ltwo = 2\l}",shape=Mrecord,color=black]
+        cluster_0_2[label="{multiply|i = T\li_lt_n = T\lone = 1\lresult = T\ltwo = 2\l}",shape=Mrecord,color=black]
+        cluster_0_3[label="{return|i = T\li_lt_n = T\lone = 1\lresult = T\ltwo = 2\l}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|i = T\li_lt_n = T\lone = 1\lresult = T\ltwo = 2\l}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_1
+        cluster_0_1 -> cluster_0_2 [color=green]
+        cluster_0_1 -> cluster_0_3 [color=red]
+        cluster_0_2 -> cluster_0_1
+        cluster_0_3 -> cluster_0_exit [color=black]
+      }
+    }
+  }
+}

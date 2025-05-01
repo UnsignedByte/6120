@@ -18,7 +18,7 @@ digraph G {
         cluster_0_exit[label=exit,color=purple,rank=sink]
         cluster_0_0 -> cluster_0_2
         cluster_0_1 -> cluster_0_2
-        cluster_0_2 -> cluster_0_exit [color=purple]
+        cluster_0_2 -> cluster_0_exit [color=black]
       }
     }
   }

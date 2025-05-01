@@ -241,12 +241,12 @@ impl GraphLike<&BasicBlock> for CFG {
                 FlowEdge::Exit => vec![if self.reversed() {
                     edge!(
                         node_id!(exit_node) => self.node_id(gid, i);
-                        attr!("color", "purple")
+                        attr!("color", "black")
                     )
                 } else {
                     edge!(
                         self.node_id(gid, i) => node_id!(exit_node);
-                        attr!("color", "purple")
+                        attr!("color", "black")
                     )
                 }.into()],
                 FlowEdge::Branch(t, f) => {

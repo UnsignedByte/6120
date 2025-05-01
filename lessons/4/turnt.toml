@@ -12,11 +12,11 @@ bril2json < {filename} | ../../target/debug/live-vars
 """
 output."live-vars.dot" = "-"
 
-# [envs.live-vars]
-# command = """
-# bril2json < {filename} | ./live-vars.py
-# """
-# output.live-vars = "-"
+[envs.const-prop]
+command = """
+bril2json < {filename} | ../../target/debug/const-prop
+"""
+output."const-prop.dot" = "-"
 
 [envs.interval]
 command = """
@@ -24,11 +24,11 @@ bril2json < {filename} | ./interval.py
 """
 output.interval = "-"
 
-[envs.const-prop]
-command = """
-bril2json < {filename} | ./const-prop.py
-"""
-output.const-prop = "-"
+# [envs.const-prop]
+# command = """
+# bril2json < {filename} | ./const-prop.py
+# """
+# output.const-prop = "-"
 
 [envs.available-expr]
 command = """

@@ -11,11 +11,11 @@ digraph G {
         style=rounded
         bgcolor=lightgray
         margin=10
-        cluster_0_0[label="{entry|cond = [.entry: ?]\l}",shape=Mrecord,color=blue]
-        cluster_0_1[label="{left|a = [.left: 1]\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_2[label="{right|cond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_3[label="{end|a = [.left: 1]\lcond = [.entry: ?]\l}",shape=Mrecord,color=black]
-        cluster_0_exit[label="{exit|a = [.left: 1]\lcond = [.entry: ?]\l}",shape=Mrecord,color=purple]
+        cluster_0_0[label="{entry|\l}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{left|a = 1\l}",shape=Mrecord,color=black]
+        cluster_0_2[label="{right|\l}",shape=Mrecord,color=black]
+        cluster_0_3[label="{end|a = 1\l}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|a = 1\l}",shape=Mrecord,color=purple]
         cluster_0_0 -> cluster_0_1 [color=green]
         cluster_0_0 -> cluster_0_2 [color=red]
         cluster_0_1 -> cluster_0_3
