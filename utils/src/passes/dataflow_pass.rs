@@ -116,18 +116,23 @@ where
             df: dataflow,
             i,
         } = self;
-
         if let Some(bb) = bb {
+            let node_labels = if dataflow.cfg.reversed() {
+                vec![
+                    dataflow.out_vals[*i].out_label(&dataflow.cfg),
+                    dataflow.in_vals[*i].in_label(&dataflow.cfg),
+                ]
+            } else {
+                vec![
+                    dataflow.in_vals[*i].in_label(&dataflow.cfg),
+                    dataflow.out_vals[*i].out_label(&dataflow.cfg),
+                ]
+            };
+
             format!(
                 r#""{{{}|{}}}""#,
                 bb.label_or_default(),
-                vec![
-                    dataflow.in_vals[*i].in_label(&dataflow.cfg),
-                    dataflow.out_vals[*i].out_label(&dataflow.cfg)
-                ]
-                .into_iter()
-                .flatten()
-                .join("|")
+                node_labels.into_iter().flatten().join("|")
             )
         } else if let Some(label) = dataflow.exit_val.out_label(&dataflow.cfg) {
             return format!(r#""{{exit|{}}}""#, label);
@@ -188,6 +193,11 @@ pub trait DataflowPass<Val>
 where
     Val: Eq + Clone + Debug,
 {
+    /// Whether this dataflow pass is reversed
+    fn reversed(&self) -> bool {
+        false
+    }
+
     /// Initial values generated from arguments
     fn entry(&self, func: &BBFunction) -> Val {
         self.init(func)
@@ -208,6 +218,12 @@ where
     }
 
     fn cfg(&mut self, cfg: CFG) -> Dataflow<Val> {
+        let cfg = if cfg.reversed() != self.reversed() {
+            cfg.reverse()
+        } else {
+            cfg
+        };
+
         let n = cfg.len();
 
         let mut in_vals = vec![self.init(cfg.func()); n];
@@ -215,7 +231,7 @@ where
 
         let mut worklist: LinkedList<_> = (0..n).collect();
         while let Some(i) = worklist.pop_front() {
-            in_vals[i] = if cfg.func().get(i).is_entry() {
+            in_vals[i] = if cfg.is_entry(i) {
                 self.entry(cfg.func())
             } else {
                 let inputs = cfg

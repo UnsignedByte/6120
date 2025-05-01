@@ -8,9 +8,16 @@ output."reaching-defs.dot" = "-"
 
 [envs.live-vars]
 command = """
-bril2json < {filename} | ./live-vars.py
+bril2json < {filename} | ../../target/debug/live-vars
 """
-output.live-vars = "-"
+output."live-vars.dot" = "-"
+
+# [envs.live-vars]
+# command = """
+# bril2json < {filename} | ./live-vars.py
+# """
+# output.live-vars = "-"
+
 [envs.interval]
 command = """
 bril2json < {filename} | ./interval.py

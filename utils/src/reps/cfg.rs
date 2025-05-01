@@ -238,21 +238,39 @@ impl GraphLike<&BasicBlock> for CFG {
             .iter()
             .enumerate()
             .flat_map(|(i, succs)| match succs {
-                FlowEdge::Exit => vec![
+                FlowEdge::Exit => vec![if self.reversed() {
+                    edge!(
+                        node_id!(exit_node) => self.node_id(gid, i);
+                        attr!("color", "purple")
+                    )
+                } else {
                     edge!(
                         self.node_id(gid, i) => node_id!(exit_node);
-                        attr!("color", "black")
+                        attr!("color", "purple")
                     )
-                    .into(),
-                ],
-                FlowEdge::Branch(t, f) => vec![
-                    edge!(self.node_id(gid, i) => self.node_id(gid, *t); attr!("color", "green"))
+                }.into()],
+                FlowEdge::Branch(t, f) => {
+                    if self.reversed() {
+                        vec![edge!(self.node_id(gid, *t) => self.node_id(gid, i); attr!("color", "green"))
+                        .into(),
+                    edge!(self.node_id(gid, *f) => self.node_id(gid, i); attr!("color", "red"))
+                        .into(),
+                        ]
+                    } else {
+                        vec![edge!(self.node_id(gid, i) => self.node_id(gid, *t); attr!("color", "green"))
                         .into(),
                     edge!(self.node_id(gid, i) => self.node_id(gid, *f); attr!("color", "red"))
-                        .into(),
-                ],
+                        .into(),]
+                    }}
+                ,
                 FlowEdge::Jump(j) => {
-                    vec![edge!(self.node_id(gid, i) => self.node_id(gid, *j)).into()]
+                    vec![
+                        if self.reversed() {
+                            edge!(self.node_id(gid, *j) => self.node_id(gid, i))
+                        } else {
+                            edge!(self.node_id(gid, i) => self.node_id(gid, *j))
+                        }.into()
+                    ]
                 }
             })
             .collect()

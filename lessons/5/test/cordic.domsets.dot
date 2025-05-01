@@ -13,7 +13,7 @@ digraph G {
         margin=10
         cluster_0_0[label="{entry|entry}",shape=Mrecord,color=blue]
         cluster_0_exit[label="{exit|entry}",shape=Mrecord,color=purple]
-        cluster_0_0 -> cluster_0_exit [color=black]
+        cluster_0_0 -> cluster_0_exit [color=purple]
       }
     }
     subgraph cluster_1_wrapper {
@@ -139,7 +139,7 @@ digraph G {
         cluster_1_45 -> cluster_1_46
         cluster_1_46 -> cluster_1_47
         cluster_1_47 -> cluster_1_1
-        cluster_1_48 -> cluster_1_exit [color=black]
+        cluster_1_48 -> cluster_1_exit [color=purple]
       }
     }
     cluster_0_0 -> cluster_1_0 [color=purple,lhead=cluster_1,ltail=cluster_0]

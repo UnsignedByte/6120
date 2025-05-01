@@ -23,7 +23,7 @@ digraph G {
         cluster_0_1 -> cluster_0_3 [color=red]
         cluster_0_2 -> cluster_0_4
         cluster_0_3 -> cluster_0_4
-        cluster_0_4 -> cluster_0_exit [color=black]
+        cluster_0_4 -> cluster_0_exit [color=purple]
       }
     }
   }
