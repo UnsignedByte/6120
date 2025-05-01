@@ -1,8 +1,8 @@
-use crate::Foldable;
 use bril_rs::{Argument, ConstOps, Function, Instruction, Type, ValueOps};
 use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
+use utils::Foldable;
 use utils::{BasicBlock, FunctionPass, HashableLiteral, InstrExt, Pass};
 
 /// A value interned in the LVN table

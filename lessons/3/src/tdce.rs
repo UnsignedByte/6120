@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use bril_rs::{Code, Function, Instruction, Program};
+use bril_rs::{Code, Function, Instruction};
 use itertools::Itertools;
 use utils::{BasicBlock, FunctionPass, Pass};
 

@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use utils::{
     AnalysisPass, BBFunction, BasicBlock, CFG, CallGraph, DataflowLabel, DataflowPass, InstrExt,
     draw_dataflow, run_analysis, setup_logger_from_env,

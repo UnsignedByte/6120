@@ -1,12 +1,11 @@
 use crate::trace::Trace;
-use bril_rs::{Instruction, Program};
+use bril_rs::Instruction;
 use bril2json::escape_control_chars;
 use brilirs::basic_block::{BBFunction, BBProgram, BasicBlock};
 use brilirs::error::{InterpError, PositionalInterpError};
 use fxhash::FxHashMap;
 use std::cmp::max;
 use std::collections::HashMap;
-use std::f32::consts::E;
 use std::fmt;
 
 /// Done contains the basic block index and the instruction index of the last executed instruction

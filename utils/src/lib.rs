@@ -1,4 +1,5 @@
 mod extensions;
+mod fold;
 mod graph;
 mod logger;
 mod macros;
@@ -8,6 +9,7 @@ mod reps;
 
 pub use bril_rs;
 pub use extensions::{InstrExt, LiteralExt};
+pub use fold::Foldable;
 pub use graph::{GraphLike, draw};
 pub use logger::{LogArgs, setup_logger, setup_logger_from_env};
 pub use misc::HashableLiteral;

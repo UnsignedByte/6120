@@ -1,27 +1,7 @@
-use std::collections::HashMap;
-
 use bril_rs::{Instruction, Literal, ValueOps};
 
 pub trait Foldable<K, V> {
     fn fold(&self, f: impl Fn(&K) -> Option<V>) -> Option<(K, Option<V>)>;
-}
-
-/// A table of values that to be used for folding
-#[derive(Default)]
-pub struct ValueTable {
-    map: HashMap<String, Literal>,
-}
-
-impl ValueTable {
-    pub fn get(&self, k: &String) -> Option<&Literal> {
-        self.map.get(k)
-    }
-
-    pub fn intern(&mut self, i: &Instruction) {
-        if let Some((k, Some(v))) = i.fold(|k| self.map.get(k).cloned()) {
-            self.map.insert(k, v);
-        }
-    }
 }
 
 impl Foldable<String, Literal> for Instruction {
