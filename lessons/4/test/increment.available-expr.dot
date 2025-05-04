@@ -1,0 +1,24 @@
+digraph G {
+  compound=true
+  subgraph cluster_ {
+    peripheries=0
+    subgraph cluster_0_wrapper {
+      peripheries=0
+      margin=15
+      subgraph cluster_0 {
+        label="main"
+        color=darkgray
+        style=rounded
+        bgcolor=lightgray
+        margin=10
+        cluster_0_0[label="{entry|In: \{\}\l|Out: \{1\}\l}",shape=Mrecord,color=blue]
+        cluster_0_1[label="{l1|In: \{1\}\l|Out: \{1\}\l}",shape=Mrecord,color=black]
+        cluster_0_2[label="{l2|In: \{1\}\l|Out: \{1\}\l}",shape=Mrecord,color=black]
+        cluster_0_exit[label="{exit|Out: \{1\}\l}",shape=Mrecord,color=purple]
+        cluster_0_0 -> cluster_0_1
+        cluster_0_1 -> cluster_0_2
+        cluster_0_2 -> cluster_0_exit [color=black]
+      }
+    }
+  }
+}

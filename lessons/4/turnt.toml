@@ -18,20 +18,14 @@ bril2json < {filename} | ../../target/debug/const-prop
 """
 output."const-prop.dot" = "-"
 
+[envs.available-expr]
+command = """
+bril2json < {filename} | ../../target/debug/available-expr
+"""
+output."available-expr.dot" = "-"
+
 [envs.interval]
 command = """
 bril2json < {filename} | ./interval.py
 """
 output.interval = "-"
-
-# [envs.const-prop]
-# command = """
-# bril2json < {filename} | ./const-prop.py
-# """
-# output.const-prop = "-"
-
-[envs.available-expr]
-command = """
-bril2json < {filename} | ./available-expr.py
-"""
-output.available-expr = "-"

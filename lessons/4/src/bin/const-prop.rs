@@ -1,10 +1,5 @@
-use bril_rs::Literal;
 use itertools::Itertools;
-use std::{
-    collections::{HashMap, HashSet},
-    fmt::Display,
-    hash::Hash,
-};
+use std::{collections::HashMap, fmt::Display, hash::Hash};
 use utils::{
     AnalysisPass, BBFunction, BasicBlock, CFG, CallGraph, CanonicalizeLiterals, DataflowLabel,
     DataflowPass, Foldable, HashableLiteral, Pass, draw_dataflow, run_analysis,
